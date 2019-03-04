@@ -1,0 +1,3 @@
+rootProject.name = 'PolyvVodRnDemo'
+
+include ':app', ':polyvsdk'
