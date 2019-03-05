@@ -15,7 +15,7 @@ PolyvRNVodDemo是为ReactNative技术开发者定制的点播集成Demo，展示
 #### 开发设备及系统
 
 - 设备要求：搭载 Android 、iOS系统的设备
-- 系统要求：Android 4.1.0(API 16) 及其以上、iOS：
+- 系统要求：Android 4.1.0(API 16) 及其以上、iOS：iOS9
 
 #### 前置条件
 
@@ -27,6 +27,12 @@ PolyvRNVodDemo是为ReactNative技术开发者定制的点播集成Demo，展示
 #### 快速开始
 
 #####   React端集成步骤
+
+开始运行行执行如下命令下载react 相关依赖
+
+```js
+npm install
+```
 
 对应的native端的注册入口标签名为：‘PolyvVodRnDemo’   对应到app.json文件里的配置
 
