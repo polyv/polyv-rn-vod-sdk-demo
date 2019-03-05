@@ -30,21 +30,20 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name: 'sdk-lecast-release', ext: 'aar')
 
     compile 'com.android.support:appcompat-v7:23+'
     compile 'com.android.support:support-annotations:23+'
     compile 'com.android.support:support-v4:23+'
     compile 'com.android.support:design:23+'
 
-    //    compile 'com.easefun.polyv:polyvPlayer:2.7.0'//SDK核心包
-    compile 'com.easefun.polyv:polyvPlayerTest:2.7.0'
+        compile 'com.easefun.polyv:polyvPlayer:2.7.1'//SDK核心包
+//    compile 'com.easefun.polyv:polyvPlayerTest:2.7.0'
 
-    compile 'com.easefun.polyv:polyvPlayerABI:1.7.0'//SDK核心包
+    compile 'com.easefun.polyv:polyvPlayerABI:1.7.1'//SDK核心包
     compile ('com.easefun.polyv:polyvDownload:2.6.0'){
         exclude group:'com.easefun.polyv',module:'polyvPlayer'
     }////SDK下载功能
-    compile 'com.easefun.polyv:polyvScreencast:0.1.0'//SDK上传功能
+    compile 'com.easefun.polyv:polyvScreencast:0.2.0'//SDK上传功能
     compile 'com.easefun.polyv:polyvGif:2.2.1'//demo中课程讨论区显示的内容里用到的包
     compile ('com.easefun.polyv:polyvSub:2.5.2'){
         exclude group:'com.easefun.polyv',module:'polyvPlayer'
