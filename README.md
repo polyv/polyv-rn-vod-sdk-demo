@@ -146,7 +146,7 @@ compile project(path: ':polyvsdk')
 
 1. 拷贝相关的Native代码
 
-   拷贝 demo项目的 ios/PolyvVodRnDemo文件夹 到 自身项目的 ios 目录下；
+   拷贝 demo项目的 ios/PolyvVodRnModule文件夹 到 自身项目的 ios 目录下；
 
 2. 集成CocoaPods管理第三方库
 
