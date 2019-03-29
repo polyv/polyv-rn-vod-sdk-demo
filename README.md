@@ -48,17 +48,19 @@ npm install
 
 2. 依赖配置文件 package.json
 
-```
+```java
 "dependencies": {
+    "react": "16.6.3",
+	"react-native": "^0.58.6",
+	
+	//polyv/demo里需要的依赖（如不需要可删除）
     "axios": "^0.18.0",
     "bower": "^1.8.8",
     "jest-haste-map": "^24.5.0",
     "loadash": "^1.0.0",
     "native-base": "^2.12.1",
-    "react": "16.6.3",
     "react-art": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-native": "^0.58.6",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-web": "^0.10.1",
     "react-navigation": "^3.3.2"
@@ -80,14 +82,14 @@ npm install
 ```javascript
 
 //该模块提供了初始化的方法init，该方法是一个异步有返回结果的函数
-/**
- * code，返回码定义：
- *      0  成功
- *      -1 vodKey为空
- *      -2 decodeKey为空
- *      -3 decodeIv为空
- *      -4 ViewId为空
- */
+ /**
+     * 
+     * @param {string} vodKey 加密串
+     * @param {*} decodeKey 加密密钥
+     * @param {*} decodeIv 加密向量
+     * @param {*} viewerId 用户ID
+     * @param {*} nickName 用户昵称
+     */
  
 //使用方式
 /**
@@ -228,7 +230,7 @@ Android 端工程的原生插件代码分为两个部分：
    2. 配置目标工程 android/settings.gradle文件 的依赖
 
       ```java
-      rootProject.name = 'XXXXXXX'
+      rootProject.name = 'XXXXXXX'//对应目标rn工程app.json下的name
       include ':app'
       
       include ':polyvsdk'  //polyvsdk模块的依赖配置  新增加的一行！
@@ -262,6 +264,19 @@ Android 端工程的原生插件代码分为两个部分：
                   return Arrays.<ReactPackage>asList(
                           new MainReactPackage()
                           , new PolyvRNVodPluginManager()  // 新增加的一行！
+                  );
+              }
+      ```
+
+      4.MainActivity配置
+
+      ```java
+      @Override
+              protected List<ReactPackage> getPackages() {
+                  return Arrays.<ReactPackage>asList(
+                          new MainReactPackage()
+                          , new PolyvRNVodPluginManager()//新增加的一行！
+                    		
                   );
               }
       ```
