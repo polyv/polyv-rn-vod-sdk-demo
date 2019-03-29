@@ -16,6 +16,8 @@ public class PolyvDownloadInfo {
     // 总文件大小(mp4)/总个数(ts)
     private long total;
 
+    private float progress;
+
     public PolyvDownloadInfo(){}
 
     public PolyvDownloadInfo(String vid, String duration, long filesize, int bitrate, String title) {
@@ -93,5 +95,13 @@ public class PolyvDownloadInfo {
                 ", percent=" + percent +
                 ", total=" + total +
                 '}';
+    }
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
     }
 }

@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/><!-- 属于android6.0运行时权限-->
 
     <application
-        android:name="com.easefun.PolyvRNVodApplication"
+        android:name="com.easefun.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

@@ -1,6 +1,6 @@
 PODS:
   - FDStackView (1.0.1)
-  - LBLelinkKit (30203)
+  - LBLelinkKit (30206)
   - Masonry (1.1.0)
   - PLVMarquee (0.0.2)
   - PLVNetworkDiagnosisTool (0.0.1)
@@ -9,7 +9,7 @@ PODS:
   - PLVVodDanmu (0.0.1)
   - PolyvAliHttpDNS (1.6.7)
   - PolyvIJKPlayer (0.4.0)
-  - PolyvVodSDK (2.5.4):
+  - PolyvVodSDK (2.5.5):
     - PLVMarquee (~> 0.0.2)
     - PLVNetworkDiagnosisTool (~> 0.0.1)
     - PLVTimer (~> 0.0.2)
@@ -35,8 +35,8 @@ PODS:
 
 DEPENDENCIES:
   - FDStackView (~> 1.0.1)
-  - LBLelinkKit
-  - Masonry
+  - LBLelinkKit (~> 30206)
+  - Masonry (~> 1.1.0)
   - PLVSubtitle (~> 0.1.0)
   - PLVVodDanmu (~> 0.0.1)
   - PolyvVodSDK (~> 2.5.4)
@@ -67,7 +67,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   FDStackView: fc0697e5be2022c8af36ce66e9e2061006058ba8
-  LBLelinkKit: d7a369ae7f68796c64c386a440667cbd6a079b5f
+  LBLelinkKit: c9515f464d41a337109f9d499babfa861a3c3b64
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   PLVMarquee: fa5b52812d3772ca5fcaa50733d549b5b1e6fbf6
   PLVNetworkDiagnosisTool: e8a098546d30c12f7d1c917d8e43f10941f1bc5d
@@ -76,7 +76,7 @@ SPEC CHECKSUMS:
   PLVVodDanmu: 7f6663e2bbc3bf93a94b9bd3a404e1760b3d3511
   PolyvAliHttpDNS: 0fbbbcd3aab07a48305d36884681ca33849cc0b7
   PolyvIJKPlayer: 42fccc693f21a89e6b5229430f0afb9b43fbcd0f
-  PolyvVodSDK: a079e35b0cd01ad68beba9fe4447adf50e7dcc5c
+  PolyvVodSDK: 1ae1e3fe2e86515ba17e63948a29b5a40992d9f5
   SQLiteRepairKit: 4d21bab9eff6a273f63da6815a0d1659e53f5bde
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   WCDB: 8e90babdeb7784c569353a4bd22a66c0a175a882
@@ -86,6 +86,6 @@ SPEC CHECKSUMS:
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: 1eb14142a86eef639a0ddc46de32b8452170206e
+PODFILE CHECKSUM: 6b619f13201b73a8c8748041a533ea4ef008aa6f
 
 COCOAPODS: 1.6.0.beta.2

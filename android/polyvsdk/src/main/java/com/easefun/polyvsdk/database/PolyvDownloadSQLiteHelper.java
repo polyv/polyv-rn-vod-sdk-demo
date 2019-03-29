@@ -92,6 +92,24 @@ public class PolyvDownloadSQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * 判断该下载信息是否已以添加过
+     * @param vid
+     * @return
+     */
+    public boolean isAdd(String vid) {
+        SQLiteDatabase db = getWritableDatabase();
+        String sql = "select vid ,duration,filesize,bitrate from downloadlist where vid=?";
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql, new String[]{vid});
+            return cursor.getCount() == 1;
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+    }
+
+    /**
      * 获取所有的下载信息对象
      * @return
      */

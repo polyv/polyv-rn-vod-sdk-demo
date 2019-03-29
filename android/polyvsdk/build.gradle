@@ -36,7 +36,7 @@ dependencies {
     compile 'com.android.support:support-v4:23+'
     compile 'com.android.support:design:23+'
 
-        compile 'com.easefun.polyv:polyvPlayer:2.7.1'//SDK核心包
+        compile 'com.easefun.polyv:polyvPlayer:2.7.2'//SDK核心包
 //    compile 'com.easefun.polyv:polyvPlayerTest:2.7.0'
 
     compile 'com.easefun.polyv:polyvPlayerABI:1.7.1'//SDK核心包

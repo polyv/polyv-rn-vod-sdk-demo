@@ -113,6 +113,15 @@ android {
             abiFilters 'arm64-v8a', 'armeabi-v7a', 'armeabi', 'x86_64', 'x86'
         }
     }
+
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
     splits {
         abi {
             reset()
@@ -125,6 +134,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     repositories {
@@ -150,14 +160,17 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation ("com.facebook.react:react-native:+"){
         exclude group:'com.android.support',module:'appcompat-v7'
     }
 
-    compile 'com.android.support:multidex:1.0.1'//64K 引用限制
+    implementation 'com.android.support:multidex:1.0.1'//64K 引用限制
 
-    compile project(path: ':polyvsdk')
+    implementation project(path: ':polyvsdk')  //polyvsdk模块的依赖配置
+
+    implementation project(':react-native-gesture-handler')    //react-native-gesture-handler模块的依赖配置
 }
 
 // Run this once to be able to run the application with BUCK
