@@ -33,6 +33,7 @@ import com.easefun.polyvsdk.player.PolyvPlayerPreviewView;
 import com.easefun.polyvsdk.player.PolyvPlayerProgressView;
 import com.easefun.polyvsdk.player.PolyvPlayerVolumeView;
 import com.easefun.polyvsdk.R;
+import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
 import com.easefun.polyvsdk.srt.PolyvSRTItemVO;
 import com.easefun.polyvsdk.util.PolyvErrorMessageUtils;
 import com.easefun.polyvsdk.util.PolyvScreenUtils;
@@ -68,6 +69,7 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
 import com.easefun.polyvsdk.vo.PolyvQuestionVO;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
+import com.facebook.react.bridge.ReadableMap;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -203,6 +205,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         videoView = (PolyvVideoView) findViewById(R.id.polyv_video_view);
         marqueeView = (PolyvMarqueeView) findViewById(R.id.polyv_marquee_view);
         mediaController =  findViewById(R.id.polyv_player_media_controller);
+        mediaController.setMediaPlayer(videoView);
         srtTextView = (TextView) findViewById(R.id.srt);
         questionView = (PolyvPlayerAnswerView) findViewById(R.id.polyv_player_question_view);
         auditionView = (PolyvPlayerAuditionView) findViewById(R.id.polyv_player_audition_view);
@@ -227,25 +230,25 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         auxiliaryVideoView.setPlayerBufferingIndicator(auxiliaryLoadingProgress);
 //        auxiliaryView.setPolyvVideoView(videoView);
 //        auxiliaryView.setDanmakuFragment(danmuFragment);
-        videoView.setMediaController(mediaController);
+
         videoView.setAuxiliaryVideoView(auxiliaryVideoView);
         videoView.setPlayerBufferingIndicator(loadingProgress);
         // 设置跑马灯
-        videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
-                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
-                .setDuration(10000) //时长
-                .setText("POLYV Android SDK") //文本
-                .setSize(16) //字体大小
-                .setColor(Color.YELLOW) //字体颜色
-                .setTextAlpha(70) //字体透明度
-                .setInterval(1000) //隐藏时间
-                .setLifeTime(1000) //显示时间
-                .setTweenTime(1000) //渐隐渐现时间
-                .setHasStroke(true) //是否有描边
-                .setBlurStroke(true) //是否模糊描边
-                .setStrokeWidth(3) //描边宽度
-                .setStrokeColor(Color.MAGENTA) //描边颜色
-                .setStrokeAlpha(70)); //描边透明度
+//        videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
+//                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
+//                .setDuration(10000) //时长
+//                .setText("POLYV Android SDK") //文本
+//                .setSize(16) //字体大小
+//                .setColor(Color.YELLOW) //字体颜色
+//                .setTextAlpha(70) //字体透明度
+//                .setInterval(1000) //隐藏时间
+//                .setLifeTime(1000) //显示时间
+//                .setTweenTime(1000) //渐隐渐现时间
+//                .setHasStroke(true) //是否有描边
+//                .setBlurStroke(true) //是否模糊描边
+//                .setStrokeWidth(3) //描边宽度
+//                .setStrokeColor(Color.MAGENTA) //描边颜色
+//                .setStrokeAlpha(70)); //描边透明度
     }
 
     private void initView() {
@@ -783,5 +786,53 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
     public int getAudioSessionId() {
         return 0;
     }
-   // </editor-fold>
+
+    public void setPlayerFullScreen(boolean fullScreen){
+        if(fullScreen){
+            if(!PolyvScreenUtils.isLandscape(getContext())){
+                mediaController.changeToLandscape();
+            }
+        }else {
+            if(!PolyvScreenUtils.isPortrait(getContext())){
+                mediaController.changeToPortrait();
+            }
+        }
+    }
+
+    // 设置跑马灯
+    public void playMarquee(ReadableMap marquee) {
+        if(!marquee.hasKey("content")){
+            PolyvToastUtil.show(getContext(),"未设置跑马灯内容");
+            return;
+        }
+        int displayDuration = 8*1000,font = 20,alpha = 255,maxRollInterval=1*1000,color=0xffffff;
+        if(marquee.hasKey("displayDuration")){
+            displayDuration = marquee.getInt("displayDuration")*1000;
+        }
+        if(marquee.hasKey("font")){
+            font = marquee.getInt("font");
+        }
+
+        if(marquee.hasKey("alpha")){
+            alpha = (int) (255*marquee.getDouble("alpha"));
+        }
+        if(marquee.hasKey("maxRollInterval")){
+            maxRollInterval = marquee.getInt("maxRollInterval")*1000;
+        }
+
+        if(marquee.hasKey("color")){
+            color = Color.parseColor(marquee.getString("color"));
+        }
+
+        videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
+                .setStyle(1) //样式
+                .setDuration(displayDuration) //时长
+                .setText(marquee.getString("content")) //文本
+                .setSize(font) //字体大小
+                .setColor(color) //字体颜色
+                .setTextAlpha(alpha) //字体透明度
+                .setLifeTime(maxRollInterval))//显示时间
+        ;
+    }
+    // </editor-fold>
 }

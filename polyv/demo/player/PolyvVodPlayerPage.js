@@ -9,45 +9,49 @@
 
 import React, { Component } from "react";
 import {
-    Text,
-    View,
-    TextInput,
-    Dimensions,
-    StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Dimensions,
+  StyleSheet,
 } from "react-native";
 
 import PolyvVodPlayer from '../../sdk/PolyvVodPlayerModule'
 
-const { width,height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 type Props = {};
 export default class PolyvVodPlayerPage extends Component<Props> {
   static navigationOptions = (
     { navigation }) => {
-      return {
-        headerTitle: '视频播放',
-      }
+    return {
+      headerTitle: '视频播放',
+    }
   };
 
   constructor(props) {
     super(props);
     this.state = {
-        vid:'',
+      vid: '',
       // 输入框默认vid
       inputVid: "e97dbe3e649c56a1e58535bd8c5d3924_e",
       canDownload: false
     };
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.refs["playerA"].release()
   }
 
+  componentDidMount() {
+    // this.refs["playerA"].setFullScreen(true)
+  }
+
   updateVid() {
-    if(!this.state.inputVid){
+    if (!this.state.inputVid) {
       Alert.alert('vid is error')
       return
-  }
+    }
     console.log("updateVid");
     this.refs["playerA"].updateVid(this.state.inputVid);
   }
@@ -78,55 +82,64 @@ export default class PolyvVodPlayerPage extends Component<Props> {
     const { navigation } = this.props;
     const vid = navigation.getParam('vid', '');
     return (
-        <View>
-          <PolyvVodPlayer
-            ref="playerA"
-            style={styles.video}
-            vid={vid}
-            isAutoStart={true}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder={"请输入更新vid"}
-            onChangeText={text => {
-              this.setState({ vid: text });
-            }}
-          >
-            {this.state.inputVid}
-          </TextInput>
-          <View style={styles.horizon}>
-            <Text style={styles.text} onPress={this.updateVid.bind(this)}>
-              updateVid
+      <View>
+        <PolyvVodPlayer
+          ref="playerA"
+          style={styles.video}
+          vid={vid}
+          isAutoStart={true}
+          fullScreen={false}
+          marquee={{
+            displayDuration:8,//单位：秒  单次跑马灯显示时长
+            maxRollInterval:1,//单位：秒  两次滚动的最大间隔时长，实际的间隔时长是取 0~maxRollInterval 的随机值
+            content:'我是跑马灯',//跑马灯内容
+            color:'#0000FF',//跑马灯颜色
+            alpha:0.5,//跑马灯透明度
+            font:20,//跑马灯字体
+          }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder={"请输入更新vid"}
+          onChangeText={text => {
+            this.setState({ vid: text });
+          }}
+        >
+          {this.state.inputVid}
+        </TextInput>
+        <View style={styles.horizon}>
+          <Text style={styles.text} onPress={this.updateVid.bind(this)}>
+            updateVid
             </Text>
-            <Text style={styles.text} onPress={this.play.bind(this)}>
-              play
+          <Text style={styles.text} onPress={this.play.bind(this)}>
+            play
             </Text>
-            <Text style={styles.text} onPress={this.pause.bind(this)}>
-               pause
+          <Text style={styles.text} onPress={this.pause.bind(this)}>
+            pause
             </Text>
-            {/* <Text
+          {/* <Text
               style={styles.text} onPress={this.showDownloadOptions.bind(this)}>
               download
             </Text> */}
-            {/* <ProgressBarAndroid /> */}
-          </View>
-  
-          
-          {/* <PolyvVodPlayer
+          {/* <ProgressBarAndroid /> */}
+        </View>
+
+
+        {/* <PolyvVodPlayer
             ref='playerB'
             style={styles.video}
             vid={"e97dbe3e64c247499b55f213a4470052_e"}
             isAutoStart={true}
           /> */}
-        </View>
-      );
-    }
+      </View>
+    );
   }
+}
 
 const styles = StyleSheet.create({
   container: {
-    width:width,
-    height:height,
+    width: width,
+    height: height,
     backgroundColor: "#ffffff"
   },
   video: {

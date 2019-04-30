@@ -10,16 +10,42 @@ Android 4.1.0 (API 16) 以上 或 iOS 9.0 以上
 
 ### 1.2 接入条件
 
-- 了解 ReactNative 技术并准备使用该技术接入点播功能；
+- 了解 ReactNative 技术；
+- 搭建好运行 React Native 的相关环境；
+- 准备在使用 React Native 技术开发的项目中接入点播功能；
 - 拥有 polyv 官网的直播账号且已开通直播权限。
 
 ## 2. 快速开始
 
 ### 2.1 RN端集成
 
-#### 2.1.1 模块列表
+#### 2.1.1 安装依赖
 
-用户需要集成的各个功能模块文件在路径 polyv - sdk 下，主要功能模块如下表所示：
+执行如下命令下载 react 相关依赖
+```js
+npm install
+```
+
+#### 2.1.2 引入插件
+
+点播的插件和 demo 使用到的插件的目录结构如下所示：
+
+├── polyv
+│   ├── demo
+│   │   ├── PolyvNavigation.js
+│   │   ├── PolyvUserConfig.js
+│   │   ├── common
+│   │   ├── downloadList
+│   │   ├── img
+│   │   ├── onlineList
+│   │   └── player
+│   └── sdk
+│       ├── PolyvVodConfigModule.js
+│       ├── PolyvVodDownloadModule.js
+│       ├── PolyvVodDownloadResultCode.js
+│       └── PolyvVodPlayerModule.js
+
+在目录 sdk 下我们的 RN 点播 SDK 提供了一下三大功能模块：
 
 | 文件名    | 描述   |
 | -------- | ------ |
@@ -27,31 +53,48 @@ Android 4.1.0 (API 16) 以上 或 iOS 9.0 以上
 | PolyvVodPlayerModule |  播放器模块    |
 | PolyvVodDownloadModule  |  视频下载模块   |
 
-#### 2.1.2 安装依赖
-
-执行如下命令下载 react 相关依赖
-
-```js
-npm install
-```
+如果只是需要使用到 sdk 的功能，把 sdk 目录下的文件拉到 RN 项目中即可。demo 中的功能则需要使用到 demo 目录下的文件。
 
 #### 2.1.3 项目配置
 
-1. 对应的 native 端的注册入口标签名为 ‘PolyvVodRnDemo’，对应到 app.json 文件里的配置
+1. 项目中app.json中的字段需要与native 层的入口名对应，所以在Android与ios两端需要做入口名统一配置。配置文件名：
 
-```java
-{
-  "name": "PolyvVodRnDemo",
-  "displayName": "PolyvVodRnDemo"
-}
-```
+   - Android端的MainActivity.java 文件
 
-2. 依赖配置文件 package.json
+     ```java
+      @Override
+         protected String getMainComponentName() {
+             return "此处填入app.json里的name字段内容";
+         }
+     ```
 
-```java
+   - IOS端的AppDelegate.m文件
+
+     ```objective-c
+     - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+     {
+       NSURL *jsCodeLocation;
+     
+       jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+     
+       RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+                                                           moduleName:@"此处填入app.json里的name字段内容"
+                                                    initialProperties:nil
+                                                        launchOptions:launchOptions];
+      .... 此处代码省略...
+       
+       return YES;
+     }
+     ```
+
+
+
+2. 在 package.json 文件中配置依赖。
+
+```json
 "dependencies": {
     "react": "16.6.3",
-	"react-native": "^0.58.6",
+	  "react-native": "^0.58.6",
 	
 	//polyv/demo里需要的依赖（如不需要可删除）
     "axios": "^0.18.0",
@@ -118,6 +161,15 @@ PolyvVodConfigRnModule.init(this.state.vodKey, this.state.decodeKey, this.state.
           style={styles.video}
           vid={"e97dbe3e64cb3adef1a27a42fe49228e_e"}//视频播放vid
           isAutoStart={true}//是否自动播放
+					fullScreen={false}
+          marquee={{
+            displayDuration:8,//单位：秒  单次跑马灯显示时长
+            maxRollInterval:1,//单位：秒  两次滚动的最大间隔时长，实际的间隔时长是取 0~maxRollInterval 的随机值
+            content:'我是跑马灯',//跑马灯内容
+            color:'#0000FF',//跑马灯颜色
+            alpha:0.5,//跑马灯透明度
+            font:20,//跑马灯字体
+          }}
         />
 ```
 

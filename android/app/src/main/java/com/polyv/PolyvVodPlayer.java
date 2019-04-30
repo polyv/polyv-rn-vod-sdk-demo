@@ -1,8 +1,10 @@
 package com.polyv;
 
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.easefun.polyvsdk.log.PolyvCommonLog;
+import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
 import com.polyv.protocol.IPolyvRNVideoPlayer;
 import com.polyv.view.PolyvRNVodPlayer;
 import com.facebook.react.bridge.ReadableArray;
@@ -13,6 +15,8 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.Map;
+
+import static com.polyv.PolyvRNConstants.RN_MARQUEE;
 
 /**
  * @author df
@@ -26,6 +30,7 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
     private static final int POLYVVODPLAYER_EVENT_PLAY = 810;
     private static final int POLYVVODPLAYER_EVENT_PAUSE = 811;
     private static final int POLYVVODPLAYER_EVENT_RELEASE = 812;
+    private static final int POLYVVODPLAYER_EVENT_FULLSCREEN = 813;
 
 
     @Override
@@ -53,6 +58,7 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
                 "startOrPause", POLYVVODPLAYER_EVENT_START_OR_PAUSE,
                 "play", POLYVVODPLAYER_EVENT_PLAY,
                 "pause", POLYVVODPLAYER_EVENT_PAUSE,
+                "setFullScreen", POLYVVODPLAYER_EVENT_FULLSCREEN,
                 "release", POLYVVODPLAYER_EVENT_RELEASE);
     }
 
@@ -86,6 +92,12 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
             case POLYVVODPLAYER_EVENT_RELEASE:
                 root.onDestroy();
                 break;
+            case POLYVVODPLAYER_EVENT_FULLSCREEN:
+                if (args != null) {
+                    Boolean fullScreen = args.getBoolean(0);
+                    root.setPlayerFullScreen(fullScreen);
+                }
+                break;
         }
     }
 
@@ -99,10 +111,34 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
     @ReactProp(name = PolyvRNConstants.RN_PLAY_PARAMETERS)
     @Override
     public void setVid(PolyvRNVodPlayer player, ReadableMap readableMap) {
+        try {
+            boolean isAutoStart = false;
+            boolean isFullScreen = false;
+            if(!readableMap.hasKey(PolyvRNConstants.RN_VID)){
+                PolyvToastUtil.show(player.getContext(),"vid is error ");
+                return;
+            }
 
-        String vid = readableMap.getString(PolyvRNConstants.RN_VID);
-        boolean isAutoStart = readableMap.getBoolean(PolyvRNConstants.RN_IS_AUTO_START);
-        player.play(vid, 1, isAutoStart, false);
+            if(readableMap.hasKey(PolyvRNConstants.RN_IS_AUTO_START)){
+                isAutoStart = readableMap.getBoolean(PolyvRNConstants.RN_IS_AUTO_START);
+            }
+            String vid = readableMap.getString(PolyvRNConstants.RN_VID);
+            player.play(vid, 1, isAutoStart, false);
+
+            if(readableMap.hasKey(PolyvRNConstants.RN_FULLSCREEN)){
+                isFullScreen = readableMap.getBoolean(PolyvRNConstants.RN_FULLSCREEN);
+            }
+            player.setPlayerFullScreen(isFullScreen);
+
+            if(readableMap.hasKey(PolyvRNConstants.RN_MARQUEE)){
+                ReadableMap marquee = readableMap.getMap(RN_MARQUEE);
+                player.playMarquee(marquee);
+            }
+        }catch (Exception e){
+            PolyvCommonLog.exception(e);
+        }
+
+
     }
 
 }

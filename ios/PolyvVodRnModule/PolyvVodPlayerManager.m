@@ -88,6 +88,23 @@ RCT_EXPORT_METHOD(
   }];
 }
 
+RCT_EXPORT_METHOD(
+                  setFullScreen:(nonnull NSNumber *)reactTag
+                  fullScreen:(BOOL)fullScreen
+                  )
+{
+  if (fullScreen) {
+    NSLog(@"setFullScreen YES");
+  } else {
+    NSLog(@"setFullScreen NO");
+  }
+  [self getPolyvVodPlayerWrapperViewByTag:reactTag callback:^(PolyvVodPlayerWrapperView *wrapper) {
+    NSLog(@"setFullScreen callback");
+    [wrapper setFullScreen:fullScreen];
+  }];
+}
+
+
 - (void)getPolyvVodPlayerWrapperViewByTag:(nonnull NSNumber *)reactTag callback:(void(^)(PolyvVodPlayerWrapperView *))callback {
   if (self.viewRegistry) {
     UIView *view = self.viewRegistry[reactTag];

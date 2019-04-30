@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 销毁
 - (void)destroyPlayer;
 
+// 横竖屏切换
+- (void)setFullScreen:(BOOL)fullScreen;
+
 @end
 
 NS_ASSUME_NONNULL_END

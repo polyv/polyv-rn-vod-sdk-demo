@@ -101,8 +101,8 @@ android {
         applicationId "com.easefun.polyvsdk.rn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 20
+        versionName "0.2.1"
 
         //64K 引用限制
         multiDexEnabled true

@@ -75,6 +75,19 @@ export class PolyvVideoDownloadItem extends Component {
     }
   }
 
+  updateDownloadStatus(){
+    var downloadStatus = this.state.videoStatus
+    if(downloadStatus == 1){//下载暂停 =>下载等待
+      this.setState({videoStatus:2})
+    }
+    // else if(downloadStatus == 2){ //下载等待 => 1、下载暂停 如果有正在下载视频 2、如果没有 在除了时间节点上（恰好其他正在下载视频下载完成，此时更改状态）是没有该状态的 理论应变成下载中
+    //   this.setState({videoStatus:1})
+    // }
+    else{
+      this.setState({videoStatus:1})
+    }
+  }
+
   getDownloadStatus(downloadingInfo){
     if (!downloadingInfo) {
       console.log('downloadingInfo video is null')
@@ -160,7 +173,7 @@ export class PolyvVideoDownloadItem extends Component {
                   this.startPlay();
                 } else {
                   this.pauseOrStartDownload();
-                  this.setState({ videoStatus: 1 ^ this.state.videoStatus });
+                  this.updateDownloadStatus();
                 }
               }}
             >

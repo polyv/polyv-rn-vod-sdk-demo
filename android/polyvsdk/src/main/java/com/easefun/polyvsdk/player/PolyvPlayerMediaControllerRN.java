@@ -2,6 +2,7 @@ package com.easefun.polyvsdk.player;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
@@ -634,6 +635,7 @@ public class PolyvPlayerMediaControllerRN extends PolyvBaseMediaController imple
     public void setLandscapeController() {
         hide();
         if(videoView == null  || hasVideoLandscape){
+            PolyvCommonLog.e(TAG,"setLandscapeController  videoview is  null");
             return;
         }
 
@@ -706,7 +708,7 @@ public class PolyvPlayerMediaControllerRN extends PolyvBaseMediaController imple
     }
 
     //根据屏幕状态改变控制栏布局
-    private void resetControllerLayout() {
+    public void resetControllerLayout() {
         hide();
         PolyvScreenUtils.reSetStatusBar(videoActivity);
         if (PolyvScreenUtils.isLandscape(mContext)) {
