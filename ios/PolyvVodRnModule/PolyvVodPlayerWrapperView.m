@@ -96,9 +96,12 @@
 // 全屏-半屏切换
 - (void)switchToFullScreen:(BOOL)fullScreen {
   NSLog(@"switchToFullScreen - %@", self);
+  if (CGRectEqualToRect(self.orginRect, CGRectZero)) {
+    self.orginRect = self.player.view.frame;
+  }
+  
   if (fullScreen) {
     NSLog(@"switch to fullScreen");
-    self.orginRect = self.player.view.frame;
     self.player.view.frame = self.fullScreenRect;
     
     [self.player.view removeFromSuperview];
@@ -150,12 +153,12 @@
 
 // 开始
 - (void)start {
-    [self.player play];
+  [self.player play];
 }
 
 // 停止
 - (void)pause {
-    [self.player pause];
+  [self.player pause];
 }
 
 // 销毁
@@ -170,15 +173,15 @@
 
 - (void)setFullScreen:(BOOL)fullScreen {
   dispatch_async(dispatch_get_main_queue(), ^{
-      if (CGRectEqualToRect(self.player.view.frame, self.fullScreenRect)) {
-        if (!fullScreen) {
-          [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
-        }
-      } else {
-        if (fullScreen) {
-          [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
-        }
+    if (CGRectEqualToRect(self.player.view.frame, self.fullScreenRect)) {
+      if (!fullScreen) {
+        [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
       }
+    } else {
+      if (fullScreen) {
+        [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+      }
+    }
   });
 }
 
@@ -230,3 +233,4 @@
 }
 
 @end
+
