@@ -28,6 +28,7 @@
   self.player = [[PLVVodSkinPlayerController alloc] initWithNibName:nil bundle:nil];
   self.player.rememberLastPosition = YES;
   self.player.enableBackgroundPlayback = YES;
+  self.player.enableTeaser = YES;
   [self addSubview:self.player.view];
   
   CGRect frame = self.player.view.frame;

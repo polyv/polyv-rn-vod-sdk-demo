@@ -43,7 +43,7 @@ public class PolyvPlayerProgressView extends FrameLayout {
 
     public void hide() {
         if (rl_center_progress != null)
-            rl_center_progress.setVisibility(View.GONE);
+            rl_center_progress.setVisibility(View.INVISIBLE);
     }
 
     public void resetMaxValue() {
@@ -56,15 +56,15 @@ public class PolyvPlayerProgressView extends FrameLayout {
 
     public void setViewProgressValue(int fastForwardPos, int totaltime, boolean end, boolean isRightSwipe) {
         if (end)
-            rl_center_progress.setVisibility(View.GONE);
+            rl_center_progress.setVisibility(View.INVISIBLE);
         else
             rl_center_progress.setVisibility(View.VISIBLE);
         if (isRightSwipe) {
-            iv_left.setVisibility(View.GONE);
+            iv_left.setVisibility(View.INVISIBLE);
             iv_right.setVisibility(View.VISIBLE);
         } else {
             iv_left.setVisibility(View.VISIBLE);
-            iv_right.setVisibility(View.GONE);
+            iv_right.setVisibility(View.INVISIBLE);
         }
         if (fastForwardPos < 0)
             fastForwardPos = 0;

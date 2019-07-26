@@ -165,7 +165,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
     private int bitrate;
     private boolean isMustFromLocal;
 
-    private boolean isCanDrag;
+    private boolean isCanDrag = true;
 
     public PolyvRNVodPlayer(Context context) {
         this(context,null);
