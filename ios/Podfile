@@ -10,7 +10,7 @@ target 'PolyvVodRnDemo' do
   pod 'YYWebImage', '~> 1.0.5'
   pod 'FDStackView', '~> 1.0.1'
   pod 'Masonry', '~> 1.1.0'
-  pod 'PolyvVodSDK', '~> 2.5.4'
+  pod 'PolyvVodSDK', '2.5.4'
   pod 'LBLelinkKit', '~> 30206'
 	pod 'PLVVodDanmu', '~> 0.0.1'
 	pod 'PLVSubtitle', '~> 0.1.0'

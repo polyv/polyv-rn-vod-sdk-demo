@@ -65,7 +65,7 @@
         android:layout_marginLeft="@dimen/corners_common"
         android:background="@drawable/polyv_ll_corners"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/iv_video"
@@ -92,7 +92,7 @@
         android:layout_marginLeft="@dimen/corners_common"
         android:layout_toRightOf="@id/ll_left_side"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/tv_video"
@@ -134,6 +134,7 @@
 
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/iv_screencast_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

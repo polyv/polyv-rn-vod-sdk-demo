@@ -37,6 +37,8 @@
 		self.statusBarHeight.constant = 12;
 	}
     
+  self.danmuButton.hidden = YES;
+  
     if (PLV_iPhoneX || PLV_iPhoneMR){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability"

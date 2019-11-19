@@ -26,7 +26,7 @@
 // 初始化播放器
 - (void)setup {
   self.player = [[PLVVodSkinPlayerController alloc] initWithNibName:nil bundle:nil];
-  self.player.rememberLastPosition = YES;
+//  self.player.rememberLastPosition = YES;
   self.player.enableBackgroundPlayback = YES;
   self.player.enableTeaser = YES;
   [self addSubview:self.player.view];
@@ -145,26 +145,35 @@
 // 开始/停止
 - (void)startOrPause {
   if (self.player.playbackState == PLVVodPlaybackStatePlaying) {
-    [self.player pause];
-  } else if (self.player.playbackState == PLVVodPlaybackStatePaused
-             || self.player.playbackState == PLVVodPlaybackStateStopped) {
-    [self.player play];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.player pause];
+    });
+  } else if (self.player.playbackState == PLVVodPlaybackStatePaused || self.player.playbackState == PLVVodPlaybackStateStopped) {
+     dispatch_async(dispatch_get_main_queue(), ^{
+       [self.player play];
+     });
   }
 }
 
 // 开始
 - (void)start {
-  [self.player play];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.player play];
+  });
 }
 
 // 停止
 - (void)pause {
-  [self.player pause];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.player pause];
+  });
 }
 
 // 销毁
 - (void)destroyPlayer {
-  [self.player destroyPlayer];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.player destroyPlayer];
+  });
 }
 
 // 横竖屏切换
@@ -174,15 +183,15 @@
 
 - (void)setFullScreen:(BOOL)fullScreen {
   dispatch_async(dispatch_get_main_queue(), ^{
-    if (CGRectEqualToRect(self.player.view.frame, self.fullScreenRect)) {
-      if (!fullScreen) {
-        [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+      if (CGRectEqualToRect(self.player.view.frame, self.fullScreenRect)) {
+        if (!fullScreen) {
+          [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+      } else {
+        if (fullScreen) {
+          [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
       }
-    } else {
-      if (fullScreen) {
-        [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
-      }
-    }
   });
 }
 
@@ -234,4 +243,3 @@
 }
 
 @end
-

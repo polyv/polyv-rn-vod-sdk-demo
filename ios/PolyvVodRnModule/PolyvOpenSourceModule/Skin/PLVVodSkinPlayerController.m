@@ -72,7 +72,7 @@
 	dispatch_async(dispatch_get_main_queue(), ^{
         [self setupPlaybackMode];
 		[self setupAd];
-		[self setupDanmu];
+//		[self setupDanmu];
 		[self setupExam];
 		[self setupSubtitle];
         [self setupOriginalAudioCover];

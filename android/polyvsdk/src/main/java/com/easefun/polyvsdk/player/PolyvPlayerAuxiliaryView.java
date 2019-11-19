@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.easefun.polyvsdk.R;
-import com.easefun.polyvsdk.fragment.PolyvPlayerDanmuFragment;
 import com.easefun.polyvsdk.video.PolyvVideoView;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -36,7 +35,8 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
 	private ImageButton mStartBtn = null;
 	private DisplayImageOptions mOptions = null;
 	private PolyvADMatterVO mADMatter = null;
-	private PolyvPlayerDanmuFragment danmuFragment = null;
+//	private PolyvPlayerDanmuFragment danmuFragment = null;
+//	private PolyvRNDanmuView danmuFragment = null;
 
     public PolyvPlayerAuxiliaryView(Context context) {
         this(context, null);
@@ -56,8 +56,8 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
     	this.mVideoView = mVideoView;
     }
 
-	public void setDanmakuFragment(PolyvPlayerDanmuFragment danmakuFragment){
-		this.danmuFragment=danmakuFragment;
+	public void setDanmakuFragment(PolyvRNDanmuView danmakuFragment){
+//		this.danmuFragment=danmakuFragment;
 	}
     
     private void initViews() {
@@ -89,7 +89,7 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
 			@Override
 			public void onClick(View v) {
 				mVideoView.start();
-				danmuFragment.resume();
+//				danmuFragment.resume();
 				hide();
 			}
 		});

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easefun.polyvsdk.PolyvSDKUtil;
+import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeItem;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeView;
 import com.easefun.polyvsdk.player.PolyvPlayerAnswerView;
@@ -28,11 +29,10 @@ import com.easefun.polyvsdk.player.PolyvPlayerAudioCoverView;
 import com.easefun.polyvsdk.player.PolyvPlayerAuditionView;
 import com.easefun.polyvsdk.player.PolyvPlayerAuxiliaryView;
 import com.easefun.polyvsdk.player.PolyvPlayerLightView;
-import com.easefun.polyvsdk.player.PolyvPlayerMediaControllerRN;
+import com.easefun.polyvsdk.player.PolyvPlayerMediaController;
 import com.easefun.polyvsdk.player.PolyvPlayerPreviewView;
 import com.easefun.polyvsdk.player.PolyvPlayerProgressView;
 import com.easefun.polyvsdk.player.PolyvPlayerVolumeView;
-import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
 import com.easefun.polyvsdk.srt.PolyvSRTItemVO;
 import com.easefun.polyvsdk.util.PolyvErrorMessageUtils;
@@ -87,7 +87,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
     /**
      * 视频控制栏
      */
-    private PolyvPlayerMediaControllerRN mediaController = null;
+    private PolyvPlayerMediaController mediaController = null;
     /**
      * 播放器的parentView
      */
@@ -398,13 +398,14 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         videoView.setOnQuestionOutListener(new IPolyvOnQuestionOutListener2() {
             @Override
             public void onOut(@NonNull PolyvQuestionVO questionVO) {
+                videoView.start();
                 switch (questionVO.getType()) {
                     case PolyvQuestionVO.TYPE_QUESTION:
-                        questionView.showAnswerContent(questionVO);
+//                        questionView.showAnswerContent(questionVO);
                         break;
 
                     case PolyvQuestionVO.TYPE_AUDITION:
-                        auditionView.show(questionVO);
+//                        auditionView.show(questionVO);
                         break;
                 }
             }
@@ -534,7 +535,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
 
                 if (end) {
                     if (fastForwardPos < 0)
-                        fastForwardPos = 0;
+                        fastForwardPos = 1000;
                     videoView.seekTo(fastForwardPos);
 //                    danmuFragment.seekTo();
                     if (videoView.isCompletedState()) {

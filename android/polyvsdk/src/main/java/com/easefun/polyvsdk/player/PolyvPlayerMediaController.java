@@ -8,10 +8,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,9 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easefun.polyvsdk.R;
-import com.easefun.polyvsdk.fragment.PolyvPlayerDanmuFragment;
 import com.easefun.polyvsdk.fragment.PolyvPlayerTopFragment;
 import com.easefun.polyvsdk.ijk.PolyvPlayerScreenRatio;
+import com.easefun.polyvsdk.log.PolyvCommonLog;
 import com.easefun.polyvsdk.sub.danmaku.entity.PolyvDanmakuInfo;
 import com.easefun.polyvsdk.sub.screenshot.PolyvScreenShot;
 import com.easefun.polyvsdk.util.PolyvKeyBoardUtils;
@@ -47,7 +49,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     private Context mContext = null;
     private PolyvVideoView videoView = null;
     private PolyvVideoVO videoVO;
-    private PolyvPlayerDanmuFragment danmuFragment;
+//    private PolyvRNDanmuView danmuFragment;
     //播放器所在的activity
     private Activity videoActivity;
     //播放器的ParentView
@@ -161,6 +163,13 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
 
     private ImageView polyvScreenLock, polyvScreenLockAudio;
 
+    private static final String landTag = "land";
+    private static final String portraitTag = "portrait";
+    private ViewGroup contentView, fullVideoViewParent;
+    private ViewGroup.LayoutParams portraitLP;//(需要移动的整个播放器布局)在竖屏下的LayoutParams
+    private ViewGroup fullVideoView;//需要移动的整个播放器布局
+    private volatile  boolean hasVideoLandscape;//是否已经有视频全屏
+
     //用于处理控制栏的显示状态
     private Handler handler = new Handler() {
         @Override
@@ -236,8 +245,8 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         this.parentView = parentView;
     }
 
-    public void setDanmuFragment(PolyvPlayerDanmuFragment danmuFragment) {
-        this.danmuFragment = danmuFragment;
+    public void setDanmuFragment(PolyvRNDanmuView danmuFragment) {
+//        this.danmuFragment = danmuFragment;
     }
 
     public void setAudioCoverView(PolyvPlayerAudioCoverView coverView) {
@@ -625,7 +634,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             updateLockStatus();
             resetTopBottomLayout(View.GONE);
             resetSideLayout(View.GONE);
-            resetLeftSideView(View.GONE);
+            resetLeftSideView(View.INVISIBLE);
             isShowing = true;
         } else {
             if (!isShowing) {
@@ -641,7 +650,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
                 isShowing = !isShowing;
                 setVisibility(View.VISIBLE);
             }
-            sensorHelper.toggle(true,PolyvScreenUtils.isLandscape(getContext()));
+            sensorHelper.toggle(true, PolyvScreenUtils.isLandscape(getContext()));
         }
 
 
@@ -669,7 +678,51 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         //初始为横屏时，状态栏需要隐藏
         PolyvScreenUtils.hideStatusBar(videoActivity);
         //初始为横屏时，控制栏的宽高需要设置
-        initLandScapeWH();
+//        initLandScapeWH();
+    }
+
+    public void setPortraitController() {
+        hasVideoLandscape = false;
+        hide();
+
+        // 把全屏下窗口布局中的整个播放器布局移除出来，并放回原本竖屏下的父控件中，使用竖屏下的LayoutParams
+        if (fullVideoView != null && landTag.equals(fullVideoView.getTag())) {
+            fullVideoView.setTag(portraitTag);
+            contentView.removeView(fullVideoView);
+            fullVideoView.setLayoutParams(portraitLP);
+            fullVideoViewParent.addView(fullVideoView, 0);
+        }
+
+        rl_port.setVisibility(View.VISIBLE);
+        rl_land.setVisibility(View.GONE);
+    }
+
+
+    public void setLandscapeController() {
+        hide();
+        if(videoView == null  || hasVideoLandscape){
+            return;
+        }
+
+        PolyvCommonLog.d(TAG,"setLandscapeController:"+this);
+        // 通过移除整个播放器布局到窗口的上层布局中，并改变整个播放器布局的大小，实现全屏的播放器。
+        if (fullVideoView == null) {
+            fullVideoView = ((ViewGroup) videoView.getParent().getParent());
+            fullVideoViewParent = (ViewGroup) fullVideoView.getParent();
+            contentView = (ViewGroup) ((Activity) mContext).findViewById(Window.ID_ANDROID_CONTENT);
+        }
+        if (!landTag.equals(fullVideoView.getTag())) {
+            hasVideoLandscape = true;
+            fullVideoView.setTag(landTag);
+            portraitLP = fullVideoView.getLayoutParams();
+            fullVideoViewParent.removeView(fullVideoView);
+            LayoutParams flp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            fullVideoView.setLayoutParams(flp);
+            contentView.addView(fullVideoView);
+        }
+
+        rl_land.setVisibility(View.VISIBLE);
+        rl_port.setVisibility(View.GONE);
     }
 
     private void initLandScapeWH() {
@@ -685,7 +738,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
      */
     public void changeToPortrait() {
         PolyvScreenUtils.setPortrait(videoActivity);
-        initPortraitWH();
+//        initPortraitWH();
     }
 
     private void initPortraitWH() {
@@ -712,25 +765,27 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
         if (PolyvScreenUtils.isLandscape(mContext)) {
             // 横屏下开启自动切换横竖屏
             sensorHelper.toggle(true, true);
-            initLandScapeWH();
+//            initLandScapeWH();
+            setLandscapeController();
         } else {
             // 竖屏下开启自动切换横竖屏
             sensorHelper.toggle(true, false);
-            initPortraitWH();
+//            initPortraitWH();
+            setPortraitController();
         }
     }
 
     //根据视频的播放状态去暂停或播放
-    private void playOrPause() {
+    public void playOrPause() {
         if (videoView != null) {
             if (videoView.isPlaying()) {
-                danmuFragment.pause();
+//                danmuFragment.pause();
                 videoView.pause();
                 status_isPlaying = false;
                 iv_play.setSelected(true);
                 iv_play_land.setSelected(true);
             } else {
-                danmuFragment.resume();
+//                danmuFragment.resume();
                 videoView.start();
                 status_isPlaying = true;
                 iv_play.setSelected(false);
@@ -780,14 +835,18 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             if (i == R.id.sb_play || i == R.id.sb_play_land) {
                 if (videoView != null) {
                     int seekToPosition = (int) (videoView.getDuration() * (long) seekBar.getProgress() / seekBar.getMax());
+                    if(seekToPosition == 0){
+                        seekToPosition = 1000;
+                    }
+                    Log.d(TAG, "onStopTrackingTouch: "+seekToPosition);
                     if (!videoView.isCompletedState()) {
                         videoView.seekTo(seekToPosition);
-                        danmuFragment.seekTo();
+//                        danmuFragment.seekTo();
                     } else if (videoView.isCompletedState() && seekToPosition / seekBar.getMax() * seekBar.getMax() < videoView.getDuration() / seekBar.getMax() * seekBar.getMax()) {
                         videoView.seekTo(seekToPosition);
-                        danmuFragment.seekTo();
+//                        danmuFragment.seekTo();
                         videoView.start();
-                        danmuFragment.resume();
+//                        danmuFragment.resume();
                     }
                 }
                 status_dragging = false;
@@ -838,7 +897,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             show(-1);
             resetTopBottomLayout(View.GONE);
             resetSideLayout(View.GONE);
-            resetLeftSideView(View.GONE);
+            resetLeftSideView(View.INVISIBLE);
             if (videoView != null) {
                 sb_light.setProgress(videoView.getBrightness(videoActivity));
                 sb_volume.setProgress(videoView.getVolume());
@@ -853,7 +912,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             show(-1);
             resetTopBottomLayout(View.GONE);
             resetSideLayout(View.GONE);
-            resetLeftSideView(View.GONE);
+            resetLeftSideView(View.INVISIBLE);
             resetBitRateLayout(View.GONE, false);
             resetSpeedLayout(View.GONE, false);
             et_dmedit.requestFocus();
@@ -861,13 +920,13 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             if (videoView != null) {
                 status_isPlaying = videoView.isPlaying();
                 videoView.pause(true);
-                danmuFragment.pause();
+//                danmuFragment.pause();
             }
             PolyvKeyBoardUtils.openKeybord(et_dmedit, mContext);
         } else if (rl_center_danmu.getVisibility() == View.VISIBLE) {
             if (videoView != null && status_isPlaying) {
                 videoView.start();
-                danmuFragment.resume();
+//                danmuFragment.resume();
             }
             PolyvKeyBoardUtils.closeKeybord(et_dmedit, mContext);
         }
@@ -895,7 +954,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
             show(-1);
             resetTopBottomLayout(View.GONE);
             resetSideLayout(View.GONE);
-            resetLeftSideView(View.GONE);
+            resetLeftSideView(View.INVISIBLE);
         }
         rl_center_share.setVisibility(isVisible);
     }
@@ -1239,10 +1298,10 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
     private void resetDmSwitchView() {
         if (iv_dmswitch.isSelected()) {
             iv_dmswitch.setSelected(false);
-            danmuFragment.show();
+//            danmuFragment.show();
         } else {
             iv_dmswitch.setSelected(true);
-            danmuFragment.hide();
+//            danmuFragment.hide();
         }
     }
 
@@ -1287,7 +1346,7 @@ public class PolyvPlayerMediaController extends PolyvBaseMediaController impleme
 
     //发送弹幕并隐藏布局
     private void sendDanmaku() {
-        danmuFragment.send(videoView, et_dmedit.getText().toString(), fontmode, fontsize, color);
+//        danmuFragment.send(videoView, et_dmedit.getText().toString(), fontmode, fontsize, color);
         hide();
     }
 

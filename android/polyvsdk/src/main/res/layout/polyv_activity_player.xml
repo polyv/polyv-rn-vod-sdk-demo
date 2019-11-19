@@ -44,11 +44,17 @@
             android:background="@drawable/polyv_logo"
             android:visibility="gone" />
 
-        <FrameLayout
+        <!--<FrameLayout-->
+            <!--android:id="@+id/fl_danmu"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+        <com.easefun.polyvsdk.player.PolyvRNDanmuView
             android:id="@+id/fl_danmu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
+        </com.easefun.polyvsdk.player.PolyvRNDanmuView>
         <!-- 底部字幕 -->
         <TextView
             android:id="@+id/srt"

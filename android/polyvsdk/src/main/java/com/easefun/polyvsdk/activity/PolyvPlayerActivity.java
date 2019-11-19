@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.easefun.polyvsdk.PolyvBitRate;
 import com.easefun.polyvsdk.PolyvSDKUtil;
 import com.easefun.polyvsdk.R;
-import com.easefun.polyvsdk.fragment.PolyvPlayerDanmuFragment;
 import com.easefun.polyvsdk.fragment.PolyvPlayerTabFragment;
 import com.easefun.polyvsdk.fragment.PolyvPlayerTopFragment;
 import com.easefun.polyvsdk.fragment.PolyvPlayerViewPagerFragment;
@@ -42,6 +41,7 @@ import com.easefun.polyvsdk.player.PolyvPlayerMediaController;
 import com.easefun.polyvsdk.player.PolyvPlayerPreviewView;
 import com.easefun.polyvsdk.player.PolyvPlayerProgressView;
 import com.easefun.polyvsdk.player.PolyvPlayerVolumeView;
+import com.easefun.polyvsdk.player.PolyvRNDanmuView;
 import com.easefun.polyvsdk.screencast.PolyvScreencastHelper;
 import com.easefun.polyvsdk.srt.PolyvSRTItemVO;
 import com.easefun.polyvsdk.sub.vlms.entity.PolyvCoursesInfo;
@@ -93,7 +93,8 @@ public class PolyvPlayerActivity extends FragmentActivity {
     private PolyvPlayerTopFragment topFragment;
     private PolyvPlayerTabFragment tabFragment;
     private PolyvPlayerViewPagerFragment viewPagerFragment;
-    private PolyvPlayerDanmuFragment danmuFragment;
+//    private PolyvPlayerDanmuFragment danmuFragment;
+    private PolyvRNDanmuView danmuFragment;
     private ImageView iv_vlms_cover;
     //投屏相关
     private PolyvScreencastHelper screencastHelper;
@@ -218,9 +219,9 @@ public class PolyvPlayerActivity extends FragmentActivity {
     }
 
     private void addFragment() {
-        danmuFragment = new PolyvPlayerDanmuFragment();
+        danmuFragment = findViewById(R.id.fl_danmu);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fl_danmu, danmuFragment, "danmuFragment");
+//        ft.add(R.id.fl_danmu, danmuFragment, "danmuFragment");
         // 网校的在线视频才添加下面的控件
         if (!getIntent().getBooleanExtra(PolyvMainActivity.IS_VLMS_ONLINE, false)) {
             ft.commit();
@@ -466,7 +467,7 @@ public class PolyvPlayerActivity extends FragmentActivity {
             public void onOut(@NonNull PolyvQuestionVO questionVO) {
                 switch (questionVO.getType()) {
                     case PolyvQuestionVO.TYPE_QUESTION:
-                        questionView.showAnswerContent(questionVO);
+//                        questionView.showAnswerContent(questionVO);
                         break;
 
                     case PolyvQuestionVO.TYPE_AUDITION:

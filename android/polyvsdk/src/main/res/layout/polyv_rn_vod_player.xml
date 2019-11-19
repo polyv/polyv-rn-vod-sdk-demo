@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.easefun.polyvsdk.player.PolyvPlayerMediaControllerRN
+        <com.easefun.polyvsdk.player.PolyvPlayerMediaController
             android:id="@+id/polyv_player_media_controller"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -33,6 +33,7 @@
             android:src="@drawable/polyv_btn_share_s" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/iv_screencast_search_land"
             style="@style/iv_click_controller_land_top"
             android:layout_marginRight="@dimen/common_margin_lr"
@@ -153,7 +154,7 @@
         android:layout_marginLeft="@dimen/corners_common"
         android:layout_toRightOf="@id/ll_left_side_land"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/tv_video_land"
@@ -242,6 +243,7 @@
             android:text="流畅" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/iv_dmswitch"
             style="@style/iv_click_controller_land_bottom"
             android:layout_centerVertical="true"
