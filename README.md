@@ -15,12 +15,7 @@ Android 4.1.0 (API 16) 以上 或 iOS 9.0 以上
 - 准备在使用 React Native 技术开发的项目中接入点播功能；
 - 拥有 polyv 官网的直播账号且已开通直播权限。
 
-### 1.3 版本功能
 
-RN 版本是基于原生 demo + sdk 开发的，iOS 与 android 对应版本，及 SDK 版本更新日志链接如下：
-
-- iOS SDK 对应版本为 v2.5.4，[版本更新日志](https://github.com/polyv/polyv-ios-vod-sdk/releases)
-- android SDK 对应版本为 v2.7.2，[版本更新日志](https://github.com/easefun/polyv-android-sdk-2.0-demo/releases)
 
 ## 2. 快速开始
 
