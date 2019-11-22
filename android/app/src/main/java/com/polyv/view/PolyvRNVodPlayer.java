@@ -37,6 +37,7 @@ import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
 import com.easefun.polyvsdk.srt.PolyvSRTItemVO;
 import com.easefun.polyvsdk.util.PolyvErrorMessageUtils;
 import com.easefun.polyvsdk.util.PolyvScreenUtils;
+import com.easefun.polyvsdk.util.PolyvVideoProgressDatabaseUtil;
 import com.easefun.polyvsdk.video.IPolyvMediaPlayerControl;
 import com.easefun.polyvsdk.video.PolyvMediaInfoType;
 import com.easefun.polyvsdk.video.PolyvPlayErrorReason;
@@ -264,6 +265,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         videoView.setOnPreparedListener(new IPolyvOnPreparedListener2() {
             @Override
             public void onPrepared() {
+
                 mediaController.preparedView();
                 progressView.setViewMaxValue(videoView.getDuration());
                 // 没开预加载在这里开始弹幕
@@ -283,6 +285,14 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
             @Override
             public boolean onInfo(int what, int extra) {
                 switch (what) {
+                    case PolyvMediaInfoType.MEDIA_INFO_VIDEO_RENDERING_START:
+                        Log.d("start", "statr render");
+                        int progress = PolyvVideoProgressDatabaseUtil.getVideoProgress(vid);
+                        if (progress != 0) {
+                            videoView.seekTo(progress);
+                        }
+
+                        break;
                     case PolyvMediaInfoType.MEDIA_INFO_BUFFERING_START:
 //                        danmuFragment.pause(false);
                         break;
@@ -669,7 +679,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
 
     // </editor-fold>
 
-   // <editor-fold defaultstate="collapsed" desc="播放器相关公开接口函数">
+    // <editor-fold defaultstate="collapsed" desc="播放器相关公开接口函数">
 
     /**
      * 播放视频
@@ -681,6 +691,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
      */
     public void play(final String vid, final int bitrate, boolean startNow, final boolean isMustFromLocal) {
         if (TextUtils.isEmpty(vid)) return;
+        this.vid = vid;
         if (iv_vlms_cover != null && iv_vlms_cover.getVisibility() == View.VISIBLE) {
             iv_vlms_cover.setVisibility(View.GONE);
         }

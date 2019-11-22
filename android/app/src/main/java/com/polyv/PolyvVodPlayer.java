@@ -1,18 +1,17 @@
 package com.polyv;
 
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.easefun.polyvsdk.log.PolyvCommonLog;
 import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
-import com.polyv.protocol.IPolyvRNVideoPlayer;
-import com.polyv.view.PolyvRNVodPlayer;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.polyv.protocol.IPolyvRNVideoPlayer;
+import com.polyv.view.PolyvRNVodPlayer;
 
 import java.util.Map;
 
@@ -69,7 +68,7 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
             case POLYVVODPLAYER_EVENT_UPDATEVID:
                 if (args != null) {
                     String vid = args.getString(0);
-                    root.setVid(vid.trim());
+                    root.play(vid.trim(), 1, true, false);
                 }
                 break;
             case POLYVVODPLAYER_EVENT_START_OR_PAUSE:
