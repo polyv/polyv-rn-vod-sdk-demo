@@ -105,7 +105,7 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
     @Override
     public void setVid(PolyvRNVodPlayer player, @Nullable String vid) {
         PolyvCommonLog.d(POLYV_VOD_PLAYER, "set vid :" + vid);
-        player.play(vid, 1, false, false);
+        player.play(vid, 0, false, false);
     }
 
     @ReactProp(name = PolyvRNConstants.RN_PLAY_PARAMETERS)
@@ -123,7 +123,7 @@ public class PolyvVodPlayer extends ViewGroupManager<PolyvRNVodPlayer> implement
                 isAutoStart = readableMap.getBoolean(PolyvRNConstants.RN_IS_AUTO_START);
             }
             String vid = readableMap.getString(PolyvRNConstants.RN_VID);
-            player.play(vid, 1, isAutoStart, false);
+            player.play(vid, 0, isAutoStart, false);
 
             if(readableMap.hasKey(PolyvRNConstants.RN_FULLSCREEN)){
                 isFullScreen = readableMap.getBoolean(PolyvRNConstants.RN_FULLSCREEN);

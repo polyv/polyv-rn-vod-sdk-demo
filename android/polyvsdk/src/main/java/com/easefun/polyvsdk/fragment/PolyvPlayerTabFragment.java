@@ -114,16 +114,13 @@ public class PolyvPlayerTabFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.tv_talk) {
+        int id = view.getId();
+        if (id == R.id.tv_talk) {
             viewPagerFragment.setCurrentItem(2);
-
-        } else if (i == R.id.tv_sum) {
+        } else if (id == R.id.tv_sum) {
             viewPagerFragment.setCurrentItem(1);
-
-        } else if (i == R.id.tv_cur) {
+        } else if (id == R.id.tv_cur) {
             viewPagerFragment.setCurrentItem(0);
-
         }
     }
 }

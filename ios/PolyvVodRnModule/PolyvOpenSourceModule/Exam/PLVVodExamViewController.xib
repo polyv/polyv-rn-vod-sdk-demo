@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina3_5" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,15 +29,25 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uZq-eR-VVR" userLabel="View1">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4CT-ba-NF4">
-                            <rect key="frame" x="16" y="0.0" width="448" height="40"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="【多选题】" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tPR-MT-Jng">
+                            <rect key="frame" x="16" y="0.0" width="62" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="CzI-N3-Usi"/>
+                                <constraint firstAttribute="width" constant="62" id="5VZ-xi-ijO"/>
+                                <constraint firstAttribute="height" constant="40" id="jZK-uW-G1m"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <nil key="textColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.29019607843137252" green="0.56470588235294117" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="123" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EmB-WD-cy8" userLabel="Question Title">
+                            <rect key="frame" x="88" y="0.0" width="376" height="40"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="aKI-U0-HXF"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gCg-Vn-lhb" userLabel="View2">
                             <rect key="frame" x="16" y="40" width="448" height="232"/>
                             <subviews>
@@ -52,9 +62,9 @@
                                     <constraints>
                                         <constraint firstItem="xaK-Pi-qLa" firstAttribute="top" secondItem="7vs-xS-Kqg" secondAttribute="top" id="0wh-BD-dHu"/>
                                         <constraint firstItem="xaK-Pi-qLa" firstAttribute="leading" secondItem="7vs-xS-Kqg" secondAttribute="leading" id="3BC-YG-wya"/>
-                                        <constraint firstAttribute="width" priority="750" constant="224" id="LzV-S4-0V8"/>
+                                        <constraint firstAttribute="width" constant="224" id="LzV-S4-0V8"/>
                                         <constraint firstAttribute="bottom" secondItem="xaK-Pi-qLa" secondAttribute="bottom" id="ctL-AR-ae4"/>
-                                        <constraint firstAttribute="trailing" secondItem="xaK-Pi-qLa" secondAttribute="trailing" constant="6" id="ttQ-zL-MJt"/>
+                                        <constraint firstAttribute="trailing" secondItem="xaK-Pi-qLa" secondAttribute="trailing" id="ttQ-zL-MJt"/>
                                     </constraints>
                                 </view>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="cZY-Bx-3f4">
@@ -119,13 +129,15 @@
                         <constraint firstAttribute="trailing" secondItem="gCg-Vn-lhb" secondAttribute="trailing" constant="16" id="02G-5m-7PT"/>
                         <constraint firstAttribute="bottom" secondItem="gCg-Vn-lhb" secondAttribute="bottom" priority="750" constant="48" id="0fO-bD-AiX"/>
                         <constraint firstAttribute="bottom" secondItem="7uS-y5-UUo" secondAttribute="bottom" id="2Zd-kK-FoW"/>
-                        <constraint firstItem="4CT-ba-NF4" firstAttribute="top" secondItem="uZq-eR-VVR" secondAttribute="top" id="AUT-83-bnE"/>
+                        <constraint firstItem="tPR-MT-Jng" firstAttribute="leading" secondItem="uZq-eR-VVR" secondAttribute="leading" constant="16" id="AGm-eb-cyQ"/>
                         <constraint firstItem="7uS-y5-UUo" firstAttribute="leading" secondItem="uZq-eR-VVR" secondAttribute="leading" id="FOA-Br-T2a"/>
                         <constraint firstAttribute="trailing" secondItem="7uS-y5-UUo" secondAttribute="trailing" id="KEU-s9-B3n"/>
                         <constraint firstItem="gCg-Vn-lhb" firstAttribute="leading" secondItem="uZq-eR-VVR" secondAttribute="leading" constant="16" id="hKr-MN-OnU"/>
+                        <constraint firstAttribute="trailing" secondItem="EmB-WD-cy8" secondAttribute="trailing" constant="16" id="io2-Rr-ylI"/>
                         <constraint firstItem="gCg-Vn-lhb" firstAttribute="top" secondItem="uZq-eR-VVR" secondAttribute="top" constant="40" id="mZT-lo-myG"/>
-                        <constraint firstItem="4CT-ba-NF4" firstAttribute="leading" secondItem="uZq-eR-VVR" secondAttribute="leading" constant="16" id="yET-fu-CHH"/>
-                        <constraint firstAttribute="trailing" secondItem="4CT-ba-NF4" secondAttribute="trailing" constant="16" id="zcx-fR-wky"/>
+                        <constraint firstItem="EmB-WD-cy8" firstAttribute="leading" secondItem="tPR-MT-Jng" secondAttribute="trailing" constant="10" id="tU6-49-beq"/>
+                        <constraint firstItem="EmB-WD-cy8" firstAttribute="top" secondItem="uZq-eR-VVR" secondAttribute="top" id="wo7-1w-6EL"/>
+                        <constraint firstItem="tPR-MT-Jng" firstAttribute="top" secondItem="uZq-eR-VVR" secondAttribute="top" id="zLW-w7-LIQ"/>
                     </constraints>
                 </view>
             </subviews>
@@ -145,11 +157,12 @@
                 <outlet property="outerContainerLeadingConstraint" destination="1Kr-2R-PTT" id="H3I-NU-PeE"/>
                 <outlet property="outerContainerTailingConstraint" destination="VYF-8e-wwG" id="6DM-Dp-0cO"/>
                 <outlet property="outerContainerTopConstraint" destination="gzS-EK-G4r" id="4BH-xS-bbv"/>
-                <outlet property="questionLabel" destination="4CT-ba-NF4" id="ABr-Bj-SSB"/>
+                <outlet property="questionLabel" destination="EmB-WD-cy8" id="599-VY-0W8"/>
+                <outlet property="questionTypeLb" destination="tPR-MT-Jng" id="rEX-PK-evD"/>
                 <outlet property="skipButton" destination="u6I-Fl-Ch5" id="iNm-1F-J1T"/>
                 <outlet property="submitButton" destination="FDe-w5-p9l" id="haq-dt-8If"/>
             </connections>
-            <point key="canvasLocation" x="723" y="49"/>
+            <point key="canvasLocation" x="260" y="-144.375"/>
         </view>
         <view contentMode="scaleToFill" id="Se4-MJ-ONL" userLabel="解释视图" customClass="PLVVodExplanationView">
             <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
@@ -202,13 +215,13 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
+                                <constraint firstItem="TLS-gQ-8jc" firstAttribute="top" secondItem="ffe-xd-e3h" secondAttribute="bottom" constant="10" id="Bdd-FQ-uIl"/>
                                 <constraint firstItem="TLS-gQ-8jc" firstAttribute="leading" secondItem="3ap-UH-CMR" secondAttribute="leading" id="DOO-nf-3Tv"/>
                                 <constraint firstItem="ffe-xd-e3h" firstAttribute="top" secondItem="3ap-UH-CMR" secondAttribute="top" id="G35-J8-hgN"/>
                                 <constraint firstAttribute="trailing" secondItem="ffe-xd-e3h" secondAttribute="trailing" constant="16" id="TSr-ZA-62G"/>
                                 <constraint firstItem="ffe-xd-e3h" firstAttribute="leading" secondItem="3ap-UH-CMR" secondAttribute="leading" constant="16" id="V7v-EW-d1E"/>
                                 <constraint firstAttribute="trailing" secondItem="TLS-gQ-8jc" secondAttribute="trailing" id="qYr-aS-M0k"/>
                                 <constraint firstAttribute="bottom" secondItem="TLS-gQ-8jc" secondAttribute="bottom" id="uLn-07-a5U"/>
-                                <constraint firstAttribute="bottom" secondItem="ffe-xd-e3h" secondAttribute="bottom" constant="54" id="yCe-1b-rTm"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X5U-uo-nNb" userLabel="没有解析内容的容器">

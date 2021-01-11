@@ -2,7 +2,6 @@ package com.easefun.polyvsdk.player;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
@@ -26,9 +25,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.fragment.PolyvPlayerTopFragment;
 import com.easefun.polyvsdk.ijk.PolyvPlayerScreenRatio;
-import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.log.PolyvCommonLog;
 import com.easefun.polyvsdk.util.PolyvKeyBoardUtils;
 import com.easefun.polyvsdk.util.PolyvScreenUtils;
@@ -458,7 +457,7 @@ public class PolyvPlayerMediaControllerRN extends PolyvBaseMediaController imple
             initBitRateViewVisible(videoView.getBitRate());
 
             //音频模式下，隐藏切换码率/填充模式/字幕/截图的按钮
-            int visibility = PolyvVideoVO.MODE_AUDIO.equals(videoView.getCurrentMode()) ? View.GONE : View.VISIBLE;
+            int visibility = PolyvVideoVO.MODE_AUDIO.equals(videoView.getCurrentMode()) ? View.INVISIBLE : View.VISIBLE;
             if (visibility == View.GONE)
                 rl_center_bit.setVisibility(visibility);
             tv_bit.setVisibility(visibility);

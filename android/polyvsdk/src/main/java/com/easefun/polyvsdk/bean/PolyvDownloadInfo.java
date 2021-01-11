@@ -1,5 +1,7 @@
 package com.easefun.polyvsdk.bean;
 
+import com.easefun.polyvsdk.PolyvDownloader;
+
 public class PolyvDownloadInfo {
     // vid
     private String vid;
@@ -15,17 +17,22 @@ public class PolyvDownloadInfo {
     private long percent;
     // 总文件大小(mp4)/总个数(ts)
     private long total;
+    // 下载的文件类型
+    private int fileType;
 
     private float progress;
 
-    public PolyvDownloadInfo(){}
-
     public PolyvDownloadInfo(String vid, String duration, long filesize, int bitrate, String title) {
+        this(vid,duration, filesize, bitrate, title, PolyvDownloader.FILE_VIDEO);
+    }
+
+    public PolyvDownloadInfo(String vid, String duration, long filesize, int bitrate, String title, int fileType) {
         this.vid = vid;
         this.duration = duration;
         this.filesize = filesize;
         this.bitrate = bitrate;
         this.title = title;
+        this.fileType = fileType;
     }
 
     public String getVid() {
@@ -84,6 +91,14 @@ public class PolyvDownloadInfo {
         this.total = total;
     }
 
+    public int getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(int fileType) {
+        this.fileType = fileType;
+    }
+
     @Override
     public String toString() {
         return "PolyvDownloadInfo{" +
@@ -94,6 +109,7 @@ public class PolyvDownloadInfo {
                 ", title='" + title + '\'' +
                 ", percent=" + percent +
                 ", total=" + total +
+                ", fileType=" + fileType +
                 '}';
     }
 

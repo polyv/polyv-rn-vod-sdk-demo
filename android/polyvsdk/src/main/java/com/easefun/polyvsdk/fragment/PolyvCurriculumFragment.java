@@ -90,7 +90,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
         vlmsHelper.getCurriculumDetail(course.course_id, new PolyvVlmsHelper.MyCurriculumDetailListener() {
             @Override
             public void fail(Throwable t) {
-                pb_loading.setVisibility(View.GONE);
+                pb_loading.setVisibility(View.INVISIBLE);
                 tv_reload.setVisibility(View.VISIBLE);
             }
 
@@ -100,7 +100,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        pb_loading.setVisibility(View.GONE);
+                        pb_loading.setVisibility(View.INVISIBLE);
                         PolyvCurriculumFragment.this.lists.clear();
                         PolyvCurriculumFragment.this.lists.addAll(curriculumsDetails);
                         if (PolyvCurriculumFragment.this.lists.size() == 0)
@@ -140,7 +140,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!adapter.getSideIconVisible()) {
                     ll_top.setVisibility(View.VISIBLE);
-                    ll_center.setVisibility(View.GONE);
+                    ll_center.setVisibility(View.INVISIBLE);
                     ll_download.setVisibility(View.VISIBLE);
                     adapter.setSideIconVisible(true);
                 }
@@ -235,7 +235,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
             return;
         ll_top.setVisibility(View.VISIBLE);
         ll_download.setVisibility(View.VISIBLE);
-        ll_center.setVisibility(View.GONE);
+        ll_center.setVisibility(View.INVISIBLE);
         adapter.setSideIconVisible(true);
         adapter.cancelSideIconSelected();
         adapter.initSelect(currentSelcetBitrate);
@@ -244,30 +244,25 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
 
     private void sideIconGone() {
         adapter.setSideIconVisible(false);
-        ll_top.setVisibility(View.GONE);
-        ll_download.setVisibility(View.GONE);
+        ll_top.setVisibility(View.INVISIBLE);
+        ll_download.setVisibility(View.INVISIBLE);
         ll_center.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.tv_hd) {
+        int id = v.getId();
+        if (id == R.id.tv_hd) {
             changeSelcet(3);
-
-        } else if (i == R.id.tv_sd) {
+        } else if (id == R.id.tv_sd) {
             changeSelcet(2);
-
-        } else if (i == R.id.tv_flu) {
+        } else if (id == R.id.tv_flu) {
             changeSelcet(1);
-
-        } else if (i == R.id.rl_bot) {
+        } else if (id == R.id.rl_bot) {
             sideIconVisible();
-
-        } else if (i == R.id.tv_cancle) {
+        } else if (id == R.id.tv_cancle) {
             sideIconGone();
-
-        } else if (i == R.id.tv_all) {
+        } else if (id == R.id.tv_all) {
             if (tv_all.getText().toString().equals("全部缓存")) {
                 adapter.putCurBitSideIconSelected(currentSelcetBitrate);
                 resetTv_allText();
@@ -278,20 +273,17 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
                 adapter.downloadSelected();
                 sideIconGone();
             }
-
-        } else if (i == R.id.tv_reload) {
+        } else if (id == R.id.tv_reload) {
             pb_loading.setVisibility(View.VISIBLE);
-            tv_reload.setVisibility(View.GONE);
+            tv_reload.setVisibility(View.INVISIBLE);
             getCurriculumDetail();
-
-        } else if (i == R.id.ll_selbit) {
+        } else if (id == R.id.ll_selbit) {
             int[] location = new int[2];
             tv_selbit.getLocationOnScreen(location);
             int width = tv_selbit.getMeasuredWidth();
             int height = tv_selbit.getMeasuredHeight();
             popupWindow.showAtLocation(popupwindow_view, Gravity.NO_GRAVITY, location[0] + width * 3 / 4,
                     location[1] + height * 3 / 4);
-
         }
     }
 }

@@ -48,7 +48,7 @@ public class PolyvPlayerTopFragment extends Fragment implements View.OnClickList
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (PolyvScreenUtils.isLandscape(getActivity())) {
-            rl_top.setVisibility(View.GONE);
+            rl_top.setVisibility(View.INVISIBLE);
         } else {
             rl_top.setVisibility(View.VISIBLE);
         }
@@ -96,22 +96,17 @@ public class PolyvPlayerTopFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        int i = view.getId();
-        if (i == R.id.iv_share) {
+        int id = view.getId();
+        if (id == R.id.iv_share) {
             popupWindow.showAsDropDown(iv_share, 0, 1);
-
-        } else if (i == R.id.iv_finish) {
+        } else if (id == R.id.iv_finish) {
             getActivity().finish();
-
-        } else if (i == R.id.ll_shareqq) {
+        } else if (id == R.id.ll_shareqq) {
             PolyvShareUtils.shareQQFriend(getActivity(), "", SHARE_TEXT, PolyvShareUtils.TEXT, null);
-
-        } else if (i == R.id.ll_sharewechat) {
+        } else if (id == R.id.ll_sharewechat) {
             PolyvShareUtils.shareWeChatFriend(getActivity(), "", SHARE_TEXT, PolyvShareUtils.TEXT, null);
-
-        } else if (i == R.id.ll_shareweibo) {
+        } else if (id == R.id.ll_shareweibo) {
             PolyvShareUtils.shareWeiBo(getActivity(), "", SHARE_TEXT, PolyvShareUtils.TEXT, null);
-
         }
     }
 }

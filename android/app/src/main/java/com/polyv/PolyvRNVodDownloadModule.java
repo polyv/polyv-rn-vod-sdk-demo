@@ -13,8 +13,10 @@ import com.easefun.polyvsdk.Video;
 import com.easefun.polyvsdk.bean.PolyvDownloadInfo;
 import com.easefun.polyvsdk.database.PolyvDownloadSQLiteHelper;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderProgressListener;
+import com.easefun.polyvsdk.download.listener.IPolyvDownloaderProgressListener2;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderSpeedListener;
 import com.easefun.polyvsdk.download.listener.IPolyvDownloaderStartListener;
+import com.easefun.polyvsdk.download.listener.IPolyvDownloaderStartListener2;
 import com.easefun.polyvsdk.log.PolyvCommonLog;
 import com.easefun.polyvsdk.util.PolyvErrorMessageUtils;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
@@ -105,8 +107,13 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
             Video.loadVideo(vid, new Video.OnVideoLoaded() {
                 public void onloaded(final Video v) {
                     if (v == null) {
-                        Toast.makeText(getCurrentActivity(), "获取下载信息失败，请重试", Toast.LENGTH_SHORT).show();
-                        promise.reject(PolyvRNVodCode.PolyvVodDownloadResultCode.DOWNLOAD_INFO_ERROR+"");
+                        (getCurrentActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getCurrentActivity(), "获取下载信息失败，请重试", Toast.LENGTH_SHORT).show();
+                                promise.reject(PolyvRNVodCode.PolyvVodDownloadResultCode.DOWNLOAD_INFO_ERROR+"");
+                            }
+                        });
                         return;
                     }
 
@@ -126,7 +133,8 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
         final PolyvDownloadInfo downloadInfo = new PolyvDownloadInfo(vid, videoJSONVO.getDuration(),
                 videoJSONVO.getFileSizeMatchVideoType(bitrate), bitrate, title);
         Log.i("videoAdapter", downloadInfo.toString());
-        if (downloadSQLiteHelper != null && !downloadSQLiteHelper.isAdd(downloadInfo.getVid())) {
+        if (downloadSQLiteHelper != null && !downloadSQLiteHelper.isAdd(downloadInfo)
+                                            && !downloadSQLiteHelper.isInDatabase(vid)) {
             downloadSQLiteHelper.insert(downloadInfo);
             PolyvDownloader polyvDownloader = addDownloadListener(vid, bitrate, downloadInfo, null);
             polyvDownloader.start(getCurrentActivity());
@@ -195,7 +203,7 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
         //移除任务
         PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(vid, bitrate);
         //删除文件
-        downloader.deleteVideo();
+        downloader.delete();
         //移除数据库的下载信息
         PolyvDownloadInfo polyvDownloadInfo = new PolyvDownloadInfo(vid, "", 0, bitrate, "");
         downloadSQLiteHelper.delete(polyvDownloadInfo);
@@ -219,7 +227,7 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
             //移除任务
             PolyvDownloader downloader = PolyvDownloaderManager.clearPolyvDownload(downloadInfo.getVid(), downloadInfo.getBitrate());
             //删除文件
-            downloader.deleteVideo();
+            downloader.delete();
             //移除数据库的下载信息
             downloadSQLiteHelper.delete(downloadInfo);
         }
@@ -253,7 +261,7 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
     // <editor-fold defaultstate="collapsed" desc="原生监听器 和 JS事件发送">
     private PolyvDownloader addDownloadListener(String vid, int bitrate, final PolyvDownloadInfo downloadInfo, final Callback callback) {
         PolyvDownloader polyvDownloader = PolyvDownloaderManager.getPolyvDownloader(vid, bitrate);
-        polyvDownloader.setPolyvDownloadProressListener(new IPolyvDownloaderProgressListener() {
+        polyvDownloader.setPolyvDownloadProressListener2(new IPolyvDownloaderProgressListener2() {
 
             private long total;
             String data = GsonUtil.toJson(downloadInfo);
@@ -272,13 +280,13 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onDownloadSuccess() {
+            public void onDownloadSuccess(int bitrate) {
                 String vid = downloadInfo.getVid();
-                int bitrate = downloadInfo.getBitrate();
+                int downloadBitrate = downloadInfo.getBitrate();
                 WritableMap map = Arguments.createMap();
                 map.putDouble("total", total);
                 map.putString("vid", vid);
-                map.putDouble("bitrate", bitrate);
+                map.putDouble("bitrate", downloadBitrate);
                 downloadSQLiteHelper.update(downloadInfo, total, total);
                 sendEvent(getReactApplicationContext(), "downloadSuccessEvent", map);
             }
@@ -298,7 +306,7 @@ public class PolyvRNVodDownloadModule extends ReactContextBaseJavaModule {
 
 
         });
-        polyvDownloader.setPolyvDownloadStartListener(new IPolyvDownloaderStartListener() {
+        polyvDownloader.setPolyvDownloadStartListener2(new IPolyvDownloaderStartListener2() {
             @Override
             public void onStart() {
                 String data = GsonUtil.toJson(downloadInfo);

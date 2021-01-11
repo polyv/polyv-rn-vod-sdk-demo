@@ -8,7 +8,11 @@
 
 #import "PLVVodDanmuSendView.h"
 #import "UIColor+PLVVod.h"
+#if __has_include(<PLVVodDanmu/PLVVodDanmu.h>)
+#import <PLVVodDanmu/PLVVodDanmu.h>
+#else
 #import "PLVVodDanmu.h"
+#endif
 
 @interface PLVVodDanmuSendView ()
 
@@ -65,9 +69,9 @@
 	_modes = @[@(PLVVodDanmuModeRoll), @(PLVVodDanmuModeTop), @(PLVVodDanmuModeBottom)];
 	_fontSizes = @[@16, @18, @24];
 	
-	_danmuColorHex = 0xffffff;
-	_danmuFontSize = 16;
-	_danmuMode = PLVVodDanmuModeRoll;
+	self.danmuColorHex = 0xffffff;
+	self.danmuFontSize = 16;
+	self.danmuMode = PLVVodDanmuModeRoll;
 }
 
 #pragma mark - property

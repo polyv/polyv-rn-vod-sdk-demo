@@ -18,6 +18,7 @@ import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.adapter.PolyvUploadListViewAdapter;
 import com.easefun.polyvsdk.bean.PolyvUploadInfo;
 import com.easefun.polyvsdk.database.PolyvUploadSQLiteHelper;
+import com.easefun.polyvsdk.util.GetPathFromUri;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class PolyvUploadActivity extends Activity {
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-//                                adapter.removeTask(position);
+                                adapter.removeTask(position);
                             }
                         }).setNegativeButton(android.R.string.cancel, null).show();
                 return true;
@@ -80,11 +81,11 @@ public class PolyvUploadActivity extends Activity {
     // 获取视频的地址并添加到上传列表中
     private void handle(Uri... uris) {
         // 路径
-        String filepath ="";
+        String filepath;
         for (int i = 0; i < uris.length; i++) {
             // 在图册中上传
             if (uris[i].toString().startsWith("content")) {
-//                filepath = GetPathFromUri.getPath(this, uris[i]);
+                filepath = GetPathFromUri.getPath(this, uris[i]);
             } else {
                 // 在文件中选择
                 filepath = uris[i].getPath().substring(uris[i].getPath().indexOf("/") + 1);
@@ -92,7 +93,12 @@ public class PolyvUploadActivity extends Activity {
             File file = new File(filepath);
             String fileName = file.getName();
             // 标题
-            String title = fileName.substring(0, fileName.lastIndexOf("."));
+            String title = null;
+            if (fileName.contains(".")) {
+                title = fileName.substring(0, fileName.lastIndexOf("."));
+            } else {
+                title = fileName;
+            }
             // 描述
             String desc = title;
             // 大小
@@ -104,7 +110,7 @@ public class PolyvUploadActivity extends Activity {
             if (!uploadSQLiteHelper.isAdd(uploadInfo)) {
                 uploadSQLiteHelper.insert(uploadInfo);
                 lists.add(uploadInfo);
-//                adapter.initUploader();
+                adapter.initUploader();
             } else {
                 PolyvUploadActivity.this.runOnUiThread(new Runnable() {
 

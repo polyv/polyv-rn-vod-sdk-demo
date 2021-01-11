@@ -1,5 +1,15 @@
 package com.easefun.polyvsdk.player;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.easefun.polyvsdk.PolyvSDKUtil;
+import com.easefun.polyvsdk.R;
+import com.easefun.polyvsdk.SDKUtil;
+import com.easefun.polyvsdk.ijk.IjkVideoView;
+import com.easefun.polyvsdk.video.PolyvVideoView;
+import com.easefun.polyvsdk.vo.PolyvQuestionVO;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -9,17 +19,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.easefun.polyvsdk.PolyvSDKUtil;
-import com.easefun.polyvsdk.R;
-import com.easefun.polyvsdk.video.PolyvVideoView;
-import com.easefun.polyvsdk.vo.PolyvQuestionVO;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * 听力问答视图
@@ -176,6 +179,6 @@ public class PolyvPlayerAuditionView extends RelativeLayout {
 			handler.removeMessages(UPDATE_PROGRESS);
 		}
 
-		setVisibility(View.GONE);
+		setVisibility(View.INVISIBLE);
 	}
 }

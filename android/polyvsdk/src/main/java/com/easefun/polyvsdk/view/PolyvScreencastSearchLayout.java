@@ -27,6 +27,8 @@ import com.easefun.polyvsdk.screencast.PolyvIUIUpdateListener;
 import com.easefun.polyvsdk.screencast.PolyvScreencastHelper;
 import com.easefun.polyvsdk.screencast.utils.PolyvLogger;
 import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
+import com.easefun.polyvsdk.util.PolyvNetworkUtils;
+import com.easefun.polyvsdk.video.PolyvVideoType;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
 import com.hpplay.common.utils.NetworkUtil;
 import com.hpplay.sdk.source.api.IConnectListener;
@@ -186,9 +188,9 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
     public void hide(boolean isStopBrowse) {
         if (getVisibility() != View.VISIBLE)
             return;
-        setVisibility(View.GONE);
+        setVisibility(View.INVISIBLE);
         if (onVisibilityChangedListener != null) {
-            onVisibilityChangedListener.onVisibilityChanged(this, View.GONE);
+            onVisibilityChangedListener.onVisibilityChanged(this, View.INVISIBLE);
         }
         if (isStopBrowse) {
             stopBrowse();
@@ -236,25 +238,38 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
     }
 
     public void disConnect() {
+        disConnect(true);
+    }
+
+    public void disConnect(boolean isSelectNull) {
         LelinkServiceInfo selectInfo = screencastDeviceListAdapter.getSelectInfo();
         if (null != screencastHelper && null != selectInfo) {
             PolyvLogger.test(TAG, "disConnect click:" + selectInfo.getName());
             screencastHelper.disConnect(selectInfo);
         }
 
+        if (isSelectNull)
+            selectNull();
+    }
+
+    public void selectNull() {
         screencastDeviceListAdapter.setSelectInfo(null);
         screencastDeviceListAdapter.notifyDataSetChanged();
     }
 
     public void refreshWifiName() {
         String netWorkName = NetworkUtil.getNetWorkName(getApplicationContext());
+        boolean isWifi = PolyvNetworkUtils.NETWORK_WIFI == PolyvNetworkUtils.getNetWorkType(getApplicationContext());
+        if (isWifi) {
+            netWorkName = PolyvNetworkUtils.getWIFISSID(getApplicationContext());
+        }
         if ("网络错误".equals(netWorkName)
                 || "有线网络".equals(netWorkName)) {
             iv_wifi_icon.setSelected(false);
             tv_wifi_name.setText("当前是非 WIFI 环境，无法使用投屏功能");
             stopBrowse();
 
-            ll_search.setVisibility(View.GONE);
+            ll_search.setVisibility(View.INVISIBLE);
             rv_devices.setVisibility(View.INVISIBLE);
         } else {
             iv_wifi_icon.setSelected(true);
@@ -305,13 +320,17 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
             List<LelinkServiceInfo> infos = screencastHelper.getInfos();
             screencastDeviceListAdapter.updateDatas(infos);
 
-            ll_search.setVisibility(View.GONE);
+            ll_search.setVisibility(View.INVISIBLE);
         }
     }
 
     private void browse() {
         PolyvLogger.test(TAG, "btn_browse click");
         String netWorkName = NetworkUtil.getNetWorkName(getApplicationContext());
+        boolean isWifi = PolyvNetworkUtils.NETWORK_WIFI == PolyvNetworkUtils.getNetWorkType(getApplicationContext());
+        if (isWifi) {
+            netWorkName = PolyvNetworkUtils.getWIFISSID(getApplicationContext());
+        }
         if ("网络错误".equals(netWorkName) || "有线网络".equals(netWorkName)) {
             return;
         }
@@ -339,7 +358,7 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
             isFirstBrowse = false;
             screencastHelper.stopBrowse();
 
-            ll_search.setVisibility(View.GONE);
+            ll_search.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -419,6 +438,7 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
                     PolyvToastUtil.show(getApplicationContext(), "播放结束");
 
                     screencastStatusLayout.hide(true);
+                    disConnect();
                     break;
                 case PolyvIUIUpdateListener.STATE_SEEK:
                     PolyvLogger.test(TAG, "callback seek:" + object);
@@ -485,8 +505,8 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
 
                     int currentBitrate = screencastStatusLayout.getCurrentPlayBitrate();
                     currentBitrate = Math.max(1, currentBitrate);
-//                    String playPath = screencastStatusLayout.getVideoView().getPlayPathWithBitRate(currentBitrate);
-//                    play(playPath, currentBitrate);
+                    String playPath = screencastStatusLayout.getVideoView().getPlayPathWithBitRate(currentBitrate);
+                    play(playPath, currentBitrate);
                 }
             }, 3000);//由于内部还有连接，所以这里延迟3秒
         }
@@ -525,26 +545,34 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
 
     public void play(String playPath, int bitrate) {
         PolyvLogger.test(TAG, "start play url:" + playPath + " type:" + PolyvAllCast.MEDIA_TYPE_VIDEO);
+        if (screencastStatusLayout.getVideoView().isDisableScreenCAP()) {
+            PolyvToastUtil.show(getApplicationContext(), "防录屏状态下不能投屏");
+            screencastStatusLayout.callPlayErrorStatus();
+            return;
+        }
         if (TextUtils.isEmpty(playPath)) {
             PolyvToastUtil.show(getApplicationContext(), "获取播放地址失败");
+            screencastStatusLayout.callPlayErrorStatus();
             return;
         }
         if (null == screencastHelper) {
             PolyvToastUtil.show(getApplicationContext(), "未初始化或未选择设备");
+            screencastStatusLayout.callPlayErrorStatus();
             return;
         }
         List<LelinkServiceInfo> connectInfos = screencastHelper.getConnectInfos();
         if (null == connectInfos || connectInfos.isEmpty()) {
             PolyvToastUtil.show(getApplicationContext(), "请先连接设备");
+            screencastStatusLayout.callPlayErrorStatus();
             return;
         }
         screencastStatusLayout.callScreencastingStatus(bitrate);
         PolyvVideoVO videoVO = screencastStatusLayout.getVideoView().getVideo();
-//        if (videoVO != null && videoVO.getVideoType() == PolyvVideoType.ENCRYPTION_M3U8) {
-//            screencastHelper.playNetMedia(playPath, videoVO.getVid(), bitrate, videoVO.getSeedConst(), PolyvAllCast.MEDIA_TYPE_VIDEO, "");
-//        } else {
-//            screencastHelper.playNetMedia(playPath, PolyvAllCast.MEDIA_TYPE_VIDEO, "");
-//        }
+        if (videoVO != null && videoVO.getVideoType() == PolyvVideoType.ENCRYPTION_M3U8) {
+            screencastHelper.playNetMedia(playPath, videoVO.getVid(), bitrate, videoVO.getSeedConst(), PolyvAllCast.MEDIA_TYPE_VIDEO, "");
+        } else {
+            screencastHelper.playNetMedia(playPath, PolyvAllCast.MEDIA_TYPE_VIDEO, "");
+        }
     }
 
     private static class NetworkReceiver extends BroadcastReceiver {
@@ -578,13 +606,11 @@ public class PolyvScreencastSearchLayout extends FrameLayout implements View.OnC
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.tv_cancel) {
+        int id = v.getId();
+        if (id == R.id.tv_cancel) {
             hide(true);
-
-        } else if (i == R.id.iv_refresh) {
+        } else if (id == R.id.iv_refresh) {
             browse();
-
         }
     }
 

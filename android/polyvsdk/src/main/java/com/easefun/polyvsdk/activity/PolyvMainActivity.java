@@ -22,13 +22,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easefun.polyvsdk.PolyvSDKClient;
+import com.easefun.polyvsdk.PolyvUserClient;
 import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.adapter.PolyvHotCoursesGridViewAdapter;
 import com.easefun.polyvsdk.permission.PolyvPermission;
+import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
 import com.easefun.polyvsdk.sub.vlms.entity.PolyvAddOrderInfo;
 import com.easefun.polyvsdk.sub.vlms.entity.PolyvCoursesInfo;
 import com.easefun.polyvsdk.sub.vlms.listener.PolyvVlmsApiListener;
 import com.easefun.polyvsdk.sub.vlms.main.PolyvVlmsTestData;
+import com.easefun.polyvsdk.util.PolyvUtils;
 import com.easefun.polyvsdk.util.PolyvVlmsHelper;
 import com.easefun.polyvsdk.view.PolyvSimpleSwipeRefreshLayout;
 
@@ -74,9 +77,9 @@ public class PolyvMainActivity extends Activity implements OnClickListener {
 
             @Override
             public void fail(Throwable t) {
-                pb_loading.setVisibility(View.GONE);
-                tv_empty.setVisibility(View.GONE);
-                tv_reload.setVisibility(View.GONE);
+                pb_loading.setVisibility(View.INVISIBLE);
+                tv_empty.setVisibility(View.INVISIBLE);
+                tv_reload.setVisibility(View.INVISIBLE);
                 srl_bot.setRefreshing(false);
 
                 srl_bot.setEnabled(false);
@@ -89,9 +92,9 @@ public class PolyvMainActivity extends Activity implements OnClickListener {
 
             @Override
             public void success(List<PolyvVlmsHelper.CoursesDetail> coursesDetails) {
-                pb_loading.setVisibility(View.GONE);
-                tv_empty.setVisibility(View.GONE);
-                tv_reload.setVisibility(View.GONE);
+                pb_loading.setVisibility(View.INVISIBLE);
+                tv_empty.setVisibility(View.INVISIBLE);
+                tv_reload.setVisibility(View.INVISIBLE);
                 srl_bot.setRefreshing(false);
 
                 srl_bot.setEnabled(true);
@@ -124,7 +127,7 @@ public class PolyvMainActivity extends Activity implements OnClickListener {
 
     private void initView() {
         if (!PolyvVlmsTestData.USERID.equals(PolyvSDKClient.getInstance().getUserId())) {
-            srl_bot.setVisibility(View.GONE);
+            srl_bot.setVisibility(View.INVISIBLE);
             tv_guide.setVisibility(View.VISIBLE);
             tv_guide.setText("您的userId是：" + PolyvSDKClient.getInstance().getUserId() + "\n请点击左上角的按钮进入视频列表页查看您的视频");
         } else {
@@ -182,21 +185,17 @@ public class PolyvMainActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.tv_reload) {
-            tv_reload.setVisibility(View.GONE);
+        int id = v.getId();
+        if (id == R.id.tv_reload) {
+            tv_reload.setVisibility(View.INVISIBLE);
             pb_loading.setVisibility(View.VISIBLE);
             getCoursesDetail();
-
-        } else if (i == R.id.iv_online) {
+        } else if (id == R.id.iv_online) {
             polyvPermission.applyPermission(this, PolyvPermission.OperationType.play);
-
-        } else if (i == R.id.iv_download) {
+        } else if (id == R.id.iv_download) {
             polyvPermission.applyPermission(this, PolyvPermission.OperationType.download);
-
-        } else if (i == R.id.iv_upload) {
+        } else if (id == R.id.iv_upload) {
             polyvPermission.applyPermission(this, PolyvPermission.OperationType.upload);
-
         }
     }
 
@@ -204,7 +203,7 @@ public class PolyvMainActivity extends Activity implements OnClickListener {
         PolyvPermission.OperationType OperationType = PolyvPermission.OperationType.getOperationType(type);
         switch (OperationType) {
             case readImei:
-//                PolyvSDKClient.getInstance().setImei(PolyvUtils.getPhoneIMEI(this));
+                PolyvSDKClient.getInstance().setImei(PolyvUtils.getAndroidId(this));
                 break;
             case play:
                 startActivity(new Intent(PolyvMainActivity.this, PolyvOnlineVideoActivity.class));
@@ -243,7 +242,7 @@ public class PolyvMainActivity extends Activity implements OnClickListener {
         if (polyvPermission.operationHasPermission(requestCode)) {
             gotoActivity(requestCode);
         } else {
-//            PolyvSDKClient.getInstance().setImei(PolyvUtils.getPhoneIMEI(this));
+            PolyvSDKClient.getInstance().setImei(PolyvUtils.getAndroidId(this));
             for (int i = 0; i < grantResults.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i])) {

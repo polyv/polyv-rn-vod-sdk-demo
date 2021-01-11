@@ -5,6 +5,9 @@
 //  Created by Bq Lin on 2017/12/26.
 //  Copyright © 2017年 POLYV. All rights reserved.
 //
+// 各个机型最小逻辑分辨率宽度
+#define PLV_Min_ScreenWidth 320
+#define PLV_Max_ScreenWidth 414
 
 #import "PLVVodPlaybackRatePanelView.h"
 #import "UIColor+PLVVod.h"
@@ -52,6 +55,20 @@
     }
 }
 
+- (void)layoutSubviews{
+    
+    if (self.frame.size.width <= PLV_Min_ScreenWidth){
+        self.playbackRateStackView.spacing = 10;
+    }
+    else if (self.frame.size.width <= PLV_Max_ScreenWidth){
+        self.playbackRateStackView.spacing = 25;
+    }
+    else{
+        self.playbackRateStackView.spacing = 60;
+    }
+}
+
+
 #pragma mark - action
 
 - (IBAction)rateButtonAction:(UIButton *)sender {
@@ -76,6 +93,15 @@
 	button.showsTouchWhenHighlighted = YES;
 	[button addTarget:target action:@selector(rateButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 	return button;
+}
+
++ (BOOL)isFullScreen{
+    BOOL fullScreen = NO;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationIsLandscape(orientation)){
+        fullScreen = YES;
+    }
+    return fullScreen;
 }
 
 @end

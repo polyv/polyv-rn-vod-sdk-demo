@@ -2,7 +2,6 @@ package com.easefun.polyvsdk.player;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -14,12 +13,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.easefun.polyvsdk.R;
+import com.easefun.polyvsdk.fragment.PolyvPlayerDanmuFragment;
+import com.easefun.polyvsdk.util.PolyvImageLoader;
 import com.easefun.polyvsdk.video.PolyvVideoView;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,10 +30,8 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
 	private PolyvVideoView mVideoView = null;
 	private ImageView mAdvertisementImage = null;
 	private ImageButton mStartBtn = null;
-	private DisplayImageOptions mOptions = null;
 	private PolyvADMatterVO mADMatter = null;
 //	private PolyvPlayerDanmuFragment danmuFragment = null;
-//	private PolyvRNDanmuView danmuFragment = null;
 
     public PolyvPlayerAuxiliaryView(Context context) {
         this(context, null);
@@ -56,7 +51,7 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
     	this.mVideoView = mVideoView;
     }
 
-	public void setDanmakuFragment(PolyvRNDanmuView danmakuFragment){
+	public void setDanmakuFragment(PolyvPlayerDanmuFragment danmakuFragment){
 //		this.danmuFragment=danmakuFragment;
 	}
     
@@ -93,17 +88,7 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
 				hide();
 			}
 		});
-    	
-    	if (mOptions == null) {
-    		mOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.polyv_avatar_def) // 设置图片在下载期间显示的图片
-    				.showImageForEmptyUri(R.drawable.polyv_avatar_def)// 设置图片Uri为空或是错误的时候显示的图片
-    				.showImageOnFail(R.drawable.polyv_avatar_def) // 设置图片加载/解码过程中错误时候显示的图片
-    				.bitmapConfig(Bitmap.Config.RGB_565)// 设置图片的解码类型
-    				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
-    				.cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
-    				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
-    				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();// 构建完成
-		}
+
     }
 
     /**
@@ -112,13 +97,13 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
      */
     public void show(PolyvADMatterVO adMatter) {
     	mADMatter = adMatter;
-		ImageLoader.getInstance().displayImage(mADMatter.getMatterUrl(), mAdvertisementImage, mOptions, new PolyvAnimateFirstDisplayListener());
+		PolyvImageLoader.getInstance().loadImageOrigin(mContext, mADMatter.getMatterUrl(), mAdvertisementImage,R.drawable.polyv_avatar_def);
 
     	//暂停图片广告不需要倒计时，是点击开始按钮继续
     	if (PolyvADMatterVO.LOCATION_PAUSE.equals(adMatter.getLocation())) {
     		mStartBtn.setVisibility(View.VISIBLE);
     	} else {
-    		mStartBtn.setVisibility(View.GONE);
+    		mStartBtn.setVisibility(View.INVISIBLE);
     	}
 
 		setVisibility(View.VISIBLE);
@@ -130,8 +115,9 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
 	 */
 	public void show(String url) {
 		mADMatter = null;
-		ImageLoader.getInstance().displayImage(url, mAdvertisementImage, mOptions, new PolyvAnimateFirstDisplayListener());
-		mStartBtn.setVisibility(View.GONE);
+		PolyvImageLoader.getInstance().loadImageOrigin(mContext, url, mAdvertisementImage, R.drawable.polyv_avatar_def);
+
+		mStartBtn.setVisibility(View.INVISIBLE);
 		setVisibility(View.VISIBLE);
 	}
 
@@ -143,7 +129,7 @@ public class PolyvPlayerAuxiliaryView extends RelativeLayout {
      * 隐藏
      */
     public void hide() {
-		setVisibility(View.GONE);
+		setVisibility(View.INVISIBLE);
     }
     
     @Override

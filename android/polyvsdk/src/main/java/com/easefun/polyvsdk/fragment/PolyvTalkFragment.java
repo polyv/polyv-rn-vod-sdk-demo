@@ -60,13 +60,13 @@ public class PolyvTalkFragment extends Fragment {
         vlmsHelper.getQuesionsDetail(course.course_id, new PolyvVlmsHelper.MyQuestionDetailListener() {
             @Override
             public void fail(Throwable t) {
-                pb_loading.setVisibility(View.GONE);
+                pb_loading.setVisibility(View.INVISIBLE);
                 tv_reload.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void success(List<PolyvVlmsHelper.QuestionsDetail> questionsDetails) {
-                pb_loading.setVisibility(View.GONE);
+                pb_loading.setVisibility(View.INVISIBLE);
                 PolyvTalkFragment.this.lists.clear();
                 PolyvTalkFragment.this.lists.addAll(questionsDetails);
                 if (PolyvTalkFragment.this.lists.size() == 0)
@@ -86,7 +86,7 @@ public class PolyvTalkFragment extends Fragment {
 
             @Override
             public void success(PolyvAddQuestionInfo polyvAddQuestionInfo) {
-                tv_empty.setVisibility(View.GONE);
+                tv_empty.setVisibility(View.INVISIBLE);
                 PolyvVlmsHelper.QuestionsDetail questionsDetail = vlmsHelper.addQuestionInfoToQuestionDetail(polyvAddQuestionInfo);
                 lists.addFirst(questionsDetail);
                 adapter.notifyDataSetChanged();
@@ -168,7 +168,7 @@ public class PolyvTalkFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 pb_loading.setVisibility(View.VISIBLE);
-                tv_reload.setVisibility(View.GONE);
+                tv_reload.setVisibility(View.INVISIBLE);
                 getQuestionsDetail();
             }
         });

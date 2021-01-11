@@ -4,16 +4,17 @@ platform :ios, '8.0'
 inhibit_all_warnings!
 
 target 'PolyvVodRnDemo' do
-  
+
   # Polyv vod rn sdk
   pod 'XRCarouselView', '~> 2.6.1'
   pod 'YYWebImage', '~> 1.0.5'
   pod 'FDStackView', '~> 1.0.1'
-  pod 'Masonry', '~> 1.1.0'
-  pod 'PolyvVodSDK', '2.5.4'
-  pod 'LBLelinkKit', '~> 30206'
-	pod 'PLVVodDanmu', '~> 0.0.1'
-	pod 'PLVSubtitle', '~> 0.1.0'
+  pod 'PLVMasonry', '~> 1.1.2'
+
+  pod 'PolyvVodSDK', '2.13.1'
+  pod 'LBLelinkKit', '~> 30226'
+  pod 'PLVVodDanmu', '~> 0.0.1'
+  pod 'PLVSubtitle', '~> 0.1.0'
 
   # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 

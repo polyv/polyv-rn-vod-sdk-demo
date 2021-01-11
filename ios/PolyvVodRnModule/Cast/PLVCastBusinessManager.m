@@ -67,12 +67,7 @@
             if (weakSelf.castControllView.delegate != weakSelf) {
                 weakSelf.castControllView.delegate = weakSelf;
             }
-        }
-        
-        if (type == PLVCastCellType_AirPlay) {
-            // AirPlay连接
-        }
-        
+        }        
     };
     
     // 点击‘刷新’按钮
@@ -130,6 +125,11 @@
 }
 
 - (void)setup{
+
+    if (self.player.videoCaptureProtect) {
+        NSLog(@"PLVCastBusinessManager - 警告：播放器防录屏功能已开启，保利威投屏模块将不可用");
+        return;
+    }
     
     // 投屏管理器
     self.castManager = [PLVCastManager shareManager];
@@ -248,8 +248,6 @@
             
             // 更新投屏控制界面状态
             self.castControllView.status = PLVCastCVStatus_Disconnect;
-            
-        }else{                     // 主动断开
             
         }
         

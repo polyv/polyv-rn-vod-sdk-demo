@@ -13,12 +13,17 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.easefun.polyvsdk.R;
+import com.easefun.polyvsdk.bean.PolyvAddDanmakuResult;
+import com.easefun.polyvsdk.log.PolyvCommonLog;
 import com.easefun.polyvsdk.sub.danmaku.auxiliary.BilibiliDanmakuTransfer;
 import com.easefun.polyvsdk.sub.danmaku.auxiliary.PolyvDanmakuTransfer;
 import com.easefun.polyvsdk.sub.danmaku.entity.PolyvDanmakuEntity;
 import com.easefun.polyvsdk.sub.danmaku.entity.PolyvDanmakuInfo;
+import com.easefun.polyvsdk.sub.danmaku.entity.PolyvDanmakuSendResult;
 import com.easefun.polyvsdk.sub.danmaku.main.PolyvDanmakuManager;
 import com.easefun.polyvsdk.video.PolyvVideoView;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.HashMap;
 
@@ -34,8 +39,6 @@ public class PolyvPlayerDanmuFragment extends Fragment {
     private static final String TAG = PolyvPlayerDanmuFragment.class.getSimpleName();
     private static final int SEEKTOFITTIME = 12;
     private static final int PAUSE = 13;
-    private boolean status_canauto_resume = true;
-    private boolean status_pause_fromuser = true;
     private boolean status_pause;
     //danmuLayoutView
     private View view;
@@ -138,12 +141,27 @@ public class PolyvPlayerDanmuFragment extends Fragment {
 
             @Override
             public void success(String s) {
-                toastMsg("发送成功");
+                Gson gson = new Gson();
+                PolyvAddDanmakuResult result=null;
+                try {
+                    result = gson.fromJson(s, PolyvAddDanmakuResult.class);
+                } catch (JsonSyntaxException e) {
+                    PolyvCommonLog.e(TAG,e.getMessage());
+                    return;
+                }
+                if (result.getCode() == 200) {
+                    toastMsg("发送成功");
+                    int danmuId = result.getData().getId();
+                } else {
+                    toastMsg(result.getMessage());
+                }
             }
         };
         callback = new DrawHandler.Callback() {
             @Override
             public void prepared() {
+                if (videoView != null && !videoView.isPlaying())
+                    return;
                 if (iDanmakuView != null) {
                     iDanmakuView.start((long) videoView.getCurrentPosition());
                     if (status_pause)
@@ -187,6 +205,8 @@ public class PolyvPlayerDanmuFragment extends Fragment {
 
     //开始弹幕
     public void start() {
+        if (videoView != null && !videoView.isPlaying())
+            return;
         if (iDanmakuView != null) {
             if (!iDanmakuView.isPrepared()) {
                 iDanmakuView.setCallback(callback);
@@ -217,10 +237,6 @@ public class PolyvPlayerDanmuFragment extends Fragment {
     }
 
     public void pause(boolean fromuser) {
-        if (!fromuser)
-            status_pause_fromuser = false;
-        else
-            status_canauto_resume = false;
         status_pause = true;
         if (iDanmakuView != null && iDanmakuView.isPrepared()) {
             iDanmakuView.pause();
@@ -232,16 +248,15 @@ public class PolyvPlayerDanmuFragment extends Fragment {
     }
 
     public void resume(boolean fromuser) {
-        if (status_pause_fromuser && fromuser || (!status_pause_fromuser && !fromuser)) {
+        if (videoView != null && !videoView.isPlaying())
+            return;
+        if (status_pause) {
             status_pause = false;
             if (iDanmakuView != null && iDanmakuView.isPrepared()) {/*iDanmakuView.isPaused() pause后获取可能为false*/
-                if (!status_pause_fromuser) {
-                    status_pause_fromuser = true;
+                if (!fromuser) {
                     seekTo();
-                    if (status_canauto_resume)
-                        iDanmakuView.resume();
+                    iDanmakuView.resume();
                 } else {
-                    status_canauto_resume = true;
                     iDanmakuView.resume();
                 }
             }

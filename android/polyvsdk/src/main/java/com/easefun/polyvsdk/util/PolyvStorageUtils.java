@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,6 +29,10 @@ public class PolyvStorageUtils {
      */
     @NonNull
     public static ArrayList<File> getExternalFilesDirs(@NonNull Context context) {
+        if(context == null){
+            Log.e("PolyvStorageUtils", "getExternalFilesDirs: context is null");
+            return new ArrayList<>();
+        }
         File[] files;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //列表中包含了可移除的存储介质（例如 SD 卡）的路径。

@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easefun.polyvsdk.PolyvSDKClient;
 import com.easefun.polyvsdk.PolyvSDKUtil;
 import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.marquee.PolyvMarqueeItem;
@@ -36,6 +37,7 @@ import com.easefun.polyvsdk.player.PolyvPlayerVolumeView;
 import com.easefun.polyvsdk.screencast.utils.PolyvToastUtil;
 import com.easefun.polyvsdk.srt.PolyvSRTItemVO;
 import com.easefun.polyvsdk.util.PolyvErrorMessageUtils;
+import com.easefun.polyvsdk.util.PolyvNetworkDetection;
 import com.easefun.polyvsdk.util.PolyvScreenUtils;
 import com.easefun.polyvsdk.video.IPolyvMediaPlayerControl;
 import com.easefun.polyvsdk.video.PolyvMediaInfoType;
@@ -59,7 +61,6 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnInfoListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnPlayPauseListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnPreloadPlayListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnPreparedListener2;
-import com.easefun.polyvsdk.video.listener.IPolyvOnQuestionAnswerTipsListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnQuestionOutListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnTeaserCountDownListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnTeaserOutListener;
@@ -249,6 +250,18 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
 //                .setStrokeWidth(3) //描边宽度
 //                .setStrokeColor(Color.MAGENTA) //描边颜色
 //                .setStrokeAlpha(70)); //描边透明度
+
+
+        //投屏功能默认隐藏
+        mediaController.findViewById(R.id.iv_screencast_search).setVisibility(View.INVISIBLE);
+        mediaController.findViewById(R.id.iv_screencast_search_land).setVisibility(View.INVISIBLE);
+
+        //关闭画中画
+        mediaController.findViewById(R.id.iv_pip).setVisibility(View.GONE);
+        mediaController.findViewById(R.id.iv_pip_portrait).setVisibility(View.GONE);
+
+        //避免空指针而初始化，但是并不使用
+        mediaController.networkDetection = new PolyvNetworkDetection(getContext());
     }
 
     private void initView() {
@@ -258,7 +271,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         videoView.setOpenSRT(true);
         videoView.setOpenPreload(true, 2);
         videoView.setOpenMarquee(true);
-        videoView.setAutoContinue(true);
+        videoView.setAutoContinue(false);
         videoView.setNeedGestureDetector(true);
 
         videoView.setOnPreparedListener(new IPolyvOnPreparedListener2() {
@@ -268,6 +281,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
                 progressView.setViewMaxValue(videoView.getDuration());
                 // 没开预加载在这里开始弹幕
                 // danmuFragment.start();
+
             }
         });
 
@@ -422,19 +436,6 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
             @Override
             public void onEnd() {
                 auxiliaryView.hide();
-            }
-        });
-
-        videoView.setOnQuestionAnswerTipsListener(new IPolyvOnQuestionAnswerTipsListener() {
-
-            @Override
-            public void onTips(@NonNull String msg) {
-                questionView.showAnswerTips(msg);
-            }
-
-            @Override
-            public void onTips(@NonNull String msg, int seek) {
-                questionView.showAnswerTips(msg, seek);
             }
         });
 
@@ -620,6 +621,28 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         lightView.hide();
     }
 
+    /**
+     * RN为了性能重写空实现了requestLayout，所有元素都不能正常调用
+     * 同时动态addView的控件会因此宽高为0
+     * 视频控件里面的renderview会因此黑屏没有视频画面，所以在这里主动measure+layout，确定宽高
+     * 不知道为什么，在原生模块那里重写并没有生效。
+     */
+    @Override
+    public void requestLayout() {
+        super.requestLayout();
+        post(measureAndLayout);
+    }
+
+    private final Runnable measureAndLayout = new Runnable() {
+        @Override
+        public void run() {
+            measure(
+                    MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+            layout(getLeft(), getTop(), getRight(), getBottom());
+        }
+    };
+
 
 // <editor-fold defaultstate="collapsed" desc="生命周期函数">
 
@@ -647,8 +670,8 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
     }
 
     public boolean onBackPressed() {
-        if (PolyvScreenUtils.isLandscape(getContext()) && mediaController != null) {
-            mediaController.changeToPortrait();
+        if (mediaController != null && mediaController.isFullScreen()) {
+            mediaController.changeToSmallScreen();
             return true;
         }
         return false;
@@ -686,7 +709,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         }
 
 //        videoView.release();
-        srtTextView.setVisibility(View.GONE);
+        srtTextView.setVisibility(View.INVISIBLE);
 //        mediaController.hide();
         mediaController.show();
         loadingProgress.setVisibility(View.GONE);
@@ -715,7 +738,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
                      * {@link com.easefun.polyvsdk.PolyvSDKClient.getinstance().setViewerId()}设置学员id
                      * 或者调用{@link videoView.setVidWithStudentId}传入学员id进行播放
                      */
-                    videoView.setVidWithStudentId(vid, bitrate, isMustFromLocal, "123");
+                    videoView.setVidWithViewerId(vid, bitrate, isMustFromLocal, PolyvSDKClient.getInstance().getViewerId());
 
                 }
             });
@@ -791,11 +814,13 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
     public void setPlayerFullScreen(boolean fullScreen){
         if(fullScreen){
             if(!PolyvScreenUtils.isLandscape(getContext())){
-                mediaController.changeToLandscape();
+                //设置横屏策略为FULLSCREEN_PORTRAIT
+                //因为iOS的竖屏全屏需要设置一个展位图View，没有则为横屏全屏
+                mediaController.changeToFullScreen();
             }
         }else {
             if(!PolyvScreenUtils.isPortrait(getContext())){
-                mediaController.changeToPortrait();
+                mediaController.changeToSmallScreen();
             }
         }
     }

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,22 +25,21 @@ import android.widget.TextView;
 
 import com.easefun.polyvsdk.PolyvQuestionUtil;
 import com.easefun.polyvsdk.R;
+import com.easefun.polyvsdk.util.PolyvImageLoader;
 import com.easefun.polyvsdk.video.PolyvVideoView;
 import com.easefun.polyvsdk.vo.PolyvQAFormatVO;
 import com.easefun.polyvsdk.vo.PolyvQuestionChoicesVO;
 import com.easefun.polyvsdk.vo.PolyvQuestionVO;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 问答视图
+ * 问答视图，已经废弃
  * @author TanQu 2016-1-25
+ * @see PolyvPlayerAnswerView
  */
+@Deprecated
 public class PolyvPlayerQuestionView extends RelativeLayout implements OnCheckedChangeListener {
 
 	private Context context = null;
@@ -50,7 +48,6 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 	private LinearLayout questionLayout = null;
 	private LinearLayout choicesRadioLayout = null;
 	private LinearLayout choicesCheckLayout = null;
-	private DisplayImageOptions mOptions = null;
 	private List<LinearLayout> answerRadioLayoutList = null;
 	private List<RadioButton> answerRadioList = null;
 	private List<LinearLayout> answerCheckLayoutList = null;
@@ -227,17 +224,6 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
     	answerCheckList.add(answerCheck3);
     	CheckBox answerCheck4 = (CheckBox) findViewById(R.id.answer_check_4);
     	answerCheckList.add(answerCheck4);
-    	
-    	if (mOptions == null) {
-    		mOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.polyv_avatar_def) // 设置图片在下载期间显示的图片
-    				.showImageForEmptyUri(R.drawable.polyv_avatar_def)// 设置图片Uri为空或是错误的时候显示的图片
-    				.showImageOnFail(R.drawable.polyv_avatar_def) // 设置图片加载/解码过程中错误时候显示的图片
-    				.bitmapConfig(Bitmap.Config.RGB_565)// 设置图片的解码类型
-    				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
-    				.cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
-    				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
-    				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).build();// 构建完成
-		}
     }
 
 	@Override
@@ -263,24 +249,24 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 		questionLayout.removeAllViews();
 
 		for (RadioButton answerRadioBtn : answerRadioList) {
-			answerRadioBtn.setVisibility(View.GONE);
+			answerRadioBtn.setVisibility(View.INVISIBLE);
 			answerRadioBtn.setChecked(false);
 		}
 
 		for (CheckBox answerCheckBox : answerCheckList) {
-			answerCheckBox.setVisibility(View.GONE);
+			answerCheckBox.setVisibility(View.INVISIBLE);
 			answerCheckBox.setChecked(false);
 		}
 
 		for (LinearLayout answerRadioLayout : answerRadioLayoutList) {
-			answerRadioLayout.setVisibility(View.GONE);
+			answerRadioLayout.setVisibility(View.INVISIBLE);
 			for (int i = 1, length = answerRadioLayout.getChildCount() ; i < length ; i++) {
 				answerRadioLayout.removeViewAt(1);
 			}
 		}
 
 		for (LinearLayout answerCheckLayout : answerCheckLayoutList) {
-			answerCheckLayout.setVisibility(View.GONE);
+			answerCheckLayout.setVisibility(View.INVISIBLE);
 			for (int i = 1, length = answerCheckLayout.getChildCount() ; i < length ; i++) {
 				answerCheckLayout.removeViewAt(1);
 			}
@@ -299,7 +285,8 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 					break;
 				case URL:
 					imageView = new ImageView(context);
-					ImageLoader.getInstance().displayImage(qaFormatVO.getStr(), imageView, mOptions, new PolyvAnimateFirstDisplayListener());
+					PolyvImageLoader.getInstance().loadImageOrigin(context, qaFormatVO.getStr(),
+							imageView, R.drawable.polyv_avatar_def);
 					questionLayout.addView(imageView);
 					break;
 			}
@@ -318,9 +305,9 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 		this.rightAnswerNum = rightAnswerNum;
 		if (rightAnswerNum > 1) {
 			choicesCheckLayout.setVisibility(View.VISIBLE);
-			choicesRadioLayout.setVisibility(View.GONE);
+			choicesRadioLayout.setVisibility(View.INVISIBLE);
 		} else {
-			choicesCheckLayout.setVisibility(View.GONE);
+			choicesCheckLayout.setVisibility(View.INVISIBLE);
 			choicesRadioLayout.setVisibility(View.VISIBLE);
 		}
 
@@ -352,7 +339,8 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 						break;
 					case URL:
 						imageView = new ImageView(context);
-						ImageLoader.getInstance().displayImage(qaFormatVO.getStr(), imageView, mOptions, new PolyvAnimateFirstDisplayListener());
+						PolyvImageLoader.getInstance().loadImageOrigin(context, qaFormatVO.getStr(),
+								imageView, R.drawable.polyv_avatar_def);
 						answerLayout.addView(imageView);
 						break;
 				}
@@ -368,7 +356,7 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 	 * 隐藏
 	 */
 	public void hide() {
-		setVisibility(View.GONE);
+		setVisibility(View.INVISIBLE);
 	}
 	
 	/**

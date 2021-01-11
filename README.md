@@ -15,7 +15,12 @@ Android 4.1.0 (API 16) 以上 或 iOS 9.0 以上
 - 准备在使用 React Native 技术开发的项目中接入点播功能；
 - 拥有 polyv 官网的直播账号且已开通直播权限。
 
+### 1.3 版本功能
 
+RN 版本是基于原生 demo + sdk 开发的，iOS 与 android 对应版本，及 SDK 版本更新日志链接如下：
+
+- iOS SDK 对应版本为 v2.13.1，[版本更新日志](https://github.com/polyv/polyv-ios-vod-sdk/releases)
+- android SDK 对应版本为 v2.13.1，[版本更新日志](https://github.com/easefun/polyv-android-sdk-2.0-demo/releases)
 
 ## 2. 快速开始
 
@@ -122,40 +127,65 @@ npm install
 #### 2.1.4 使用方法
 ##### 2.1.4.1 初始化
 
-初始化的方法要放在界面渲染前初始化， 一般在 componentWillMount 调用该方法进行初始化
+初始化的方法要放在界面渲染前初始化， 一般在 componentWillMount 调用该方法进行初始化.
+
+0.4.0起建议使用初始化方法`setToken`，该方法是一个异步有返回结果的函数。推荐使用 https 接口，从服务端获取加密串，APP 本地解密（开发者设计自己的加解密方式）得到 `useId`、`readtoken`、`writetoken`、`secretkey` ，再使用该方法配置用户信息。
+
+低于0.4.0的可以使用`init`方法初始化，他也是异步有返回结果的函数。
 
 ```javascript
+ /*
+   * @param {string} userid 加密串
+   * @param {*} writetoken 加密密钥
+   * @param {*} decodeIv 加密向量
+   * @param {*} viewerId 用户ID
+   * @param {*} nickName 用户昵称
+   */
 
-//该模块提供了初始化的方法init，该方法是一个异步有返回结果的函数
- /**
-     * 
-     * @param {string} vodKey 加密串
-     * @param {*} decodeKey 加密密钥
-     * @param {*} decodeIv 加密向量
-     * @param {*} viewerId 用户ID
-     * @param {*} nickName 用户昵称
-     */
- 
-//使用方式
-/**
- * <Polyv Live init/>
- */
-console.log("Polyv rn vod init")
-PolyvVodConfigRnModule.init(this.state.vodKey, this.state.decodeKey, this.state.decodeIv, this.state.viewerId, this.state.nickName)
-      .then(ret => {
-        if (ret.code != 0) { // 初始化失败
-          var str = "初始化失败  errCode=" + ret.code + "  errMsg=" + ret.message
-          console.log(str)
-          alert(str)
-        } else { // 初始化成功
-          console.log("初始化成功")
+PolyvVodConfig.setToken(
+        this.state.userid,
+        this.state.writetoken,
+        this.state.readtoken,
+        this.state.secretkey,
+        this.state.viewerId,
+        this.state.nickName
+    ).then(ret =>{
+        if(ret.code != 0){
+            //初始化失败
+            var str = "初始化失败  errCode=" + ret.code + "  errMsg=" + ret.message;
+            console.log(str);
+            alert(str);
+        } else {
+            // 初始化成功
+            console.log("初始化成功");
         }
-      })
+    });
+
+ /**
+   * @param {string} vodKey 加密串
+   * @param {*} decodeKey 加密密钥
+   * @param {*} decodeIv 加密向量
+   * @param {*} viewerId 用户ID
+   * @param {*} nickName 用户昵称
+   */
+   console.log("Polyv rn vod init")
+   PolyvVodConfigRnModule.init(this.state.vodKey, this.state.decodeKey, this.state.decodeIv, this.state.viewerId, this.state.nickName)
+     .then(ret => {
+       if (ret.code != 0) { // 初始化失败
+         var str = "初始化失败  errCode=" + ret.code + "  errMsg=" + ret.message
+         console.log(str)
+         alert(str)
+       } else { // 初始化成功
+         console.log("初始化成功")
+       }
+     })
 ```
+
+
 
 ##### 2.1.4.2 视频播放
 
-```java
+```javascript
 
 //使用方式
 <PolyvVodPlayer
@@ -174,6 +204,8 @@ PolyvVodConfigRnModule.init(this.state.vodKey, this.state.decodeKey, this.state.
           }}
         />
 ```
+
+
 
 ##### 2.1.4.3 视频下载
 
@@ -415,11 +447,11 @@ iOS 端工程的原生插件代码全部包含在  ios/PolyvVodRnModule文件夹
      pod 'XRCarouselView', '~> 2.6.1'
      pod 'YYWebImage', '~> 1.0.5'
      pod 'FDStackView', '~> 1.0.1'
-     pod 'Masonry', '~> 1.1.0'
-     pod 'PolyvVodSDK', '~> 2.5.4'
-     pod 'LBLelinkKit', '~> 30206'
-   	pod 'PLVVodDanmu', '~> 0.0.1'
-   	pod 'PLVSubtitle', '~> 0.1.0'
+     pod 'PLVMasonry', '~> 1.1.2'
+     pod 'PolyvVodSDK', '2.13.1'
+     pod 'LBLelinkKit', '~> 30226'
+     pod 'PLVVodDanmu', '~> 0.0.1'
+     pod 'PLVSubtitle', '~> 0.1.0'
    
      # 执行 npm install命令之后，有可能会自动生成下面这一行配置。需要把这一行配置删掉或者注释掉；
      # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler' 

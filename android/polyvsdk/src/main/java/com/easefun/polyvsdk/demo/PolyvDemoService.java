@@ -1,5 +1,6 @@
 package com.easefun.polyvsdk.demo;
 
+import android.app.Service;
 import android.content.Intent;
 import android.util.Log;
 

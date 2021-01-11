@@ -360,7 +360,7 @@ public class IcsLinearLayout extends LinearLayout {
         for (int i = 0; i < childCount; i++) {
             final View child = getChildAt(i);
 
-            if (child == null || child.getVisibility() == View.GONE) {
+            if (child == null || child.getVisibility() == View.INVISIBLE) {
                 continue;
             }
 
@@ -402,7 +402,7 @@ public class IcsLinearLayout extends LinearLayout {
         for (int i = 0; i < childCount; i++) {
             final View child = getChildAt(i);
 
-            if (child == null || child.getVisibility() == View.GONE) {
+            if (child == null || child.getVisibility() == View.INVISIBLE) {
                 continue;
             }
 

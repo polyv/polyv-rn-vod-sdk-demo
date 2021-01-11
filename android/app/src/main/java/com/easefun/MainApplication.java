@@ -3,15 +3,15 @@ package com.easefun;
 import android.support.multidex.MultiDexApplication;
 
 import com.easefun.polyvsdk.PolyvSDKClient;
+import com.easefun.polyvsdk.application.PolyvSettings;
 import com.easefun.polyvsdk.rn.BuildConfig;
+import com.easefun.polyvsdk.video.constant.PolyvRenderViewType;
 import com.polyv.PolyvRNVodPluginManager;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
 import java.util.Arrays;

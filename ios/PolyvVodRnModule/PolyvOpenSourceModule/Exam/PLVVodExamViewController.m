@@ -11,6 +11,7 @@
 #import "PLVVodExplanationView.h"
 #import <PLVVodSDK/PLVVodExam.h>
 #import <PLVVodSDK/PLVVodConstans.h>
+#import "NSString+PLVVod.h"
 
 @interface PLVVodExamViewController ()
 
@@ -50,7 +51,7 @@
 	};
 	self.questionView.skipActionHandler = ^{
 		PLVVodExam *exam = [weakSelf hideExam];
-		if (weakSelf.examDidCompleteHandler) weakSelf.examDidCompleteHandler(exam, 0);
+		if (weakSelf.examDidCompleteHandler) weakSelf.examDidCompleteHandler(exam, -1);
 	};
 	self.explanationView.confirmActionHandler = ^(BOOL correct) {
 		PLVVodExam *exam = [weakSelf hideExam];
@@ -73,13 +74,14 @@
 		return [@(obj1.showTime) compare:@(obj2.showTime)];
 	}];
 	_exams = sortedExams;
-	_tempExams = sortedExams.mutableCopy;
+	self.tempExams = sortedExams.mutableCopy;
 }
 
 - (void)setCurrentTime:(NSTimeInterval)currentTime {
 	if (currentTime+1 < _currentTime && _currentTime > 0) {
+        // 重置问题
 		[self hideExam];
-		_tempExams = self.exams.mutableCopy;
+		self.tempExams = self.exams.mutableCopy;
 		//NSLog(@"current: %f -> %f", _currentTime, currentTime);
 	}
 	_currentTime = currentTime;
@@ -93,9 +95,26 @@
 	}
 	
 	PLVVodExam *exam = [self examAtTime:self.currentTime];
+    
 	if (!exam || exam.correct) {
 		return;
 	}
+    
+    // 问答参数检查
+    if (![exam.question checkStringLegal]) {
+        NSLog(@"PLVVodExamViewController - 问题展示错误，exam.question非法，请检查");
+        return;
+    }
+    
+    if (exam.options.count == 0) {
+        NSLog(@"PLVVodExamViewController - 问题展示错误，exam.options非法，请检查");
+        return;
+    }
+    
+    if (exam.correctIndex.count == 0) {
+        NSLog(@"PLVVodExamViewController - 问题展示错误，exam.correctIndex非法，请检查");
+        return;
+    }
 	
 	if (self.examWillShowHandler) self.examWillShowHandler(exam);
 	[self resetIfNeedWithCompletion:^{
@@ -111,15 +130,35 @@
 	}];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)changeExams:(NSArray<PLVVodExam *> *)arrExam showTime:(NSTimeInterval)showTime{
+    NSArray *tmpArr = [self updateExamArray:self.tempExams changeArray:arrExam showTime:showTime];
+    _tempExams = [NSMutableArray arrayWithArray:tmpArr];
+    _exams = [self updateExamArray:self.exams changeArray:arrExam showTime:showTime];
 }
-*/
+
+- (NSArray<PLVVodExam *> *)updateExamArray:(NSArray<PLVVodExam *> *)origArray changeArray:(NSArray<PLVVodExam *> *)changeArray showTime:(NSTimeInterval)showTime{
+    // 删除旧问题
+    NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:origArray];
+    [origArray enumerateObjectsUsingBlock:^(PLVVodExam * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.showTime == showTime){
+            [tmpArray removeObject:obj];
+        }
+    }];
+    // 插入更新后的问题
+    [changeArray enumerateObjectsUsingBlock:^(PLVVodExam * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        PLVVodExam *arrObj = obj;
+        [origArray enumerateObjectsUsingBlock:^(PLVVodExam * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (arrObj.showTime <= obj.showTime){
+                [tmpArray insertObject:arrObj atIndex:idx];
+                *stop = YES;
+            }
+        }];
+    }];
+    
+    NSArray *retArr = [NSMutableArray arrayWithArray:tmpArray];
+    
+    return retArr;
+}
 
 #pragma mark - private method
 
@@ -132,6 +171,7 @@
 	question.options = exam.options;
 	question.skippable = exam.skippable;
     question.illustration = exam.illustration;
+    question.isMultipleChoice = exam.correctIndex.count > 1 ? YES : NO;
 	return question;
 }
 

@@ -42,6 +42,14 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		74F1F418B32A5CDE6BD0B174 /* libPods-PolyvVodRnDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EA030F4C27026E8A614F344 /* libPods-PolyvVodRnDemo.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		8624F27F258AF97D00136D16 /* PLVVodPlayTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F27E258AF97D00136D16 /* PLVVodPlayTipsView.m */; };
+		8624F39B258AFD9D00136D16 /* PLVVodFastForwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F399258AFD9D00136D16 /* PLVVodFastForwardView.m */; };
+		8624F3A4258AFDB200136D16 /* PLVVodRouteLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F3A1258AFDB200136D16 /* PLVVodRouteLineView.m */; };
+		8624F3A5258AFDB200136D16 /* PLVVodNetworkTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F3A2258AFDB200136D16 /* PLVVodNetworkTipsView.m */; };
+		8624F3F2258AFEE700136D16 /* PLVVodNetworkUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F3EC258AFEE600136D16 /* PLVVodNetworkUtil.m */; };
+		8624F3F3258AFEE700136D16 /* PLVVodUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F3EE258AFEE600136D16 /* PLVVodUtils.m */; };
+		8624F3F4258AFEE700136D16 /* PLVVodErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F3EF258AFEE600136D16 /* PLVVodErrorUtil.m */; };
+		8624F438258B021B00136D16 /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 8624F437258B021B00136D16 /* UIButton+EnlargeTouchArea.m */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		DA2746432216B95D009BD3BA /* PolyvVodPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2746422216B95D009BD3BA /* PolyvVodPlayerManager.m */; };
 		DA274713221A486D009BD3BA /* PLVVodPlayerSkin.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2746D8221A486D009BD3BA /* PLVVodPlayerSkin.xib */; };
@@ -408,6 +416,22 @@
 		70DA15E52E7DD2EC9271E8A0 /* Pods-PolyvVodRnDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PolyvVodRnDemo.debug.xcconfig"; path = "Target Support Files/Pods-PolyvVodRnDemo/Pods-PolyvVodRnDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		8624F27D258AF97D00136D16 /* PLVVodPlayTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodPlayTipsView.h; sourceTree = "<group>"; };
+		8624F27E258AF97D00136D16 /* PLVVodPlayTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodPlayTipsView.m; sourceTree = "<group>"; };
+		8624F399258AFD9D00136D16 /* PLVVodFastForwardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodFastForwardView.m; sourceTree = "<group>"; };
+		8624F39A258AFD9D00136D16 /* PLVVodFastForwardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodFastForwardView.h; sourceTree = "<group>"; };
+		8624F3A0258AFDB200136D16 /* PLVVodRouteLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodRouteLineView.h; sourceTree = "<group>"; };
+		8624F3A1258AFDB200136D16 /* PLVVodRouteLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodRouteLineView.m; sourceTree = "<group>"; };
+		8624F3A2258AFDB200136D16 /* PLVVodNetworkTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodNetworkTipsView.m; sourceTree = "<group>"; };
+		8624F3A3258AFDB200136D16 /* PLVVodNetworkTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodNetworkTipsView.h; sourceTree = "<group>"; };
+		8624F3EC258AFEE600136D16 /* PLVVodNetworkUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodNetworkUtil.m; sourceTree = "<group>"; };
+		8624F3ED258AFEE600136D16 /* PLVVodErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodErrorUtil.h; sourceTree = "<group>"; };
+		8624F3EE258AFEE600136D16 /* PLVVodUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodUtils.m; sourceTree = "<group>"; };
+		8624F3EF258AFEE600136D16 /* PLVVodErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodErrorUtil.m; sourceTree = "<group>"; };
+		8624F3F0258AFEE600136D16 /* PLVVodNetworkUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodNetworkUtil.h; sourceTree = "<group>"; };
+		8624F3F1258AFEE600136D16 /* PLVVodUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodUtils.h; sourceTree = "<group>"; };
+		8624F436258B021B00136D16 /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
+		8624F437258B021B00136D16 /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		9EA030F4C27026E8A614F344 /* libPods-PolyvVodRnDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PolyvVodRnDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		DA2746412216B95D009BD3BA /* PolyvVodPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PolyvVodPlayerManager.h; sourceTree = "<group>"; };
@@ -783,6 +807,7 @@
 			sourceTree = "<group>";
 			tabWidth = 2;
 			usesTabs = 0;
+			wrapsLines = 1;
 		};
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
@@ -793,6 +818,28 @@
 				2D02E4901E0B4A5D006451C7 /* PolyvVodRnDemo-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8624F27C258AF97D00136D16 /* PlayTips */ = {
+			isa = PBXGroup;
+			children = (
+				8624F27D258AF97D00136D16 /* PLVVodPlayTipsView.h */,
+				8624F27E258AF97D00136D16 /* PLVVodPlayTipsView.m */,
+			);
+			path = PlayTips;
+			sourceTree = "<group>";
+		};
+		8624F3EB258AFEE600136D16 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				8624F3EC258AFEE600136D16 /* PLVVodNetworkUtil.m */,
+				8624F3ED258AFEE600136D16 /* PLVVodErrorUtil.h */,
+				8624F3EE258AFEE600136D16 /* PLVVodUtils.m */,
+				8624F3EF258AFEE600136D16 /* PLVVodErrorUtil.m */,
+				8624F3F0258AFEE600136D16 /* PLVVodNetworkUtil.h */,
+				8624F3F1258AFEE600136D16 /* PLVVodUtils.h */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		ADBDB9201DFEBF0600ED6528 /* Products */ = {
@@ -826,6 +873,7 @@
 			isa = PBXGroup;
 			children = (
 				DA2746FF221A486D009BD3BA /* PLVVodResources.xcassets */,
+				8624F3EB258AFEE600136D16 /* Util */,
 				DA2746D5221A486D009BD3BA /* Skin */,
 				DA2746F0221A486D009BD3BA /* Category */,
 				DA274700221A486D009BD3BA /* Exam */,
@@ -849,6 +897,13 @@
 		DA2746D9221A486D009BD3BA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8624F27C258AF97D00136D16 /* PlayTips */,
+				8624F3A3258AFDB200136D16 /* PLVVodNetworkTipsView.h */,
+				8624F3A2258AFDB200136D16 /* PLVVodNetworkTipsView.m */,
+				8624F3A0258AFDB200136D16 /* PLVVodRouteLineView.h */,
+				8624F3A1258AFDB200136D16 /* PLVVodRouteLineView.m */,
+				8624F39A258AFD9D00136D16 /* PLVVodFastForwardView.h */,
+				8624F399258AFD9D00136D16 /* PLVVodFastForwardView.m */,
 				DA2746E6221A486D009BD3BA /* PLVVodDefinitionPanelView.h */,
 				DA2746DA221A486D009BD3BA /* PLVVodDefinitionPanelView.m */,
 				DA2746DB221A486D009BD3BA /* PLVVodPlaybackRatePanelView.h */,
@@ -876,6 +931,8 @@
 		DA2746F0221A486D009BD3BA /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				8624F436258B021B00136D16 /* UIButton+EnlargeTouchArea.h */,
+				8624F437258B021B00136D16 /* UIButton+EnlargeTouchArea.m */,
 				DA2746F1221A486D009BD3BA /* UIControl+PLVVod.h */,
 				DA2746FA221A486D009BD3BA /* UIControl+PLVVod.m */,
 				DA2746F2221A486D009BD3BA /* UIColor+PLVVod.h */,
@@ -1053,6 +1110,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				F2C3C198845D9A4844C5B82B /* [CP] Copy Pods Resources */,
+				4FB48E2E52C95422AF4A7143 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1529,6 +1587,24 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+		4FB48E2E52C95422AF4A7143 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvVodRnDemo/Pods-PolyvVodRnDemo-frameworks.sh",
+				"${PODS_ROOT}/PolyvIJKPlayer/PolyvIJKMediaFramework.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PolyvIJKMediaFramework.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PolyvVodRnDemo/Pods-PolyvVodRnDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5973A5286698015FA65B66A3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1586,15 +1662,26 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				DA274731221A6829009BD3BA /* PolyvVodPlayerWrapperView.m in Sources */,
+				8624F39B258AFD9D00136D16 /* PLVVodFastForwardView.m in Sources */,
+				8624F3F3258AFEE700136D16 /* PLVVodUtils.m in Sources */,
 				DAE18041223A672F0050F8A6 /* RNGestureHandlerRegistry.m in Sources */,
 				DAE0A2E92241DDB2003AC27F /* PLVVodDBManager.mm in Sources */,
-				DA274719221A486D009BD3BA /* PLVVodPlaybackRatePanelView.m in Sources */,
-				DA274717221A486D009BD3BA /* PLVVodFullscreenView.m in Sources */,
 				DAE1804D223A672F0050F8A6 /* RNGestureHandlerModule.m in Sources */,
+				8624F3F4258AFEE700136D16 /* PLVVodErrorUtil.m in Sources */,
+				DA274715221A486D009BD3BA /* PLVVodDanmuSendView.m in Sources */,
+				DA274719221A486D009BD3BA /* PLVVodPlaybackRatePanelView.m in Sources */,
+				DA274716221A486D009BD3BA /* PLVVodCoverView.m in Sources */,
+				DA27471D221A486D009BD3BA /* PLVVodLockScreenView.m in Sources */,
+				DA274717221A486D009BD3BA /* PLVVodFullscreenView.m in Sources */,
+				8624F3A5258AFDB200136D16 /* PLVVodNetworkTipsView.m in Sources */,
+				DA27471C221A486D009BD3BA /* PLVVodShrinkscreenView.m in Sources */,
+				DA27471A221A486D009BD3BA /* PLVVodAudioCoverPanelView.m in Sources */,
+				DA274718221A486D009BD3BA /* PLVVodGestureIndicatorView.m in Sources */,
+				DA274714221A486D009BD3BA /* PLVVodDefinitionPanelView.m in Sources */,
+				DA27471B221A486D009BD3BA /* PLVVodSettingPanelView.m in Sources */,
 				DA274723221A486D009BD3BA /* UIControl+PLVVod.m in Sources */,
 				00EC8258237D016600B6BB6F /* PLVCastManager.m in Sources */,
 				DAE18043223A672F0050F8A6 /* RNGestureHandlerButton.m in Sources */,
-				DA274715221A486D009BD3BA /* PLVVodDanmuSendView.m in Sources */,
 				DA274728221A486D009BD3BA /* PLVVodExamViewController.m in Sources */,
 				DA274735221A891B009BD3BA /* PolyvRNVodConfigModule.m in Sources */,
 				DA27471F221A486D009BD3BA /* PLVVodSkinPlayerController.m in Sources */,
@@ -1604,27 +1691,24 @@
 				DA27472E221A486D009BD3BA /* PLVVodExplanationView.m in Sources */,
 				DAE1804A223A672F0050F8A6 /* RNTapHandler.m in Sources */,
 				DA27472B221A486D009BD3BA /* PLVVodQuestionView.m in Sources */,
-				DA27471D221A486D009BD3BA /* PLVVodLockScreenView.m in Sources */,
 				DAE18046223A672F0050F8A6 /* RNRotationHandler.m in Sources */,
 				00EC8257237D016600B6BB6F /* PLVCastControllView.m in Sources */,
 				DA274720221A486D009BD3BA /* NSString+PLVVod.m in Sources */,
-				DA27471C221A486D009BD3BA /* PLVVodShrinkscreenView.m in Sources */,
 				DA274722221A486D009BD3BA /* UINavigationController+PLVVod.m in Sources */,
+				8624F3F2258AFEE700136D16 /* PLVVodNetworkUtil.m in Sources */,
 				DAE0A2EB2241DDB2003AC27F /* PLVDownloadCompleteInfoModel.m in Sources */,
-				DA274714221A486D009BD3BA /* PLVVodDefinitionPanelView.m in Sources */,
 				00EC8259237D016600B6BB6F /* PLVCastServiceListView.m in Sources */,
 				DA274725221A486D009BD3BA /* PLVVodDanmu+PLVVod.m in Sources */,
-				DA274716221A486D009BD3BA /* PLVVodCoverView.m in Sources */,
 				DA274721221A486D009BD3BA /* UIColor+PLVVod.m in Sources */,
-				DA274718221A486D009BD3BA /* PLVVodGestureIndicatorView.m in Sources */,
-				DA27471B221A486D009BD3BA /* PLVVodSettingPanelView.m in Sources */,
-				DA27471A221A486D009BD3BA /* PLVVodAudioCoverPanelView.m in Sources */,
 				DAE18040223A672F0050F8A6 /* RNGestureHandlerManager.m in Sources */,
 				DAE0A2F12241DDB2003AC27F /* PLVVodDownloadHelper.m in Sources */,
 				DAE0A2EA2241DDB2003AC27F /* PLVVodExtendVideoInfo.mm in Sources */,
 				DAE1803F223A672F0050F8A6 /* RNGestureHandler.m in Sources */,
+				8624F438258B021B00136D16 /* UIButton+EnlargeTouchArea.m in Sources */,
+				8624F27F258AF97D00136D16 /* PLVVodPlayTipsView.m in Sources */,
 				DAE18047223A672F0050F8A6 /* RNPanHandler.m in Sources */,
 				DA27472C221A486D009BD3BA /* PLVVodOptionCell.m in Sources */,
+				8624F3A4258AFDB200136D16 /* PLVVodRouteLineView.m in Sources */,
 				DA2746432216B95D009BD3BA /* PolyvVodPlayerManager.m in Sources */,
 				DA27471E221A486D009BD3BA /* PLVVodPlayerSkin.m in Sources */,
 				DAAC46E8224082A7007868BE /* PolyvRNVodDownloadModule.m in Sources */,

@@ -3,10 +3,14 @@ package com.easefun.polyvsdk.permission;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -72,6 +76,8 @@ public class PolyvPermission {
             case play:
                 //播放视频需要的权限
                 permissions.add(Manifest.permission.READ_PHONE_STATE);
+                //投屏功能在android9.0获取wifi名称及搜索设备所需的权限
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 resultCode = OperationType.play.getNum();
                 break;
@@ -94,6 +100,8 @@ public class PolyvPermission {
             case playAndDownload:
                 //播放视频和下载需要的权限
                 permissions.add(Manifest.permission.READ_PHONE_STATE);
+                //投屏功能在android9.0获取wifi名称及搜索设备所需的权限
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 resultCode = OperationType.playAndDownload.getNum();
                 break;
@@ -205,7 +213,7 @@ public class PolyvPermission {
      * @return
      */
     public static boolean canMakeSmores() {
-        return(Build.VERSION.SDK_INT> Build.VERSION_CODES.LOLLIPOP_MR1);
+        return(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
     public void setResponseCallback(ResponseCallback responseCallback) {

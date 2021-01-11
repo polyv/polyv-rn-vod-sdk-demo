@@ -5,6 +5,9 @@
 //  Created by Bq Lin on 2017/12/26.
 //  Copyright © 2017年 POLYV. All rights reserved.
 //
+// 各个机型最小逻辑分辨率宽度
+#define PLV_Min_ScreenWidth 320
+#define PLV_Max_ScreenWidth 414
 
 #import "PLVVodDefinitionPanelView.h"
 #import "UIColor+PLVVod.h"
@@ -23,6 +26,15 @@
 @implementation PLVVodDefinitionPanelView
 
 #pragma mark - property
+
+- (void)layoutSubviews{
+    if (self.frame.size.width <= PLV_Max_ScreenWidth){
+        self.qualityStackView.spacing = 70;
+    }
+    else{
+        self.qualityStackView.spacing = 100;
+    }
+}
 
 - (void)setQualityCount:(int)qualityCount {
 	_qualityCount = qualityCount;

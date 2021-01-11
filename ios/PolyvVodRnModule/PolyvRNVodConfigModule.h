@@ -17,6 +17,13 @@ NS_ASSUME_NONNULL_BEGIN
  *      -1 vodKey为空
  *      -2 decodeKey为空
  *      -3 decodeIv为空
+ *      -4 ViewId为空
+ *      -5 解析数据错误
+ *      -6 没有正在下载的视频
+ *      -7 userid为空
+ *      -8 writeToken为空
+ *      -9 readToken为空
+ *      -10 secretkey为空
  */
 typedef NS_ENUM(NSInteger, PolyvVodConfigRnErrorCode) {
   PolyvVodRnError_Success = 0,
@@ -24,6 +31,12 @@ typedef NS_ENUM(NSInteger, PolyvVodConfigRnErrorCode) {
   PolyvVodRnError_NoDecodeKey = -2,
   PolyvVodRnError_NoDecodeIv = -3,
   PolyvVodRnError_NoViewerId = -4,
+  PolyvVodRnError_ParseDataError = -5,
+  PolyvVodRnError_NoDownloadedVideo = -6,
+  PolyvVodRnError_NoUserId = -7,
+  PolyvVodRnError_NoWriteToken = -8,
+  PolyvVodRnError_NoReadToken = -9,
+  PolyvVodRnError_NoSecretKey = -10
 };
 
 @interface PolyvRNVodConfigModule : NSObject <RCTBridgeModule>

@@ -6,7 +6,7 @@
     android:alpha="0.7"
     android:background="@drawable/polyv_rl_corners"
     android:layout_centerInParent="true"
-    android:visibility="invisible" >
+    android:visibility="gone" >
 
     <!-- relativelayout下的linearlayout可以在任意方向居中 -->
 
@@ -16,25 +16,19 @@
         android:gravity="center"
         android:orientation="vertical" >
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/iv_left"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:src="@drawable/polyv_ic_left"
+            android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/iv_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/polyv_ic_left"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/iv_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/polyv_ic_right"
-                android:visibility="visible" />
-
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/polyv_ic_right"
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="wrap_content"

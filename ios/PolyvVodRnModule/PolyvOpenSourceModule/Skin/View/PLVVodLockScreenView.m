@@ -5,10 +5,14 @@
 //  Created by mac on 2018/12/10.
 //  Copyright © 2018 POLYV. All rights reserved.
 //
-
-// iPhone X
 #define PLV_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
-#define PLV_iPhoneMR ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1624), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define PLV_iPhoneXR1 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(828, 1792), [[UIScreen mainScreen] currentMode].size) : NO)
+#define PLV_iPhoneXR2 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1624), [[UIScreen mainScreen] currentMode].size) : NO)
+#define PLV_iPhoneXS ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+#define PLV_iPhoneXsMax ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2688), [[UIScreen mainScreen] currentMode].size) : NO)
+#define PLV_iPhoneXSeries ((PLV_iPhoneX || PLV_iPhoneXR1 || PLV_iPhoneXR2 || PLV_iPhoneXS || PLV_iPhoneXsMax))
+
 // 横屏时左右安全区域
 #define PLV_Landscape_Left_And_Right_Safe_Side_Margin  44
 // 横屏时底部安全区域
@@ -34,15 +38,13 @@
     
     self.backgroundColor = [UIColor clearColor];
     
-    if (PLV_iPhoneX || PLV_iPhoneMR){
+
+    if (PLV_iPhoneXSeries){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability"
         [self.constraints enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj.firstItem isKindOfClass:[UIButton class]]){
-                if (obj.firstAttribute == NSLayoutAttributeLeading && obj.secondAttribute == NSLayoutAttributeLeading){
-                    //
-                    obj.constant = PLV_Landscape_Left_And_Right_Safe_Side_Margin;
-                }
+            if ([obj.firstItem isKindOfClass:[UIButton class]] && obj.firstAttribute == NSLayoutAttributeLeading && obj.secondAttribute == NSLayoutAttributeLeading){
+                obj.constant = PLV_Landscape_Left_And_Right_Safe_Side_Margin;
             }
         }];
 #pragma clang diagnostic pop

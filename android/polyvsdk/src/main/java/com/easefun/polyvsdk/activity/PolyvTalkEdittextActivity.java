@@ -80,7 +80,7 @@ public class PolyvTalkEdittextActivity extends Activity {
             public void onClick(View v) {
                 String sendMsg = et_talk.getText().toString().substring(length);
                 if (sendMsg.trim().length()==0) {
-                    Toast.makeText(PolyvTalkEdittextActivity.this,"发送信息不能为空!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PolyvTalkEdittextActivity.this,"发送信息不能为空!",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent(PolyvTalkEdittextActivity.this, PolyvTalkFragment.class);

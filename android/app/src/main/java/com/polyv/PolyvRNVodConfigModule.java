@@ -14,8 +14,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,41 +37,85 @@ public class PolyvRNVodConfigModule extends ReactContextBaseJavaModule {
         return TAG;
     }
 
-
     @ReactMethod
-    public void init(String vodKey, String decodeKey, String decodeIv, String viewerId, String nickName, Promise promise){
-
+    public void setToken(String userid, String writetoken, String readtoken, String secretkey, String viewerId, String nickName, Promise promise) {
+        Log.d(TAG, "setToken - start");
         int code = PolyvRNVodCode.success;
-        if(TextUtils.isEmpty(decodeKey)){
-            code  = PolyvRNVodCode.noDecodeKey;
-        }else if(TextUtils.isEmpty(vodKey)){
-            code  = PolyvRNVodCode.noVodKey;
-        }else if(TextUtils.isEmpty(decodeIv)){
-            code  = PolyvRNVodCode.noDecodeIv;
-        }else if(TextUtils.isEmpty(viewerId)){
+        if (TextUtils.isEmpty(userid)) {
+            code = PolyvRNVodCode.noUserId;
+        } else if (TextUtils.isEmpty(writetoken)) {
+            code = PolyvRNVodCode.noWriteToken;
+        } else if (TextUtils.isEmpty(readtoken)) {
+            code = PolyvRNVodCode.noReadToken;
+        } else if (TextUtils.isEmpty(secretkey)) {
+            code = PolyvRNVodCode.noSecretKey;
+        } else if (TextUtils.isEmpty(viewerId)) {
             code = PolyvRNVodCode.noViewId;
         }
 
-        if(code == PolyvRNVodCode.success){
+        if (code == PolyvRNVodCode.success) {
+            PolyvSDKClient client = PolyvSDKClient.getInstance();
+
+            PolyvUserConfig.getInstance().setNickName(nickName);
+            PolyvUserConfig.getInstance().setViewerId(viewerId);
+            client.setViewerId(viewerId);
+
+            //初始化sdk
+            client.initSetting(getReactApplicationContext());
+            client.settingsWithUserid(userid, secretkey, readtoken, writetoken);
+            client.initCrashReport(getCurrentActivity());
+
+            setDownloadDir();
+            PolyvDownloaderManager.setDownloadQueueCount(1);
+
+            WritableMap map = Arguments.createMap();
+            map.putInt("code", PolyvRNVodCode.success);
+            map.putString("token", PolyvSDKClient.getInstance().getReadtoken());
+            map.putBoolean("isSign", PolyvSDKClient.getInstance().isSign());
+            promise.resolve(map);
+        } else {
+            String errorCode = "" + code;
+            String errorDesc = PolyvRNVodCode.getDesc(code);
+            Throwable throwable = new Throwable(errorDesc);
+            Log.e(TAG, "errorCode=" + errorCode + "  errorDesc=" + errorDesc);
+            promise.reject(errorCode, errorDesc, throwable);
+        }
+        Log.d(TAG, "setToken result code: " + code);
+    }
+
+    /**
+     * 建议使用{@link PolyvRNVodConfigModule#setToken(String, String, String, String, String, String, Promise)}
+     */
+    @Deprecated
+    @ReactMethod
+    public void init(String vodKey, String decodeKey, String decodeIv, String viewerId, String nickName, Promise promise) {
+        Log.d(TAG, "init");
+        int code = PolyvRNVodCode.success;
+        if (TextUtils.isEmpty(decodeKey)) {
+            code = PolyvRNVodCode.noDecodeKey;
+        } else if (TextUtils.isEmpty(vodKey)) {
+            code = PolyvRNVodCode.noVodKey;
+        } else if (TextUtils.isEmpty(decodeIv)) {
+            code = PolyvRNVodCode.noDecodeIv;
+        } else if (TextUtils.isEmpty(viewerId)) {
+            code = PolyvRNVodCode.noViewId;
+        }
+
+        if (code == PolyvRNVodCode.success) {
 
             PolyvUserConfig.getInstance().setNickName(nickName);
             PolyvUserConfig.getInstance().setViewerId(viewerId);
 
-            // 创建默认的ImageLoader配置参数
-            ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(getCurrentActivity());
-            ImageLoader.getInstance().init(configuration);
+            initPolyvCilent(vodKey, decodeKey, decodeIv, viewerId);
 
-            initPolyvCilent(vodKey,decodeKey,decodeIv,viewerId);
-//            initScreencast();
-
-            Log.d(TAG, "init: token"+PolyvSDKClient.getInstance().getReadtoken()+"  sign :"+PolyvSDKClient.getInstance().isSign());
+            Log.d(TAG, "init: token" + PolyvSDKClient.getInstance().getReadtoken() + "  sign :" + PolyvSDKClient.getInstance().isSign());
             WritableMap map = Arguments.createMap();
             map.putInt("code", PolyvRNVodCode.success);
-            map.putString("token",PolyvSDKClient.getInstance().getReadtoken());
-            map.putBoolean("isSign",PolyvSDKClient.getInstance().isSign());
+            map.putString("token", PolyvSDKClient.getInstance().getReadtoken());
+            map.putBoolean("isSign", PolyvSDKClient.getInstance().isSign());
             promise.resolve(map);
 
-        }else{
+        } else {
             String errorCode = "" + code;
             String errorDesc = PolyvRNVodCode.getDesc(code);
             Throwable throwable = new Throwable(errorDesc);
@@ -83,22 +125,22 @@ public class PolyvRNVodConfigModule extends ReactContextBaseJavaModule {
         }
 
     }
+
     @ReactMethod
-    public void parseEncryptData(String vid,String data, Promise promise){
-        String sourceData = PolyvSDKClient.getInstance().getDataToString(vid,data);
-        if(!TextUtils.isEmpty(sourceData)){
+    public void parseEncryptData(String vid, String data, Promise promise) {
+        String sourceData = PolyvSDKClient.getInstance().getDataToString(vid, data);
+        if (!TextUtils.isEmpty(sourceData)) {
             WritableMap map = Arguments.createMap();
-            map.putString("data",sourceData);
+            map.putString("data", sourceData);
             promise.resolve(map);
-            return ;
+            return;
         }
-        String errorCode = ""+parseDataError;
+        String errorCode = "" + parseDataError;
         String errorDesc = PolyvRNVodCode.getDesc(parseDataError);
         Throwable throwable = new Throwable(errorDesc);
         Log.e(TAG, "errorCode=" + errorCode + "  errorDesc=" + errorDesc);
         promise.reject(errorCode, errorDesc, throwable);
     }
-
 
 
     public void initScreencast() {
@@ -108,16 +150,17 @@ public class PolyvRNVodConfigModule extends ReactContextBaseJavaModule {
         PolyvScreencastHelper.getInstance(getCurrentActivity());
     }
 
-    public void initPolyvCilent(String vodKey, String decodeKey, String decodeIv,String viewerId) {
+    public void initPolyvCilent(String vodKey, String decodeKey, String decodeIv, String viewerId) {
         //网络方式取得SDK加密串，（推荐）
         //网络获取到的SDK加密串可以保存在本地SharedPreference中，下次先从本地获取
 //		new LoadConfigTask().execute();
         PolyvSDKClient client = PolyvSDKClient.getInstance();
         client.setViewerId(viewerId);
+        client.initSetting(getReactApplicationContext());
         //使用SDK加密串来配置
-        client.setConfig(vodKey, decodeKey, decodeIv, getCurrentActivity());
+        client.settingsWithConfigString(vodKey, decodeKey, decodeIv);
         //初始化SDK设置
-        client.initSetting(getCurrentActivity());
+
         //启动Bugly
         client.initCrashReport(getCurrentActivity());
         //启动Bugly后，在学员登录时设置学员id

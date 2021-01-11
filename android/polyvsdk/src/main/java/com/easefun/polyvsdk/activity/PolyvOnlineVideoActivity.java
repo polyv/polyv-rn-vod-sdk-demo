@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.easefun.polyvsdk.PolyvSDKClient;
@@ -69,7 +70,7 @@ public class PolyvOnlineVideoActivity extends Activity implements View.OnClickLi
     private void createLoadMoreView() {
         loadMoreView = LayoutInflater.from(this).inflate(R.layout.polyv_bottom_loadmorelayout, lv_online, false);
         mAdapter.addFooterView(loadMoreView);
-        loadMoreView.setVisibility(View.GONE);
+        loadMoreView.setVisibility(View.INVISIBLE);
     }
 
     class LoadVideoList extends AsyncTask<String, String, List<RestVO>> {
@@ -88,7 +89,7 @@ public class PolyvOnlineVideoActivity extends Activity implements View.OnClickLi
         @Override
         protected void onPostExecute(List<RestVO> result) {
             super.onPostExecute(result);
-            loadMoreView.setVisibility(View.GONE);
+            loadMoreView.setVisibility(View.INVISIBLE);
             if (result == null) {
                 mAdapter.removeFootView();
                 return;
@@ -106,10 +107,8 @@ public class PolyvOnlineVideoActivity extends Activity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.iv_finish) {
+        if (v.getId() == R.id.iv_finish) {
             finish();
-
         }
     }
 }

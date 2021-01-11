@@ -18,7 +18,10 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *outerContainerTopConstraint;
 @property CGFloat outerContanerWeidht;
 
-@property (weak, nonatomic) IBOutlet UILabel *questionLabel;
+//@property (weak, nonatomic) IBOutlet UILabel *questionLabel;
+@property (weak, nonatomic) IBOutlet UITextView *questionLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *questionTypeLb;
 
 @property (weak, nonatomic) IBOutlet UIImageView *illustrationImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *illustrationContainerWidthConstraint;
@@ -38,6 +41,10 @@
 #pragma mark - init & dealloc
 
 - (void)dealloc {
+    if (self.cellHeights != NULL){
+        free(self.cellHeights);
+        self.cellHeights = NULL;
+    }
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -60,7 +67,7 @@
 
 - (void)interfaceOrientationDidChange:(NSNotification *)notification {
     if (self.question) {
-        [self updateUI];
+        [self updateOuterContainerSize];
     }
 }
 
@@ -69,6 +76,14 @@
 	[self.optionCollectionView registerNib:[UINib nibWithNibName:[PLVVodOptionCell identifier] bundle:nil] forCellWithReuseIdentifier:[PLVVodOptionCell identifier]];
 	self.optionCollectionView.allowsMultipleSelection = YES;
 	self.optionCollectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.questionLabel.textContainerInset = UIEdgeInsetsMake(5, 0, 0, 0);
+    self.questionLabel.editable = NO;
+    self.illustrationImageView.clipsToBounds = YES;
+    self.illustrationImageView.contentMode = UIViewContentModeScaleAspectFill;
+}
+
+- (void)layoutSubviews{
+    [self updateOuterContainerSize];
 }
 
 - (void)clear {
@@ -81,8 +96,9 @@
 #pragma mark - property
 - (void)setQuestion:(PLVVodQuestion *)question {
 	_question = question;
+    self.optionCollectionView.allowsMultipleSelection = _question.isMultipleChoice;
 	dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUI];
+        [self updateOuterContainerSize];
 	});
 }
 
@@ -108,6 +124,7 @@
 //    cell.text = self.question.options[indexPath.item];
     NSString *optionText = [NSString stringWithFormat:@"%@ %@", [self optionOrderWithIndex:indexPath.row], self.question.options[indexPath.item]];
     cell.text = optionText;
+    cell.multipleChoiceType = self.question.isMultipleChoice;
 	return cell;
 }
 
@@ -125,18 +142,20 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(self.cellwidth, self.cellHeights[indexPath.row]);
+    CGFloat w = self.cellwidth;
+    CGFloat h = self.cellHeights[indexPath.row];
+    return CGSizeMake(w, h);
 }
 
 #pragma mark - public method
 - (void)scrollToTop {
-	[self.optionCollectionView setContentOffset:CGPointZero animated:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.optionCollectionView setContentOffset:CGPointZero animated:YES];
+    });
 }
 
 #pragma mark - private method
-- (void)updateUI {
-    [self updateOuterContainerSize];
-    
+- (void)updateUI {    
     CGFloat padding = 16;
     
     // 是否有插图
@@ -151,28 +170,35 @@
     }
     
     // 计算cell的宽度
-    self.cellwidth = self.outerContanerWeidht / 2 - padding - 10;
+    CGFloat cellW = self.outerContanerWeidht / 2 - padding - 10;
     if ([self isLandscape] && !hasIllustration){
         // 无图且处于横屏状态，显示一行，重新计算cell 宽度，
-        self.cellwidth = self.outerContanerWeidht - 2*padding -10;
+       cellW = self.outerContanerWeidht - 2*padding -10;
     }
-
+    
+    if (cellW <= 0) { cellW = 1; }
+    self.cellwidth = cellW;
+    
     // 计算cell的高度
     int count = (int)_question.options.count;
+    if (self.cellHeights != NULL){
+        free(self.cellHeights);
+        self.cellHeights = NULL;
+    }
     self.cellHeights = malloc(sizeof(CGFloat) * count);
     for (int i=0; i<count; i++) { // 根据每个cell的文字计算每个cell适合的高度
-        self.cellHeights[i] = [PLVVodOptionCell calculateCellWithHeight:_question.options[i] andWidth:self.cellwidth];
+        NSString *optionText = [NSString stringWithFormat:@"%@ %@", [self optionOrderWithIndex:i], self.question.options[i]];
+        CGFloat h = [PLVVodOptionCell calculateCellWithHeight:optionText andWidth:self.cellwidth];
+        self.cellHeights[i] = h;
     }
-    if (!hasIllustration) { // 没有插图时，一行显示两个cell，两个cell的高度要保持一致
-        if (![self isLandscape]){
-            for (int i=0; i<count/2; i++) {
-                int leftCellIndex = i * 2;
-                int rightCellIndex = i * 2 + 1;
-                if (self.cellHeights[leftCellIndex] > self.cellHeights[rightCellIndex]) {
-                    self.cellHeights[rightCellIndex] = self.cellHeights[leftCellIndex];
-                } else {
-                    self.cellHeights[leftCellIndex] = self.cellHeights[rightCellIndex];
-                }
+    if (!hasIllustration && ![self isLandscape]) { // 没有插图时，一行显示两个cell，两个cell的高度要保持一致
+        for (int i=0; i<count/2; i++) {
+            int leftCellIndex = i * 2;
+            int rightCellIndex = i * 2 + 1;
+            if (self.cellHeights[leftCellIndex] > self.cellHeights[rightCellIndex]) {
+                self.cellHeights[rightCellIndex] = self.cellHeights[leftCellIndex];
+            } else {
+                self.cellHeights[leftCellIndex] = self.cellHeights[rightCellIndex];
             }
         }
     }
@@ -181,7 +207,9 @@
     
     // 设置问题
     self.questionLabel.text = _question.question;
-    self.questionLabel.numberOfLines = 0;
+
+    // 设置题型
+    self.questionTypeLb.text = _question.isMultipleChoice ? @"【多选题】" : @"【单选题】";
     
     // 设置跳过按钮
     self.skipButton.enabled = _question.skippable;
@@ -197,25 +225,40 @@
 
 - (void)updateOuterContainerSize {
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    float width = self.superview.bounds.size.width;
+    float height = self.superview.bounds.size.height;
+    
     if (interfaceOrientation == UIInterfaceOrientationPortrait) { // 竖屏
+        
+        if (width >= height) {
+            self.outerContainerTopConstraint.constant = 0;
+            self.outerContainerBottomConstraint.constant = 0;
+        }else{
+            CGFloat contanerHeight = width / (16.0 / 9.0);
+            CGFloat topBottomPadding = (height - contanerHeight) / 2.0;
+            
+            self.outerContainerTopConstraint.constant = topBottomPadding;
+            self.outerContainerBottomConstraint.constant = topBottomPadding;
+        }
+        
         self.outerContainerLeadingConstraint.constant = 0;
         self.outerContainerTailingConstraint.constant = 0;
-        self.outerContainerTopConstraint.constant = 0;
-        self.outerContainerBottomConstraint.constant = 0;
-        
         self.outerContanerWeidht = [UIScreen mainScreen].bounds.size.width;
+
     } else { // 横屏
         CGFloat verticalPadding = 60;
         CGFloat horzontalPadding;
         
-        CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-        CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+        CGFloat scale = verticalPadding / 375.0;
+        verticalPadding = scale * height;
         
-        CGFloat outerContanerHeight = screenHeight - 60 * 2;
-        NSLog(@"outerContanerHeight = %f", outerContanerHeight);
-        self.outerContanerWeidht = outerContanerHeight / 9 * 16;
+        CGFloat outerContanerHeight = height - verticalPadding * 2;
+        self.outerContanerWeidht = outerContanerHeight / 9.0 * 16;
         
-        horzontalPadding = (screenWidth - self.outerContanerWeidht) / 2 ;
+        horzontalPadding = (width - self.outerContanerWeidht) / 2.0 ;
+        
+        // NSLog(@"outerContanerHeight = %f", outerContanerHeight);
         
         self.outerContainerLeadingConstraint.constant = horzontalPadding;
         self.outerContainerTailingConstraint.constant = horzontalPadding;
@@ -223,7 +266,7 @@
         self.outerContainerBottomConstraint.constant = verticalPadding;
     }
     
-//    [self layoutIfNeeded];
+    [self updateUI];
 }
 
 - (BOOL)isLandscape{

@@ -247,7 +247,7 @@ public class PolyvVlmsHelper {
 
             @Override
             public void success(PolyvCurriculumInfo polyvCurriculumInfo) {
-                List<CurriculumsDetail> lists = new ArrayList<CurriculumsDetail>();
+                List<PolyvVlmsHelper.CurriculumsDetail> lists = new ArrayList<CurriculumsDetail>();
                 if (polyvCurriculumInfo.data.sections.size() == 0) {
                     callSuccess(curriculumDetailListener, lists);
                 } else {
@@ -359,7 +359,7 @@ public class PolyvVlmsHelper {
         question.user_id = polyvAddQuestionInfo.data.user_id;
         question.title = polyvAddQuestionInfo.data.title;
         questionsDetail.question = question;
-        questionsDetail.answers = new LinkedList<QuestionsDetail.AnswerDetail>();
+        questionsDetail.answers = new LinkedList<PolyvVlmsHelper.QuestionsDetail.AnswerDetail>();
         questionsDetail.content_display = new SpannableStringBuilder(question.nickname + " : ").append(question.content);
         return questionsDetail;
     }
@@ -463,7 +463,7 @@ public class PolyvVlmsHelper {
         private ExecutorService executorService;
         private MyCurriculumDetailListener curriculumDetailListener;
         private List<PolyvCurriculumInfo.Section> sections;
-        private List<CurriculumsDetail> lists;
+        private List<PolyvVlmsHelper.CurriculumsDetail> lists;
 
         public LoadVideoVOTalk(MyCurriculumDetailListener curriculumDetailListener, List<PolyvCurriculumInfo.Section> sections, List<CurriculumsDetail> lists) {
             this.curriculumDetailListener = curriculumDetailListener;

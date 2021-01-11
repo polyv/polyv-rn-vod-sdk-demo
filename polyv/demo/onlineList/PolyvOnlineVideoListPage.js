@@ -32,7 +32,7 @@ export default class PolyvOnlineVideoListPage extends Component {
         />
       ),
     }
-   
+
   };
   constructor(props) {
     super(props);
@@ -43,6 +43,10 @@ export default class PolyvOnlineVideoListPage extends Component {
       decodeIv: PolyvUserConfig.User.decodeIv,
       viewerId: PolyvUserConfig.User.viewerId,
       nickName: PolyvUserConfig.User.nickName,
+      userid: PolyvUserConfig.User.userid,
+      writetoken: PolyvUserConfig.User.writetoken,
+      readtoken: PolyvUserConfig.User.readtoken,
+      secretkey: PolyvUserConfig.User.secretkey,
 
       // 输入框默认vid
       inputVid: PolyvUserConfig.User.inputVid,
@@ -58,22 +62,23 @@ export default class PolyvOnlineVideoListPage extends Component {
     console.log("Polyv vod init");
     setAxios();
 
-    PolyvVodConfig.init(
-      this.state.vodKey,
-      this.state.decodeKey,
-      this.state.decodeIv,
-      this.state.viewerId,
-      this.state.nickName
-    ).then(ret => {
-      if (ret.code != 0) {
-        // 初始化失败
-        var str = "初始化失败  errCode=" + ret.code + "  errMsg=" + ret.message;
-        console.log(str);
-        alert(str);
-      } else {
-        // 初始化成功
-        console.log("初始化成功");
-      }
+    PolyvVodConfig.setToken(
+        this.state.userid,
+        this.state.writetoken,
+        this.state.readtoken,
+        this.state.secretkey,
+        this.state.viewerId,
+        this.state.nickName
+    ).then(ret =>{
+        if(ret.code != 0){
+            //初始化失败
+            var str = "初始化失败  errCode=" + ret.code + "  errMsg=" + ret.message;
+            console.log(str);
+            alert(str);
+        } else {
+            // 初始化成功
+            console.log("初始化成功");
+        }
     });
   }
 
@@ -100,7 +105,7 @@ export default class PolyvOnlineVideoListPage extends Component {
       <View style={styles.container}>
       <PolyvVideoListView  navigation={this.props.navigation} ref='videoList' style={styles.video} />
     </View>
-      
+
     );
   }
 }

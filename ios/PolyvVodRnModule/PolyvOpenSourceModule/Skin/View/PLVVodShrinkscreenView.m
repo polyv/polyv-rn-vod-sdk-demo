@@ -6,6 +6,10 @@
 //  Copyright © 2017年 POLYV. All rights reserved.
 //
 
+// 各个机型最小逻辑分辨率宽度
+#define PLV_Min_ScreenWidth 320
+#define PLV_Max_ScreenWidth 414
+
 #import "PLVVodShrinkscreenView.h"
 
 @interface PLVVodShrinkscreenView ()
@@ -15,9 +19,52 @@
 @property (weak, nonatomic) IBOutlet UIImageView *audioModeSelectedImageView;
 @property (weak, nonatomic) IBOutlet UILabel *audioModeLabel;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
+@property (weak, nonatomic) IBOutlet UIStackView *rightToolStackView;
+
+// 是否显示 ppt 相关按钮，默认 NO，需要设为 YES 调用方法 "-enablePPTMode:"
+@property (nonatomic, assign) BOOL supportPPT;
+
+#pragma clang diagnostic pop
+
 @end
 
 @implementation PLVVodShrinkscreenView
+
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    
+    [self initUIControl];
+}
+
+- (void)initUIControl{
+    // 默认隐藏清晰度
+    self.isShowQuality = NO;
+    self.definitionButton.hidden = !self.isShowQuality;
+
+    // 默认隐藏播放速率
+    self.isShowRate = NO;
+    self.playbackRateButton.hidden = !self.isShowRate;
+
+    //  默认隐藏线路切换
+    self.isShowRouteline = NO;
+    self.routeButton.hidden = !self.isShowRouteline;
+}
+
+- (void)layoutSubviews{
+    
+    // 客户可以具体需求，调整布局
+    if (self.frame.size.width <= PLV_Min_ScreenWidth){
+        self.rightToolStackView.spacing = 10;
+    }
+    else{
+        self.rightToolStackView.spacing = 15;
+    }
+}
+
+#pragma mark button action
 
 - (void)switchToPlayMode:(PLVVodPlaybackMode)mode {
     if (mode == PLVVodPlaybackModeAudio) {
@@ -30,6 +77,26 @@
         self.videoModeLabel.highlighted = YES;
         self.audioModeSelectedImageView.hidden = YES;
         self.audioModeLabel.highlighted = NO;
+    }
+    [self enablePPTMode:_supportPPT];
+}
+
+- (void)enablePPTMode:(BOOL)enable {
+    _supportPPT = enable;
+    self.subScreenButton.hidden = !_supportPPT;
+}
+
+- (void)enableFloating:(BOOL)enable {
+    self.floatingButton.hidden = !enable;
+}
+
+- (void)setEnableQualityBtn:(BOOL)enableQualityBtn{
+    self.definitionButton.enabled = enableQualityBtn;
+    if (enableQualityBtn){
+        self.definitionButton.alpha = 1.0;
+    }
+    else{
+        self.definitionButton.alpha = 0.5;
     }
 }
 

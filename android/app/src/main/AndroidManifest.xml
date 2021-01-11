@@ -19,6 +19,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/polyv_network_security_config"
         >
         <activity
             android:name=".MainActivity"

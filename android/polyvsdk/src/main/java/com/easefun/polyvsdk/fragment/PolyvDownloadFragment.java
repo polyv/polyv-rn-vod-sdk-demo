@@ -72,7 +72,7 @@ public class PolyvDownloadFragment extends Fragment {
         tv_downloadall = (TextView) view.findViewById(R.id.tv_downloadall);
         DrawableCompat.setTint(DrawableCompat.wrap(((ImageView) view.findViewById(R.id.iv_trash)).getDrawable().mutate()), getResources().getColor(R.color.center_bottom_text_color_red));
         if (isFinished) {
-            rl_bot.setVisibility(View.GONE);
+            rl_bot.setVisibility(View.INVISIBLE);
         }
         ll_downloadall.setOnClickListener(new View.OnClickListener() {
 

@@ -1,11 +1,11 @@
 package com.easefun.polyvsdk.view;
 
+import com.easefun.polyvsdk.R;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
-import com.easefun.polyvsdk.R;
 
 public class PolyvGrayImageView extends ImageView {
 

@@ -1,5 +1,7 @@
 package com.easefun.polyvsdk.activity;
 
+import com.easefun.polyvsdk.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +12,6 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.easefun.polyvsdk.R;
 
 public class PolyvTalkSendActivity extends Activity {
 	// 返回按钮

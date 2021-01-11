@@ -13,13 +13,14 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.util.PolyvDownloadDirUtil;
+import com.easefun.polyvsdk.util.PolyvImageLoader;
+import com.easefun.polyvsdk.util.PolyvScreenUtils;
 import com.easefun.polyvsdk.video.PolyvVideoView;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
@@ -59,7 +60,7 @@ public class PolyvPlayerAudioCoverView extends FrameLayout {
         fl_cover = (FrameLayout) findViewById(R.id.fl_cover);
         if (!isShowFilm) {
             iv_audio_cover_m.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            fl_cover.setVisibility(View.GONE);
+            fl_cover.setVisibility(View.INVISIBLE);
         } else {
             iv_audio_cover_m.setAlpha(0.4f);
         }
@@ -71,11 +72,8 @@ public class PolyvPlayerAudioCoverView extends FrameLayout {
         PolyvVideoVO videoVO = videoView.getVideo();
         if (videoVO != null)
             if (!videoView.isLocalPlay()) {
-                ImageLoader.getInstance().displayImage(videoVO.getFirstImage(), imageView
-                        , new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true)
-                                .showImageForEmptyUri(isRotateView ? R.drawable.polyv_rotate_cover_default : R.drawable.polyv_bg_cover_default)//显示默认的图片
-                                .showImageOnFail(isRotateView ? R.drawable.polyv_rotate_cover_default : R.drawable.polyv_bg_cover_default).build()
-                        , new PolyvAnimateFirstDisplayListener());
+                PolyvImageLoader.getInstance().loadImageOrigin(getContext(),videoVO.getFirstImage(),imageView,
+                        isRotateView ? R.drawable.polyv_rotate_cover_default : R.drawable.polyv_bg_cover_default);
             } else {
                 int index = 0;
                 if (videoVO.getFirstImage().contains("/")) {
@@ -109,9 +107,23 @@ public class PolyvPlayerAudioCoverView extends FrameLayout {
     public void hide() {
         if (animator != null)
             animator.cancel();
-        fl_cover.setVisibility(View.GONE);
-        iv_audio_cover.setVisibility(View.GONE);
-        iv_audio_cover_m.setVisibility(View.GONE);
+        fl_cover.setVisibility(View.INVISIBLE);
+        iv_audio_cover.setVisibility(View.INVISIBLE);
+        iv_audio_cover_m.setVisibility(View.INVISIBLE);
+    }
+
+    public void fitLocationChange(boolean isInMainScreen) {
+        if (fl_cover == null)
+            return;
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) fl_cover.getLayoutParams();
+        if (isInMainScreen) {
+            rlp.width = PolyvScreenUtils.dip2px(getContext(), 150);
+            rlp.height = PolyvScreenUtils.dip2px(getContext(),150);
+        } else {
+            rlp.width = PolyvScreenUtils.dip2px(getContext(), 70);
+            rlp.height = PolyvScreenUtils.dip2px(getContext(), 70);
+        }
+        fl_cover.setLayoutParams(rlp);
     }
 
     //用于mp3源文件播放

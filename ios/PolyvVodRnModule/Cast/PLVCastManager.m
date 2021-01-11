@@ -8,6 +8,7 @@
 
 #import "PLVCastManager.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
+#import <AlicloudUtils/AlicloudReachabilityManager.h>
 
 // 定时器时间
 // 两者不能一样 否则任务无法区分
@@ -141,13 +142,15 @@ static PLVCastManager * manager = nil;
             ssid = info[@"SSID"];
         }
     }
+    if (!ssid && [self wifiCanUse]) {
+        ssid = @"获取 WIFI 名称失败";
+    }
     return ssid;
 }
 
 + (BOOL)wifiCanUse{
-    NSString * wifiName = [self getWifiName];
-    if (wifiName == nil || [wifiName isKindOfClass: [NSString class]] == NO || wifiName.length == 0) return NO;
-    return YES;
+    AlicloudReachabilityManager *reachability = [AlicloudReachabilityManager shareInstance];
+    return [reachability isReachableViaWifi];
 }
 
 - (void)quitAllFuntionc{
@@ -227,7 +230,7 @@ static PLVCastManager * manager = nil;
     // 若已连接其他设备
     if (self.lelinkConnection.lelinkService != nil) {
         // 提前保存即将断开的服务
-        _willBeDisconnectedService = self.lelinkConnection.lelinkService;
+        self.willBeDisconnectedService = self.lelinkConnection.lelinkService;
         
         [self stop];
         [self stop];
@@ -259,8 +262,16 @@ static PLVCastManager * manager = nil;
     if (video.keepSource) {
         urlString = video.play_source_url;
     }else{
+        
+        NSArray * urlArr;
+        if(video.isPlain == YES && video.isHls == NO){
+            urlArr = video.plainVideos;
+        }else{
+            urlArr = video.hlsVideos;
+        }
         NSInteger idx = quality - 1;
-        urlString = (video.hlsVideos.count > idx && idx >= 0) ? video.hlsVideos[idx] : @"";
+        urlString = (urlArr.count > idx && idx >= 0) ? urlArr[idx] : @"";
+        
     }
     
     if (urlString == nil || [urlString isKindOfClass: [NSString class]] == NO || urlString.length == 0) {
@@ -435,7 +446,7 @@ static void onNotifyCallback(CFNotificationCenterRef center, void *observer, CFS
         [self.plv_servicesArr addObject:plv_s];
     }
     
-    _lb_servicesArr = lbServicesArr;
+    self.lb_servicesArr = lbServicesArr;
     // NSLog(@"PLVCastManager - 设备信息数组已更新 设备数：%lu",(unsigned long)self.plv_servicesArr.count);
 }
 
@@ -538,7 +549,7 @@ didFindLelinkServices:(NSArray<LBLelinkService *> *)services {
     }
     
     // 清空
-    _willBeDisconnectedService = nil;
+    self.willBeDisconnectedService = nil;
     if (self.lelinkConnection.lelinkService == service) {
         self.lelinkConnection.lelinkService = nil;
     }
@@ -555,7 +566,7 @@ didFindLelinkServices:(NSArray<LBLelinkService *> *)services {
 - (void)lelinkPlayer:(LBLelinkPlayer *)player playStatus:(LBLelinkPlayStatus)playStatus {
     NSLog(@"PLVCastManager - 播放状态回调 %lu",(unsigned long)playStatus);
     
-    if (self.lelinkConnection.lelinkService == _willBeDisconnectedService) {
+    if (self.lelinkConnection.lelinkService == self.willBeDisconnectedService) {
         return;
     }
     

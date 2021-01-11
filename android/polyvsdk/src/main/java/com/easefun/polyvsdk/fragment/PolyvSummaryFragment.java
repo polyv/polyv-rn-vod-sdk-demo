@@ -72,7 +72,7 @@ public class PolyvSummaryFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                if (tv_expand.getVisibility() == View.GONE)
+                if (tv_expand.getVisibility() == View.INVISIBLE)
                     return;
                 expandOrCollapse();
             }

@@ -115,7 +115,11 @@ public class PolyvScreencastStatusLayout extends FrameLayout implements View.OnC
         iv_volume_reduce.setOnClickListener(this);
 
         rl_port = (RelativeLayout) findViewById(R.id.rl_port);
-        findViewById(R.id.iv_screencast_search).setVisibility(View.GONE);
+        findViewById(R.id.iv_screencast_search).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tv_route_portrait).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tv_bit_portrait).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tv_speed_portrait).setVisibility(View.INVISIBLE);
+        findViewById(R.id.iv_vice_status_portrait).setVisibility(View.INVISIBLE);
         iv_play = (ImageView) findViewById(R.id.iv_play);
         iv_play.setOnClickListener(this);
         iv_land = (ImageView) findViewById(R.id.iv_land);
@@ -162,11 +166,11 @@ public class PolyvScreencastStatusLayout extends FrameLayout implements View.OnC
     }
 
     public void callConnectStatus(String deviceName) {
-        tv_bit.setVisibility(View.GONE);
-        tv_retry.setVisibility(View.GONE);
+        tv_bit.setVisibility(View.INVISIBLE);
+        tv_retry.setVisibility(View.INVISIBLE);
         tv_exit.setBackgroundDrawable(getResources().getDrawable(R.drawable.polyv_tv_lb_corners));
-        ll_bit_layout.setVisibility(View.GONE);
-        ll_volume_layout.setVisibility(View.GONE);
+        ll_bit_layout.setVisibility(View.INVISIBLE);
+        ll_volume_layout.setVisibility(View.INVISIBLE);
         tv_status.setTextColor(Color.WHITE);
 
         tv_curtime.setText("00:00");
@@ -214,12 +218,12 @@ public class PolyvScreencastStatusLayout extends FrameLayout implements View.OnC
         tv_status.setText("投屏失败");
         tv_status.setTextColor(Color.parseColor("#FF5B5B"));
 
-        tv_bit.setVisibility(View.GONE);
+        tv_bit.setVisibility(View.INVISIBLE);
         tv_retry.setVisibility(View.VISIBLE);
 
         tv_exit.setBackgroundDrawable(getResources().getDrawable(R.drawable.polyv_tv_no_corners));
 
-        ll_volume_layout.setVisibility(View.GONE);
+        ll_volume_layout.setVisibility(View.INVISIBLE);
     }
 
     public void show(LelinkServiceInfo info) {
@@ -236,65 +240,54 @@ public class PolyvScreencastStatusLayout extends FrameLayout implements View.OnC
         if (getVisibility() != View.VISIBLE)
             return;
         currentPlayBitrate = -1;
-        setVisibility(View.GONE);
+        setVisibility(View.INVISIBLE);
         if (isStop) {
             getScreencastSearchLayout().stop();
-            getScreencastSearchLayout().disConnect();
+//            screencastSearchLayout.disConnect();
+//            landScreencastSearchLayout.disConnect();
         }
     }
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.iv_play) {
+        int id = v.getId();
+        if (id == R.id.iv_play) {
             if (iv_play.isSelected()) {
                 getScreencastSearchLayout().resume();
             } else {
                 getScreencastSearchLayout().pause();
             }
             iv_play.setSelected(!iv_play.isSelected());
-
-        } else if (i == R.id.tv_retry) {
+        } else if (id == R.id.tv_retry) {
             callConnectStatus(serviceInfo.getName());
             getScreencastSearchLayout().reconnectPlay();
-
-        } else if (i == R.id.iv_volume_add) {
+        } else if (id == R.id.iv_volume_add) {
             getScreencastSearchLayout().voulumeUp();
-
-        } else if (i == R.id.iv_volume_reduce) {
+        } else if (id == R.id.iv_volume_reduce) {
             getScreencastSearchLayout().voulumeDown();
-
-        } else if (i == R.id.tv_sc) {
+        } else if (id == R.id.tv_sc) {
             resetBitRateView(3);
-
-        } else if (i == R.id.tv_hd) {
+        } else if (id == R.id.tv_hd) {
             resetBitRateView(2);
-
-        } else if (i == R.id.tv_flu) {
+        } else if (id == R.id.tv_flu) {
             resetBitRateView(1);
-
-        } else if (i == R.id.ll_bit_layout) {
-            ll_bit_layout.setVisibility(View.GONE);
-
-        } else if (i == R.id.tv_bit) {
+        } else if (id == R.id.ll_bit_layout) {
+            ll_bit_layout.setVisibility(View.INVISIBLE);
+        } else if (id == R.id.tv_bit) {
             ll_bit_layout.setVisibility(View.VISIBLE);
-
-        } else if (i == R.id.tv_exit) {
+        } else if (id == R.id.tv_exit) {
             hide(true);
-
-        } else if (i == R.id.tv_switch_device) {
+        } else if (id == R.id.tv_switch_device) {
             getScreencastSearchLayout().show();
-
-        } else if (i == R.id.iv_land) {
+        } else if (id == R.id.iv_land) {
             if (iv_land.isSelected()) {
                 iv_land.setImageResource(R.drawable.polyv_btn_fullscreen);
-                mediaController.changeToPortrait();
+                mediaController.changeToSmallScreen();
             } else {
                 iv_land.setImageResource(R.drawable.polyv_btn_exitfulls);
-                mediaController.changeToLandscape();
+                mediaController.changeToFullScreen();
             }
             iv_land.setSelected(!iv_land.isSelected());
-
         }
     }
 
@@ -323,9 +316,9 @@ public class PolyvScreencastStatusLayout extends FrameLayout implements View.OnC
 
     //初始化选择码率控件的可见性
     private void initBitRateViewVisible(int currentBitRate) {
-        tv_sc.setVisibility(View.GONE);
-        tv_hd.setVisibility(View.GONE);
-        tv_flu.setVisibility(View.GONE);
+        tv_sc.setVisibility(View.INVISIBLE);
+        tv_hd.setVisibility(View.INVISIBLE);
+        tv_flu.setVisibility(View.INVISIBLE);
         PolyvVideoVO videoVO = videoView.getVideo();
         if (videoVO != null) {
             switch (videoVO.getDfNum()) {
@@ -360,13 +353,13 @@ public class PolyvScreencastStatusLayout extends FrameLayout implements View.OnC
 
     //重置选择码率的控件
     private void resetBitRateView(int bitRate) {
-        ll_bit_layout.setVisibility(View.GONE);
+        ll_bit_layout.setVisibility(View.INVISIBLE);
         if (currentPlayBitrate == bitRate)
             return;
         currentPlayBitrate = bitRate;
         initBitRateView(bitRate);
-//        String playPath = videoView.getPlayPathWithBitRate(bitRate);
-//        getScreencastSearchLayout().play(playPath, bitRate);
+        String playPath = videoView.getPlayPathWithBitRate(bitRate);
+        getScreencastSearchLayout().play(playPath, bitRate);
     }
 
     @Override

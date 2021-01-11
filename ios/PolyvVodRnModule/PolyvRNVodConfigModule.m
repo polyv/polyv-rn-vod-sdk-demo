@@ -21,6 +21,18 @@ NSString * NSStringFromPolyvVodRnError(PolyvVodConfigRnErrorCode code) {
       return @"decodeIv为空";
     case PolyvVodRnError_NoViewerId:
       return @"viewerId为空";
+    case PolyvVodRnError_ParseDataError:
+      return @"解析视频数据出错";
+    case PolyvVodRnError_NoDownloadedVideo:
+      return @"获取下载视频为空";
+    case PolyvVodRnError_NoUserId:
+      return @"userid为空";
+    case PolyvVodRnError_NoWriteToken:
+      return @"writeToken为空";
+    case PolyvVodRnError_NoReadToken:
+      return @"readToken为空";
+    case PolyvVodRnError_NoSecretKey:
+      return @"secretkey为空";
     default:
       return @"";
   }
@@ -80,6 +92,51 @@ RCT_EXPORT_METHOD(init:(NSString *)vodKey
         settings.viewerName = nickName ? nickName : @"游客";
       
         NSDictionary *dic = @{ @"code": @(PolyvVodRnError_Success), @"token":readToken, @"isSign":@(NO) };
+      
+        resolve(dic);
+    } else {
+        NSString *errorDesc = NSStringFromPolyvVodRnError(errorCode);
+        NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:errorDesc}];
+        NSLog(@"%@", errorDesc);
+        reject([@(errorCode) stringValue], errorDesc, error);
+    }
+}
+
+RCT_EXPORT_METHOD(setToken:(NSString *)userid
+                  writetoken:(NSString *)writetoken
+                  readtoken:(NSString *)readtoken
+                  secretkey:(NSString *)secretkey
+                  viewerId:(NSString *)viewerId
+                  nickName:(NSString *)nickName
+                  findEventsWithResolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+{
+    NSLog(@"setToken() - %@", userid);
+  
+    PolyvVodConfigRnErrorCode errorCode = PolyvVodRnError_Success;
+    if (!userid.length) {
+        errorCode = PolyvVodRnError_NoUserId;
+    } else if (!secretkey.length) {
+        errorCode = PolyvVodRnError_NoSecretKey;
+    } else if (!readtoken.length) {
+        errorCode = PolyvVodRnError_NoReadToken;
+    } else if (!writetoken.length) {
+      errorCode = PolyvVodRnError_NoWriteToken;
+    } else if (!viewerId.length) {
+      errorCode = PolyvVodRnError_NoViewerId;
+    }
+    
+    if (errorCode == PolyvVodRnError_Success) {
+      
+        PLVVodSettings *settings = [PLVVodSettings settingsWithUserid:userid readtoken:readtoken writetoken:writetoken secretkey:secretkey];
+            
+        settings.logLevel = PLVVodLogLevelAll;
+      
+        settings.viewerId = viewerId;
+        settings.viewerName = nickName ? nickName : @"游客";
+      
+        NSDictionary *dic = @{ @"code": @(PolyvVodRnError_Success), @"token":readtoken, @"isSign":@(NO) };
       
         resolve(dic);
     } else {

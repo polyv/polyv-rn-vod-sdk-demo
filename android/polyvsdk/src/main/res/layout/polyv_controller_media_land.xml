@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rl_land"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:visibility="gone">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_land"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <RelativeLayout
         android:id="@+id/rl_top"
@@ -33,12 +35,19 @@
             android:src="@drawable/polyv_btn_share_s" />
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/iv_screencast_search_land"
             style="@style/iv_click_controller_land_top"
             android:layout_marginRight="@dimen/common_margin_lr"
             android:layout_toLeftOf="@id/iv_share"
             android:src="@drawable/polyv_btn_proj_q_android" />
+
+        <ImageView
+            android:id="@+id/iv_pip"
+            style="@style/iv_click_controller_land_top"
+            android:layout_marginRight="@dimen/common_margin_lr"
+            android:layout_toLeftOf="@id/iv_screencast_search_land"
+            android:src="@drawable/polyv_btn_pip_l"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -47,7 +56,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/center_bottom_margin_left_s"
             android:layout_marginRight="@dimen/center_bottom_margin_left_s"
-            android:layout_toLeftOf="@id/iv_screencast_search_land"
+            android:layout_toLeftOf="@id/iv_pip"
             android:layout_toRightOf="@id/iv_finish"
             android:ellipsize="marquee"
             android:focusable="true"
@@ -73,6 +82,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/rl_bot" />
+    <!-- 中间选择线路布局 -->
+
+    <include
+        layout="@layout/polyv_controller_media_center_route"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_bot"/>
 
     <!-- 中间分享布局 -->
 
@@ -154,7 +170,7 @@
         android:layout_marginLeft="@dimen/corners_common"
         android:layout_toRightOf="@id/ll_left_side_land"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_video_land"
@@ -230,10 +246,29 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/polyv_btn_exitfulls" />
 
+        <ImageView
+            android:id="@+id/iv_vice_status"
+            style="@style/iv_click_controller_land_bottom"
+            android:layout_toLeftOf="@id/iv_port"
+            android:src="@drawable/polyv_vice_selected" />
+
+        <TextView
+            android:id="@+id/tv_ppt_dir"
+            style="@style/tv_click_controller_land_bottom"
+            android:layout_toLeftOf="@id/iv_vice_status"
+            android:text="目录" />
+
+        <TextView
+            android:id="@+id/tv_route"
+            style="@style/tv_click_controller_land_bottom"
+            android:layout_marginRight="6dp"
+            android:layout_toLeftOf="@id/tv_ppt_dir"
+            android:text="线路" />
+
         <TextView
             android:id="@+id/tv_speed"
             style="@style/tv_click_controller_land_bottom"
-            android:layout_toLeftOf="@id/iv_port"
+            android:layout_toLeftOf="@id/tv_route"
             android:text="1x" />
 
         <TextView
@@ -243,7 +278,6 @@
             android:text="流畅" />
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/iv_dmswitch"
             style="@style/iv_click_controller_land_bottom"
             android:layout_centerVertical="true"
