@@ -131,13 +131,14 @@ npm install
 
 0.4.0起建议使用初始化方法`setToken`，该方法是一个异步有返回结果的函数。推荐使用 https 接口，从服务端获取加密串，APP 本地解密（开发者设计自己的加解密方式）得到 `useId`、`readtoken`、`writetoken`、`secretkey` ，再使用该方法配置用户信息。
 
-低于0.4.0的可以使用`init`方法初始化，他也是异步有返回结果的函数。
+低于0.4.0的可以继续使用`init`方法初始化，他也是异步有返回结果的函数。
 
 ```javascript
  /*
-   * @param {string} userid 加密串
-   * @param {*} writetoken 加密密钥
-   * @param {*} decodeIv 加密向量
+   * @param {string} userid 保利威后台API接口userid
+   * @param {*} writetoken 保利威后台API接口writetoken
+   * @param {*} readtoken 保利威后台API接口readtoken
+   * @param {*} secretkey 保利威后台API接口secretkey
    * @param {*} viewerId 用户ID
    * @param {*} nickName 用户昵称
    */
