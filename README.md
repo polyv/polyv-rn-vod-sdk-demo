@@ -142,7 +142,6 @@ npm install
    * @param {*} viewerId 用户ID
    * @param {*} nickName 用户昵称
    */
-
 PolyvVodConfig.setToken(
         this.state.userid,
         this.state.writetoken,
