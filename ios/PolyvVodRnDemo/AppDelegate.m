@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 
+#import <PLVVodSDK/PLVVodSDK.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
@@ -32,6 +33,8 @@
   
   [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
   [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+  
+  [PLVVodDownloadManager sharedManager].autoStart = YES;
   
   return YES;
 }
