@@ -3,6 +3,7 @@ package com.polyv.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -51,8 +52,10 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnChangeModeListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnCompletionListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnErrorListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnGestureClickListener;
+import com.easefun.polyvsdk.video.listener.IPolyvOnGestureDoubleClickListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnGestureLeftDownListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnGestureLeftUpListener;
+import com.easefun.polyvsdk.video.listener.IPolyvOnGestureLongTouchListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnGestureRightDownListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnGestureRightUpListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnGestureSwipeLeftListener;
@@ -67,6 +70,7 @@ import com.easefun.polyvsdk.video.listener.IPolyvOnTeaserOutListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoPlayErrorListener2;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoSRTListener;
 import com.easefun.polyvsdk.video.listener.IPolyvOnVideoStatusListener;
+import com.easefun.polyvsdk.view.PolyvTouchSpeedLayout;
 import com.easefun.polyvsdk.vo.PolyvADMatterVO;
 import com.easefun.polyvsdk.vo.PolyvQuestionVO;
 import com.easefun.polyvsdk.vo.PolyvVideoVO;
@@ -148,6 +152,10 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
      */
     private PolyvPlayerProgressView progressView = null;
     /**
+     * 手势出现的快进界面
+     */
+    private PolyvTouchSpeedLayout touchSpeedLayout = null;
+    /**
      * 音频模式下的封面
      */
     private PolyvPlayerAudioCoverView coverView = null;
@@ -167,6 +175,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
     private boolean isMustFromLocal;
 
     private boolean isCanDrag = true;
+    private float beforeTouchSpeed;
 
     public PolyvRNVodPlayer(Context context) {
         this(context,null);
@@ -222,7 +231,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         coverView = (PolyvPlayerAudioCoverView) findViewById(R.id.polyv_cover_view);
 //        danmuFragment = (PolyvPlayerDanmuLayout) findViewById(R.id.fl_danmu);
         iv_vlms_cover = (ImageView) findViewById(R.id.iv_vlms_cover);
-
+        touchSpeedLayout = (PolyvTouchSpeedLayout) findViewById(R.id.polyv_player_touch_speed_layout);
         mediaController.initConfig(viewLayout);
         mediaController.setAudioCoverView(coverView);
 //        mediaController.setDanmuFragment(danmuFragment);
@@ -238,7 +247,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
 //        videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
 //                .setStyle(PolyvMarqueeItem.STYLE_ROLL_FLICK) //样式
 //                .setDuration(10000) //时长
-//                .setText("POLYV Android SDK") //文本
+//                .setText("") //文本
 //                .setSize(16) //字体大小
 //                .setColor(Color.YELLOW) //字体颜色
 //                .setTextAlpha(70) //字体透明度
@@ -262,6 +271,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
 
         //避免空指针而初始化，但是并不使用
         mediaController.networkDetection = new PolyvNetworkDetection(getContext());
+
     }
 
     private void initView() {
@@ -299,9 +309,11 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
                 switch (what) {
                     case PolyvMediaInfoType.MEDIA_INFO_BUFFERING_START:
 //                        danmuFragment.pause(false);
+                        touchSpeedLayout.updateStatus(true);
                         break;
                     case PolyvMediaInfoType.MEDIA_INFO_BUFFERING_END:
 //                        danmuFragment.resume(false);
+                        touchSpeedLayout.updateStatus(false);
                         break;
                 }
 
@@ -599,6 +611,31 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
             }
         });
 
+        videoView.setOnGestureDoubleClickListener(new IPolyvOnGestureDoubleClickListener() {
+            @Override
+            public void callback() {
+                if ((videoView.isInPlaybackState() || videoView.isExceptionCompleted()) && mediaController != null && !mediaController.isLocked())
+                    mediaController.playOrPause();
+            }
+        });
+
+        videoView.setOnGestureLongTouchListener(new IPolyvOnGestureLongTouchListener() {
+            @Override
+            public void callback(boolean isTouchLeft, boolean start, boolean end) {
+                if (start) {
+                    beforeTouchSpeed = videoView.getSpeed();
+                    if (beforeTouchSpeed < 2 && videoView.isPlaying() && !mediaController.isLocked()) {
+                        videoView.setSpeed(2);
+                        touchSpeedLayout.show();
+                    }
+                } else {
+                    videoView.setSpeed(beforeTouchSpeed);
+                    mediaController.initSpeedView((int) (beforeTouchSpeed * 10));
+                    touchSpeedLayout.hide();
+                }
+            }
+        });
+
         videoErrorRetry.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -643,8 +680,26 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         }
     };
 
+    private void resetMarquee() {
+        if (marqueeView != null) {
+            marqueeView.removeAllItem();
+            marqueeView.addItem(marqueeItem);
+        }
+    }
 
-// <editor-fold defaultstate="collapsed" desc="生命周期函数">
+
+    // <editor-fold defaultstate="collapsed" desc="生命周期函数">
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        post(new Runnable() {
+            @Override
+            public void run() {
+                resetMarquee();
+            }
+        });
+    }
 
     public void onResume() {
         //回来后继续播放
@@ -687,10 +742,6 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         mediaController.disable();
     }
 // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="触摸事件">
-
-    // </editor-fold>
 
    // <editor-fold defaultstate="collapsed" desc="播放器相关公开接口函数">
 
@@ -851,7 +902,7 @@ public class PolyvRNVodPlayer extends FrameLayout  implements IPolyvMediaPlayerC
         }
 
         videoView.setMarqueeView(marqueeView, marqueeItem = new PolyvMarqueeItem()
-                .setStyle(1) //样式
+                .setStyle(PolyvMarqueeItem.STYLE_ROLL) //样式
                 .setDuration(displayDuration) //时长
                 .setText(marquee.getString("content")) //文本
                 .setSize(font) //字体大小
