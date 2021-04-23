@@ -15,9 +15,9 @@
 
 @property (nonatomic, strong) NSString *vid;
 @property (nonatomic, strong) PLVVodSkinPlayerController *player;
+@property (nonatomic, assign) CGRect fullScreenRect;
 
 @property CGRect orginRect;
-@property CGRect fullScreenRect;
 
 @end
 
@@ -38,12 +38,16 @@
   
   self.orginRect = CGRectZero;
   
-  CGRect screenBounds = [UIScreen mainScreen].bounds;
-  CGFloat screenWidth = screenBounds.size.width;
-  CGFloat screenHeight = screenBounds.size.height;
-  self.fullScreenRect = CGRectMake(0, 0, screenHeight, screenWidth);
-  
   self.player.wrapperView = self;
+  
+  //根据进入时屏幕横竖屏判断
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  if (orientation == UIInterfaceOrientationUnknown ||
+         orientation == UIInterfaceOrientationPortrait) {
+         //横屏
+     } else {
+       [self setFullScreen];
+     }
 }
 
 - (void)setPlay_parameters:(NSDictionary *)play_parameters {
@@ -90,6 +94,8 @@
       marquee.alpha = [alpha floatValue];
       marquee.font = [UIFont systemFontOfSize:[font floatValue]];
       self.player.marquee = marquee;
+    } else {
+      self.player.marquee = nil;
     }
   }
 }
@@ -98,7 +104,7 @@
 - (void)switchToFullScreen:(BOOL)fullScreen {
   NSLog(@"switchToFullScreen - %@", self);
   if (CGRectEqualToRect(self.orginRect, CGRectZero)) {
-    self.orginRect = self.player.view.frame;
+    self.orginRect = self.bounds;
   }
   
   if (fullScreen) {
@@ -190,6 +196,7 @@
       } else {
         if (fullScreen) {
           [self.player.playerControl.fullShrinkscreenButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+          [self switchToFullScreen:YES];
         }
       }
   });
@@ -240,6 +247,17 @@
                          green:((float) g / 255.0f)
                           blue:((float) b / 255.0f)
                          alpha:1.0f];
+}
+
+#pragma mark -- getter
+- (CGRect)fullScreenRect {
+  CGRect screenBounds = [UIScreen mainScreen].bounds;
+  CGFloat screenWidth = screenBounds.size.width;
+  CGFloat screenHeight = screenBounds.size.height;
+  if (screenHeight > screenWidth) {
+    return CGRectMake(0, 0, screenHeight, screenWidth);
+  }
+  return CGRectMake(0, 0, screenWidth, screenHeight);
 }
 
 @end
