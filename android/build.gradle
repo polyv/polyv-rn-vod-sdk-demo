@@ -31,7 +31,14 @@ allprojects {
         }
 
         maven {url 'http://maven.aliyun.com/nexus/content/repositories/releases/'}
-        maven {url 'https://dl.bintray.com/polyv/android'}
+        //阿里云效仓库，必须添加
+        maven {
+            credentials {
+                username '609cc5623a10edbf36da9615'
+                password 'EbkbzTNHRJ=P'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2102846-release-8EVsoM/'
+        }
     }
 }
 

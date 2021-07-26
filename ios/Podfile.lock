@@ -54,7 +54,7 @@ DEPENDENCIES:
   - YYWebImage (~> 1.0.5)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/cocoapods/specs.git:
     - FDStackView
     - LBLelinkKit
     - PLVMarquee
@@ -96,4 +96,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4517a0a7c4cfdb3218134ec063c6b5eb282d6520
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.7.2
