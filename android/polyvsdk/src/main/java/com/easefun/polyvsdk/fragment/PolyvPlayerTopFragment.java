@@ -3,8 +3,8 @@ package com.easefun.polyvsdk.fragment;
 import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easefun.polyvsdk.R;
-import com.easefun.polyvsdk.sub.vlms.entity.PolyvCoursesInfo;
+import com.easefun.polyvsdk.sub.vlms.entity.PolyvVlmsCoursesInfo;
 import com.easefun.polyvsdk.util.PolyvScreenUtils;
 import com.easefun.polyvsdk.util.PolyvShareUtils;
+import com.google.gson.Gson;
 
 public class PolyvPlayerTopFragment extends Fragment implements View.OnClickListener {
     //fragmentView
@@ -34,7 +35,7 @@ public class PolyvPlayerTopFragment extends Fragment implements View.OnClickList
     private LinearLayout ll_shareqq, ll_sharewechat, ll_shareweibo;
     private TextView tv_title;
 
-    public static final String SHARE_TEXT = "http://www.polyv.net";
+    public static final String SHARE_TEXT = "https://www.polyv.net";
 
     @Nullable
     @Override
@@ -48,7 +49,7 @@ public class PolyvPlayerTopFragment extends Fragment implements View.OnClickList
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (PolyvScreenUtils.isLandscape(getActivity())) {
-            rl_top.setVisibility(View.INVISIBLE);
+            rl_top.setVisibility(View.GONE);
         } else {
             rl_top.setVisibility(View.VISIBLE);
         }
@@ -63,10 +64,11 @@ public class PolyvPlayerTopFragment extends Fragment implements View.OnClickList
 
     private void initView() {
         initPopupWindow();
-        PolyvCoursesInfo.Course course = getArguments().getParcelable("course");
+        String courseString = getArguments().getString("course");
+        PolyvVlmsCoursesInfo course = new Gson().fromJson(courseString, PolyvVlmsCoursesInfo.class);
         String title = "";
         if (course != null)
-            title = course.title;
+            title = course.getTitle();
         tv_title.setText(title);
         tv_title.requestFocus();
         iv_finish.setOnClickListener(this);

@@ -11,11 +11,11 @@
 #import "PLVVodPlayerSkin.h"
 #import "PLVVodDanmu+PLVVod.h"
 #import "PLVVodExamViewController.h"
+#import "PLVVodNetworkUtil.h"
+#import "NSString+PLVVod.h"
 #import <PLVVodSDK/PLVVodExam.h>
 #import <PLVSubtitle/PLVSubtitleManager.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import <PLVMarquee/PLVMarquee.h>
-#import <MediaPlayer/MPVolumeView.h>
 #import <AlicloudUtils/AlicloudReachabilityManager.h>
 #import <PLVVodSDK/PLVVodDownloadManager.h>
 #import <PLVVodSDK/PLVVodLocalVideo.h>
@@ -54,6 +54,9 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 /// 问答控制器
 @property (nonatomic, strong) PLVVodExamViewController *examViewController;
 
+/// 知识清单控制器
+@property (nonatomic, strong) PLVKnowledgeListViewController *knowledgeListViewController;
+
 /// 字幕管理器
 @property (nonatomic, strong) PLVSubtitleManager *subtitleManager;
 
@@ -62,10 +65,6 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 
 /// 滑动进度
 @property (nonatomic, assign) NSTimeInterval scrubTime;
-
-/// 修改系统音量
-@property (nonatomic, strong) MPVolumeView *volumeView;
-@property (nonatomic, assign) double currentVolume;
 
 /// 视频播放判断网络类型功能所需的延迟操作事件
 @property (nonatomic, copy) void (^networkTipsConfirmBlock) (void);
@@ -87,6 +86,12 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 /// 记录最长播放进度使用的计时器
 @property (nonatomic, strong) NSTimer *markMaxPositionTimer;
 
+/// 禁止拖动提示
+@property (nonatomic, strong) UILabel *toastLable;
+
+/// 记录播放重试之前的播放进度
+@property (nonatomic, assign) NSTimeInterval retryPlaybackTime;
+
 @end
 
 @implementation PLVVodSkinPlayerController
@@ -97,20 +102,20 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	// !!!: 这部分的功能的控制，由于与每次设置的 video 有关，因此必须在设置 PLVVodVideo 对象之前，或在这里设置。
 	{
 		// 开启广告
-		//self.enableAd = YES;
-
+		self.enableAd = YES;
+		
 		// 开启片头
-		//self.enableTeaser = YES;
-
+		self.enableTeaser = YES;
+		
 		// 记忆播放位置
 		//self.rememberLastPosition = YES;
 	}
-
+    
     /// 封面图无需关心网络类型
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupCoverWithVideo:video];
     });
-
+    
     /// 因setVideo即会开始请求视频数据，因此需在此判断网络类型
     // 若无需’视频播放判断网络类型‘功能，可将此段判断注释
     if (self.allow4gNetwork == NO && ![self checkVideoWillPlayLocal:video]) {
@@ -128,14 +133,13 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             return;
         }
     }
-
+	
 	[super setVideo:video quality:quality];
 	if (!video.available) return;
 	dispatch_async(dispatch_get_main_queue(), ^{
         [self setupPlaybackMode];
         [self setupAd];
-        //todo-update 原版的注释了弹幕，应该是不要弹幕功能
-//		[self setupDanmu];
+		[self setupDanmu];
 		[self setupExam];
 		[self setupSubtitle];
         // 设置播放打点信息
@@ -149,12 +153,26 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	});
 }
 
+- (void)setIsVideoToolBox:(BOOL)isVideoToolBox {
+    PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
+    skin.isVideoToolBox = isVideoToolBox;
+    [super setIsVideoToolBox:isVideoToolBox];
+}
+
 - (void)setExamViewController:(PLVVodExamViewController *)examViewController {
 	if (_examViewController) {
 		[_examViewController.view removeFromSuperview];
 		[_examViewController removeFromParentViewController];
 	}
 	_examViewController = examViewController;
+}
+
+- (void)setKnowledgeListViewController:(PLVKnowledgeListViewController *)knowledgeListViewController {
+    if (_knowledgeListViewController) {
+        [_knowledgeListViewController.view removeFromSuperview];
+        [_knowledgeListViewController removeFromParentViewController];
+    }
+    _knowledgeListViewController = knowledgeListViewController;
 }
 
 - (NSTimeInterval)maxPosition {
@@ -172,18 +190,18 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     if (self.restrictedDragging == NO) {
         return;
     }
-
+    
     if (maxPosition <= 0 || maxPosition <= self.maxPosition) {
 //        NSLog(@"当前进度小于0，或低于历史记录最长播放进度，不保存");
         return;
     }
-
+    
     NSString * vidStr = self.video.vid;
     if (vidStr == nil || ![vidStr isKindOfClass: [NSString class]] || vidStr.length == 0) {
         NSLog(@"vid为空,无法保存播放进度");
         return;
     }
-
+    
     NSMutableDictionary *maxPositionDict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:PLVVodMaxPositionKey].mutableCopy;
     if (maxPositionDict == nil) {
         maxPositionDict = [[NSMutableDictionary alloc] init];
@@ -193,12 +211,69 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+
+/// 设置知识清单
+/// @param knowledgeModel 知识清单model
+- (void)setKnowledgeModel:(PLVKnowledgeModel *)knowledgeModel {
+    _knowledgeModel = [self dealKnowledgeListData:knowledgeModel];
+    
+    // 显示 “知识点” 按钮
+    PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
+    if (_knowledgeModel.buttonName.length > 0 && _knowledgeModel.knowledgeWorkTypes.count > 0) {
+        skin.enableKnowledge = YES;
+        skin.knowledgeButtonTitle = knowledgeModel.buttonName;
+    }else {
+        skin.enableKnowledge = NO;
+    }
+    
+    
+    if (knowledgeModel.fullScreenStyle) {
+        [self.knowledgeListViewController.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo(self.view);
+        }];
+    }else {
+        [self.knowledgeListViewController.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
+            make.right.top.bottom.equalTo(self.view);
+            make.width.equalTo(self.view).multipliedBy(0.59);
+        }];
+    }
+    
+    // 填充知识点数据到控制器
+    self.knowledgeListViewController.knowledgeModel = knowledgeModel;
+}
+
+
+/// 处理知识清单数据
+- (PLVKnowledgeModel *)dealKnowledgeListData:(PLVKnowledgeModel *)knowledgeModel {
+    
+    NSMutableArray *workTypeList = [NSMutableArray arrayWithCapacity:1];
+    for (PLVKnowledgeWorkType *workTypeModel in knowledgeModel.knowledgeWorkTypes) {
+        //过滤空 知识点 的workkey
+        NSMutableArray *workKeyList = [NSMutableArray arrayWithCapacity:1];
+        for (PLVKnowledgeWorkKey *workkeyModel in workTypeModel.knowledgeWorkKeys) {
+            if (workkeyModel.knowledgePoints.count != 0) {
+                [workKeyList addObject:workkeyModel];
+            }
+        }
+        workTypeModel.knowledgeWorkKeys = workKeyList;
+        
+        // 过滤空 workkey的worktype
+        if (workTypeModel.knowledgeWorkKeys.count != 0) {
+            [workTypeList addObject:workTypeModel];
+        }
+    }
+    knowledgeModel.knowledgeWorkTypes = workTypeList;
+    
+    return knowledgeModel;
+}
+
 #pragma mark - view controller
 
 - (void)dealloc {
 	[self.playbackTimer cancel];
 	self.playbackTimer = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[AVAudioSession sharedInstance] removeObserver:self forKeyPath:@"outputVolume" context:(void *)[AVAudioSession sharedInstance]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -209,17 +284,18 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-
+	
 	self.automaticallyAdjustsScrollViewInsets = NO;
-
+	
     self.longPressPlaybackRate = 2.0;
     self.originPlaybackRate = self.playbackRate;
-
+    self.allowShowToast = NO;
+    
 	[self setupSkin];
-
+    [self setupKnowledgeList];
 	[self addObserver];
     [self addTimer];
-
+    
 	__weak typeof(self) weakSelf = self;
     __block NSInteger repeatCount = 0;
 	self.playbackTimer = [PLVTimer repeatWithInterval:0.2 repeatBlock:^{
@@ -239,20 +315,23 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 
 			/// 同步显示字幕
 			[weakSelf.subtitleManager showSubtitleWithTime:weakSelf.currentPlaybackTime];
-
+            
             /// 隐藏播放错误提示
             if (weakSelf.hidePlayError && PLVVodPlaybackStatePlaying == weakSelf.playbackState){
-                PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)weakSelf.playerControl;
-                [skin hidePlayErrorTips];
-                weakSelf.hidePlayError = NO;
+                AlicloudReachabilityManager *netMgr = [AlicloudReachabilityManager shareInstance];
+                if (AlicloudNotReachable != netMgr.currentNetworkStatus){
+                    PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)weakSelf.playerControl;
+                    [skin hidePlayErrorTips];
+                    weakSelf.hidePlayError = NO;
+                }
             }
-
+            
             // 回调现在播放到第几秒
             if (weakSelf.lastPlaybackTime != weakSelf.currentPlaybackTime) {
                 !weakSelf.playbackTimeHandler ?: weakSelf.playbackTimeHandler(weakSelf.currentPlaybackTime);
                 weakSelf.lastPlaybackTime = weakSelf.currentPlaybackTime;
             }
-
+            
             // 更新加载速度
             if (!weakSelf.localPlayback){
                 repeatCount ++;
@@ -262,43 +341,41 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             }
 		});
 	}];
-
+	
 	// 配置手势
 	self.gestureCallback = ^(PLVVodPlayerViewController *player, UIGestureRecognizer *recognizer, PLVVodGestureType gestureType) {
 		[weakSelf handleGesture:recognizer gestureType:gestureType];
 	};
-
+	
 	// 开启后台播放
 	//self.enableBackgroundPlayback = YES;
-
+	
 	// 自动播放
 	//self.autoplay = NO;
-
-	// 设置跑马灯
-
-    PLVMarquee *marquee = [[PLVMarquee alloc] init];
-    marquee.type = PLVMarqueeTypeRoll;
-    marquee.displayDuration = 10;
-    marquee.maxFadeInterval = 5*60;
-    marquee.maxRollInterval = 5*60;
-//    marquee.maxFadeInterval = 5;
-    self.marquee = marquee;
-
+    
+    // 设置新版跑马灯（2.0）
+    self.marqueeView = [[PLVMarqueeView alloc]init];
+    PLVMarqueeModel *marqueeModel = [[PLVMarqueeModel alloc]init];
+    self.marqueeView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    self.marqueeView.frame = self.maskView.bounds;
+    [self.marqueeView setPLVMarqueeModel:marqueeModel];
+    [self.maskView addSubview:self.marqueeView];
+    
 	// 错误回调
 	self.playerErrorHandler = ^(PLVVodPlayerViewController *player, NSError *error) {
 		NSLog(@"player error: %@", error);
         [weakSelf handlePlayError:player error:error];
 	};
-
+    
     // 恢复播放
     self.playbackRecoveryHandle = ^(PLVVodPlayerViewController *player) {
-
+        
         // 应用层重试，减小sdk出错概率，降低风险
         [weakSelf setCurrentPlaybackTime:weakSelf.lastPosition];
         // 对于某些场景需要再次调用play函数才能播放
         [weakSelf play];
     };
-
+    
     // 若需投屏功能，请解开以下注释
     // 仅在投屏信息设置有效 及 ‘防录屏’开关为NO 时投屏按钮会显示
 #ifdef PLVCastFeature
@@ -346,41 +423,46 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             }
         }
     }
-
+    
     AlicloudReachabilityManager * reachability = [AlicloudReachabilityManager shareInstance];
-
+    
     if (reachability.currentNetworkStatus == AlicloudReachableViaWiFi){ // WiFi
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             PLVVodPlayerSkin * skin = (PLVVodPlayerSkin *)self.playerControl;
             [skin hideNetworkTips];
-
+            
             [self play];
+            
+            // 恢复播放重试之前的进度
+            if (self.retryPlaybackTime) {
+                [self setCurrentPlaybackTime:self.retryPlaybackTime];
+                self.retryPlaybackTime = 0;
+            }
 
             if (self.networkTipsConfirmBlock) {
-
                 self.networkTipsConfirmBlock();
                 self.networkTipsConfirmBlock = nil;
             }
         });
-
+        
     }else if (reachability.currentNetworkStatus >= AlicloudReachableVia2G){ // 移动网络
 
         if (self.allow4gNetwork) { return; }
-
+        
         // 若播放器播放中
         if (self.playbackState == PLVVodPlaybackStatePlaying) { [self pause]; }
-
+        
         __weak typeof(self) weakSelf = self;
         PLVVodPlayerSkin * skin = (PLVVodPlayerSkin *)self.playerControl;
         dispatch_async(dispatch_get_main_queue(), ^{
             PLVVodNetworkTipsView * tipsV = [skin showNetworkTips];
             __weak typeof(tipsV) weakTipsV = tipsV;
-
+            
             if (tipsV.playBtnClickBlock == nil) {
                 tipsV.playBtnClickBlock = ^{
                     [weakSelf play];
-
+                    
                     weakSelf.allow4gNetwork = YES;
                     if (weakSelf.networkTipsConfirmBlock) {
                         weakSelf.networkTipsConfirmBlock();
@@ -396,7 +478,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 #pragma -- 播放重试处理
 - (void)handlePlayError:(PLVVodPlayerViewController *)player error:(NSError *)error{
     // 客户可以自定义播放失败的错误逻辑
-
+    
     if (self.localPlayback || [self checkVideoWillPlayLocal:self.video]){
         // 本地视频播放可以不重试
         PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
@@ -415,10 +497,15 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             __weak typeof(PLVVodPlayerSkin *) weakSkin = skin;
             __weak typeof(PLVVodNetworkTipsView*) weakTips = tipsView;
             __weak typeof(self) weakSelf = self;
-
+            
+            // 记录播放重试之前的进度
+            if (weakSelf.retryPlaybackTime == 0) {
+                weakSelf.retryPlaybackTime = self.currentPlaybackTime;
+            }
+            
             // 播放重试事件
             tipsView.playBtnClickBlock = ^{
-
+                
                 AlicloudReachabilityManager *netMgr = [AlicloudReachabilityManager shareInstance];
                 if (AlicloudNotReachable == netMgr.currentNetworkStatus){
                     //
@@ -442,7 +529,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
                                         }
                                         else{
                                             weakSelf.video = video;
-
+                                            
                                             [[NSNotificationCenter defaultCenter] postNotificationName:PLVVodPlaybackRecoveryNotification object:nil];
                                         }
                                     });
@@ -487,11 +574,10 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 #pragma mark - private
 
 - (void)setupSkin {
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    self.currentVolume = audioSession.outputVolume;
-
+    
 	PLVVodPlayerSkin *skin = [[PLVVodPlayerSkin alloc] initWithNibName:nil bundle:nil];
     skin.enableFloating = self.enableFloating;
+    skin.deviceOrientationChangedNotSwitchFullscreen = self.deviceOrientationChangedNotSwitchFullscreen;
 	__weak typeof(skin) _skin = skin;
 	[self addChildViewController:skin];
 	UIView *skinView = skin.view;
@@ -501,16 +587,17 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	NSDictionary *views = NSDictionaryOfVariableBindings(skinView, playerView);
 	[playerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[skinView]|" options:0 metrics:nil views:views]];
 	[playerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[skinView]|" options:0 metrics:nil views:views]];
-
+	
 	self.skinView = skinView;
 	self.playerControl = skin;
-
+    skin.isVideoToolBox = self.isVideoToolBox;
+	
 	__weak typeof(self) weakSelf = self;
 	// 配置皮肤控件事件
 	skin.selectedSubtitleKeyDidChangeBlock = ^(NSString *selectedSubtitleKey) {
 		[weakSelf setupSubtitle];
 	};
-
+	
 	// 配置载入状态
 	self.loadingHandler = ^(BOOL isLoading) {
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -523,12 +610,12 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             }
 		});
 	};
-
+    
     // 配置打点信息回调
     self.videoTipsSelectedHandler = ^(NSUInteger tipIndex) {
         [_skin showVideoPlayTips:tipIndex];
     };
-
+    
     skin.routeLineDidChangeBlock = ^(NSUInteger routeIndex) {
         //
         // TODO: 进行线路切换
@@ -542,17 +629,27 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
         }
         [weakSelf setRouteLine:routeLine];
     };
-
+    
     // 为保证封面图正常回收，需调用一次该Block
     self.playbackStateHandler = ^(PLVVodPlayerViewController *player) {
-
+    
+    };
+    
+    // 点击 “知识点” 按钮
+    skin.knowledgeButtonTouchHandler = ^{
+        [weakSelf.knowledgeListViewController showKnowledgeListView];
+    };
+    
+    skin.videoToolBoxDidChangeBlock = ^(BOOL isVideoToolBox) {
+        weakSelf.isVideoToolBox = isVideoToolBox;
+        [weakSelf switchVideoToolBox:isVideoToolBox];
     };
 }
 
 - (void)updateSkin{
     // 更新线路设置
     [self setRouteLineView];
-
+    
     // 更新清晰度控制
     [self setQualityView];
 }
@@ -560,22 +657,25 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 // 线路设置
 - (void)setRouteLineView{
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
-    if (self.video.keepSource){
+    if (self.video.keepSource || self.localPlayback){
         // 屏蔽线路切换
         [skin setRouteLineFullScreenBtnHidden:YES];
         [skin setRouteLineShrinkScreenBtnHidden:YES];
     }
     else{
-        if ([skin isShowRoutelineInShrinkSreen]){
-            [skin setRouteLineShrinkScreenBtnHidden:NO];
-        }
-
-        [skin setRouteLineFullScreenBtnHidden:NO];
         if (PLVVodPlaybackModeAudio == self.playbackMode){
             [skin setRouteLineCount:self.video.availableAudioRouteLines.count];
+            [skin setRouteLineFullScreenBtnHidden:self.video.availableAudioRouteLines.count > 1 ? NO : YES];
+            if ([skin isShowRoutelineInShrinkSreen]){
+                [skin setRouteLineShrinkScreenBtnHidden:self.video.availableAudioRouteLines.count > 1 ? NO : YES];
+            }
         }
         else{
             [skin setRouteLineCount:self.video.availableRouteLines.count];
+            [skin setRouteLineFullScreenBtnHidden:self.video.availableRouteLines.count > 1 ? NO : YES];
+            if ([skin isShowRoutelineInShrinkSreen]){
+                [skin setRouteLineShrinkScreenBtnHidden:self.video.availableRouteLines.count > 1 ? NO : YES];
+            }
         }
     }
 }
@@ -598,7 +698,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:ad.address]];
 	};
 	self.adPlayer.canSkip = YES;
-
+	
 	// ad player UI
 	[self.adPlayer.muteButton setImage:[UIImage imageNamed:@"plv_ad_btn_volume_on"] forState:UIControlStateNormal];
 	[self.adPlayer.muteButton setImage:[UIImage imageNamed:@"plv_ad_btn_volume_off"] forState:UIControlStateSelected];
@@ -614,11 +714,11 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLVVodDanmuDidSendNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLVVodDanmuWillSendNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLVVodDanmuEndSendNotification object:nil];
-
+	
 	// 配置弹幕
 	__weak typeof(self) weakSelf = self;
 	[PLVVodDanmu requestDanmusWithVid:self.video.vid completion:^(NSArray<PLVVodDanmu *> *danmus, NSError *error) {
-
+        
         __block PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)weakSelf.playerControl;
 		__block PLVVodDanmuManager *danmuManager = [[PLVVodDanmuManager alloc] initWithDanmus:danmus inView:skin.skinMaskView/*weakSelf.maskView*/];
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -650,26 +750,55 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	self.examViewController = examViewController;
 	__weak typeof(self) weakSelf = self;
 	self.examViewController.examWillShowHandler = ^(PLVVodExam *exam) {
-		[weakSelf pause];
+        [weakSelf pauseWithoutAd];
 	};
-	self.examViewController.examDidCompleteHandler = ^(PLVVodExam *exam, NSTimeInterval backTime) {
+	self.examViewController.examDidCompleteHandler = ^(PLVVodExam *exam, NSTimeInterval backTime, NSArray<NSNumber *> *anwserIndexs) {
 		if (backTime >= 0) {
-
+            
 #ifdef PLVSupportCustomQuestion
             // 回答错误，可在这里替换问题
             NSMutableArray *changeArr = [[NSMutableArray alloc] init];
             // TODO: 添加要替换的问题
-
+            
             [weakSelf.examViewController changeExams:changeArr showTime:exam.showTime];;
 #endif
-
-			weakSelf.currentPlaybackTime = backTime;
+            
+			weakSelf.currentPlaybackTime = backTime;          
 		}
-
+        // 上报答题统计
+        [weakSelf saveExamStatitics:exam answer:anwserIndexs];
+        
 		[weakSelf play];
 	};
-
+    
     [self loadExams];
+}
+
+- (void)saveExamStatitics:(PLVVodExam *)exam answer:(NSArray<NSNumber *> *)answerIndexs{
+    if (answerIndexs.count){
+        NSMutableString *strAnswer = [[NSMutableString alloc] init];
+        for (NSNumber *index in answerIndexs){
+            NSString *answerText = [exam.options objectAtIndex:[index integerValue]];
+            [strAnswer appendString:answerText];
+            [strAnswer appendString:@","];
+        }
+        if (strAnswer.length == 0) return;
+        NSRange range = NSMakeRange(strAnswer.length-1, 1);
+        [strAnswer deleteCharactersInRange:range];
+        NSString *playerId = [self getPlayId];
+        [PLVVodExam saveExamStatisticsWithPid:playerId
+                                          eid:exam.examId
+                                          uid:exam.userId
+                                    quesition:exam.question
+                                          vid:exam.vid
+                                      correct:exam.correct
+                                       anwser:strAnswer
+                                   completion:^(NSError *error) {
+            if (error){
+                NSLog(@"[保存答题记录失败]");
+            }
+        }];
+    }
 }
 
 - (void)loadExams{
@@ -683,7 +812,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             return;
         }
     }
-
+    
     // 在线获取问答数据
     if (self.video.interactive){
         // 若使用保利威后台配置的题目，可按以下方式获取并配置配置
@@ -691,7 +820,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             self.examViewController.exams = exams;
             NSLog(@"[player] -- 在线问答");
         }];
-
+        
         // 若题目数据另外自行获取，可参考以下方式
         //    // 1、从文件中读取Json，来模拟数据从外部获取
         //    NSString * path = [[NSBundle mainBundle]pathForResource:@"PLVVodExamTestData" ofType:@"json"];
@@ -707,16 +836,33 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     }
 }
 
+- (void)setupKnowledgeList {
+    PLVKnowledgeListViewController *knowledgeController = [[PLVKnowledgeListViewController alloc] init];
+    [self.view addSubview:knowledgeController.view];
+    [knowledgeController.view plv_makeConstraints:^(PLVMASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.view);
+    }];
+    [self addChildViewController:knowledgeController];
+    self.knowledgeListViewController = knowledgeController;
+    __weak typeof(self) weakSelf = self;
+    self.knowledgeListViewController.selectKnowledgePointBlock = ^(PLVKnowledgePoint * _Nonnull point) {
+        if (point.time >= 0) {
+            weakSelf.currentPlaybackTime = point.time;
+        }
+    };
+}
+
+
 - (void)setupSubtitle {
 	PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
 //    //srtUrl = @"https://static.polyv.net/usrt/f/f46ead66de/srt/b3ecc235-a47c-4c22-af29-0aab234b1b69.srt";
-
+    
     // 清空数据
     self.subtitleManager = [PLVSubtitleManager managerWithSubtitle:nil
                                                              label:skin.subtitleLabel
                                                           topLabel:skin.subtitleTopLabel
                                                              error:nil];
-
+    
     if (!skin.selectedSubtitleKey) return;
 
     [self loadSubtitle];
@@ -724,7 +870,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 
 - (void)loadSubtitle{
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
-
+    
     if (self.localPlayback || [self checkVideoWillPlayLocal:self.video]){
         // 优先获取本地字幕
         NSDictionary *srtDic = [PLVVodLocalVideo localSubtitlesWithVideo:self.video
@@ -761,7 +907,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     //
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
     [skin addVideoPlayTips:self.video];
-
+    
     __weak typeof(self) weakSelf = self;
 
     // 视频打点,点击播放回调处理
@@ -788,7 +934,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 
 - (void)setupPlaybackInfoWithCover:(UIImage *)cover {
     if (!cover) return;
-
+    
 	NSMutableDictionary *playbackInfo = [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo.mutableCopy;
 	if (!playbackInfo.count) playbackInfo = [NSMutableDictionary dictionary];
 	playbackInfo[MPMediaItemPropertyTitle] = self.video.title;
@@ -824,12 +970,41 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     }
 }
 
+// 禁止拖动提示
+- (void)showToastWithMessage:(NSString *)message inView:(UIView *)view {
+    if (!view || !self.allowShowToast) return;
+
+    if (!self.toastLable) {
+        self.toastLable = [[UILabel alloc]init];
+        self.toastLable.text = message;
+        self.toastLable.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+        self.toastLable.layer.cornerRadius = 20;
+        self.toastLable.layer.masksToBounds = YES;
+        self.toastLable.font = [UIFont systemFontOfSize:14.0];
+        self.toastLable.textColor = [UIColor whiteColor];
+        self.toastLable.textAlignment = NSTextAlignmentCenter;
+        [view addSubview:self.toastLable];
+        CGFloat width = [self.toastLable sizeThatFits:CGSizeMake(MAXFLOAT, 40.0)].width + 20;
+        [self.toastLable plv_makeConstraints:^(PLVMASConstraintMaker *make) {
+            make.centerX.plv_offset(0);
+            make.bottom.plv_offset(-40);
+            make.size.plv_equalTo(CGSizeMake(width, 40));
+        }];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.toastLable removeFromSuperview];
+            self.toastLable = nil;
+        });
+    }
+}
+
+
 #pragma mark override -- 播放模式切换回调
 // 更新播放模式更新成功回调
 - (void)playbackModeDidChange {
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
     [skin updatePlayModeContainView:self.video];
-
+    
     // 更新清晰度状态
     [skin setEnableQualityBtn:(self.playbackMode != PLVVodPlaybackModeAudio)];
 }
@@ -841,13 +1016,18 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 
 - (void)setPlaybackStateHandler:(void (^)(PLVVodPlayerViewController *))playbackStateHandler{
     __weak typeof(self) weakSelf = self;
-
+    
     super.playbackStateHandler = ^(PLVVodPlayerViewController *player) {
         if (player.playbackState == PLVVodPlaybackStatePlaying) {
             [weakSelf removeCover];
         }
         BOOL stop = (player.playbackState == PLVVodPlaybackStateStopped) || (player.playbackState == PLVVodPlaybackStatePaused) || (player.playbackState == PLVVodPlaybackStateInterrupted);
         [weakSelf stopAndRestartTimer:stop];
+        
+        if (player.playbackState == PLVVodPlaybackStatePlaying) {
+            [UIApplication sharedApplication].idleTimerDisabled = YES;
+        }
+        
         if (playbackStateHandler) {
             playbackStateHandler(player);
         }
@@ -856,17 +1036,27 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 
 - (void)setCurrentPlaybackTime:(NSTimeInterval)currentPlaybackTime {
     BOOL allow = NO;
-
+    
     if (self.restrictedDragging &&
         self.allForbidDragging == NO) { // 对进度拖拽进行部分限制
         NSTimeInterval max = MAX(self.maxPosition, self.currentPlaybackTime);
         if (currentPlaybackTime <= max) { // 符合允许拖拽的条件
             allow = YES;
+        } else {
+            [self showToastWithMessage:@"只能拖拽到已播放过的进度" inView:[UIApplication sharedApplication].keyWindow];
         }
+    } else if (self.restrictedDragging && self.allForbidDragging) {
+        [self showToastWithMessage:@"已设置禁止拖拽" inView:[UIApplication sharedApplication].keyWindow];
     } else if (self.restrictedDragging == NO) { // 不限制进度拖拽
         allow = YES;
     }
-
+    
+    // 断网的情况下不能进行seek操作
+    if (AlicloudNotReachable == [AlicloudReachabilityManager shareInstance].currentNetworkStatus &&
+        !self.localPlayback) {
+        allow = NO;
+    }
+    
     if (allow) {
         [super setCurrentPlaybackTime:currentPlaybackTime];
     }
@@ -875,11 +1065,14 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 #pragma mark gesture
 
 - (void)handleGesture:(UIGestureRecognizer *)recognizer gestureType:(PLVVodGestureType)gestureType {
-
+    
 	switch (gestureType) {
 		case PLVVodGestureTypeTap:{
 			PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
 			[skin hideOrShowPlaybackControl];
+            if (self.knowledgeListViewController && self.knowledgeListViewController.showing) {
+                [self.knowledgeListViewController hideKnowledgeListView];
+            }
 		}break;
 		case PLVVodGestureTypeDoubleTap:{
 			[self playPauseAction:nil];
@@ -913,14 +1106,14 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	} else {
 		return;
 	}
-
+	
 	// 手势所在视图
 	UIView *gestureView = pan.view;
 	// 速率
 	CGPoint veloctyPoint = [pan velocityInView:gestureView];
 	// 皮肤
 	PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
-
+	
 	switch (pan.state) {
 		case UIGestureRecognizerStateBegan: {
             [skin showGestureIndicator:YES];
@@ -947,23 +1140,22 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     } else {
         return;
     }
-
+    
     // 手势所在视图
     UIView *gestureView = pan.view;
     // 速率
     CGPoint veloctyPoint = [pan velocityInView:gestureView];
     // 皮肤
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
-
-    BOOL isSystemVolume = YES;
+    
+    BOOL isSystemVolume = self.adjustSystemVolume;
     if (isSystemVolume){
         // 系统音量调节
         switch (pan.state) {
             case UIGestureRecognizerStateBegan: {
             } break;
             case UIGestureRecognizerStateChanged: {
-                self.currentVolume -= veloctyPoint.y/10000;
-                [self changeVolume:self.currentVolume];
+                self.playbackVolume -= veloctyPoint.y/10000;
             } break;
             case UIGestureRecognizerStateEnded: {
             } break;
@@ -978,7 +1170,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
             } break;
             case UIGestureRecognizerStateChanged: {
                 self.playbackVolume -= veloctyPoint.y/10000;
-
+                
                 NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
                 formatter.numberStyle = NSNumberFormatterPercentStyle;
                 NSString *text = [formatter stringFromNumber:@(self.playbackVolume)];
@@ -993,44 +1185,25 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     }
 }
 
-- (void)changeVolume:(CGFloat)distance {
-    if (distance > 1) { distance = 1; }
-    else if (distance < 0) { distance = 0; }
-
-    if (self.volumeView == nil) {
-        self.volumeView = [[MPVolumeView alloc] init];
-        self.volumeView.showsVolumeSlider = YES;
-    }
-
-    for (UIView *v in self.volumeView.subviews) {
-        if ([v.class.description isEqualToString:@"MPVolumeSlider"]) {
-            UISlider *volumeSlider = (UISlider *)v;
-            [volumeSlider setValue:distance];
-            [volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
-            break;
-        }
-    }
-}
-
 - (void)changeProgressWithGesture:(UIGestureRecognizer *)recognizer gestureType:(PLVVodGestureType)gestureType {
     if (self.restrictedDragging) { // restrictedDragging 为 YES 时不允许使用手势对进度拖动
         return;
     }
-
+    
 	UIPanGestureRecognizer *pan = nil;
 	if ([recognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
 		pan = (UIPanGestureRecognizer *)recognizer;
 	} else {
 		return;
 	}
-
+	
 	// 手势所在视图
 	UIView *gestureView = pan.view;
 	// 速率
 	CGPoint veloctyPoint = [pan velocityInView:gestureView];
 	// 皮肤
 	PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
-
+	
 	switch (pan.state) {
 		case UIGestureRecognizerStateBegan: { // 开始移动
 			self.scrubTime = self.currentPlaybackTime;
@@ -1064,20 +1237,20 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     if (self.disableLongPressGesture || self.playbackState != PLVVodPlaybackStatePlaying) {
         return;
     }
-
+    
     if (recognizer.state == UIGestureRecognizerStateBegan && self.playbackRate >= self.longPressPlaybackRate) {
         recognizer.state = UIGestureRecognizerStateCancelled;
         return;
     }
-
+    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         self.originPlaybackRate = self.playbackRate;
     }
-
+    
     self.longPressForward = YES;
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
     if (skin.selectedPlaybackRateDidChangeBlock) skin.selectedPlaybackRateDidChangeBlock(self.longPressPlaybackRate);
-
+   
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         PLVVodFastForwardView *forwardView = skin.fastForwardView;
@@ -1094,13 +1267,13 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     if (![recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
         return;
     }
-
+    
     if (self.longPressForward) {
         self.longPressForward = NO;
         PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
         if (skin.selectedPlaybackRateDidChangeBlock) skin.selectedPlaybackRateDidChangeBlock(self.originPlaybackRate);
     }
-
+    
     PLVVodPlayerSkin *skin = (PLVVodPlayerSkin *)self.playerControl;
     dispatch_async(dispatch_get_main_queue(), ^{
         PLVVodFastForwardView *forwardView = skin.fastForwardView;
@@ -1137,16 +1310,26 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 	[self adStateDidChange];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(teaserStateDidChange) name:PLVVodPlayerTeaserStateDidChangeNotification object:nil];
 	[self teaserStateDidChange];
-
+	
 	// 接收远程事件
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(remoteControlEventDidReceive:) name:PLVVodRemoteControlEventDidReceiveNotification object:nil];
-
+    
     // 网络类型监听
     // 若无需’视频播放判断网络类型‘功能，可将此监听注释
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(networkStatusDidChange:)
                                                  name:ALICLOUD_NETWOEK_STATUS_NOTIFY
                                                object:nil];
+    
+    [[AVAudioSession sharedInstance] addObserver:self forKeyPath:@"outputVolume" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:(void *)[AVAudioSession sharedInstance]];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if(context == (__bridge void *)[AVAudioSession sharedInstance] &&
+       [keyPath isEqualToString:@"outputVolume"]){
+        float newValue = [[change objectForKey:@"new"] floatValue];
+        self.playbackVolume = newValue;
+    }
 }
 
 - (void)teaserStateDidChange {
@@ -1198,7 +1381,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 }
 
 - (void)danmuWillSend:(NSNotification *)notification {
-	[self pause];
+    [self pauseWithoutAd];
 	[self.danmuManager pause];
 }
 
@@ -1219,7 +1402,7 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 		playbackInfo[MPNowPlayingInfoPropertyPlaybackRate] = @(self.playbackRate);
 		playbackInfo[MPMediaItemPropertyPlaybackDuration] = @(self.duration);
 		[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = playbackInfo;
-
+		
 		switch (event.subtype) {
 			case UIEventSubtypeRemoteControlPause:{
 				[self pause];
@@ -1231,13 +1414,13 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
 				[self playPauseAction:nil];
 			}break;
 			case UIEventSubtypeRemoteControlPreviousTrack:{
-
+				
 			}break;
 			case UIEventSubtypeRemoteControlNextTrack:{
-
+				
 			}break;
 			case 5:{
-
+				
 			}break;
 			default:{}break;
 		}
@@ -1258,35 +1441,43 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     [rootViewController addChildViewController:self];
     self.placeholderView = placeholderView;
     [rootViewController.view addSubview:self.view];
-
+    
     [self updatePlayerConstraints];
 }
 
 - (void)interfaceOrientationDidChange:(NSNotification *)notification {
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    if ([self fullscreenMustBeLandscape]) {
-        [self playInFullscreen:(interfaceOrientation != UIInterfaceOrientationPortrait)];
+    if (self.deviceOrientationChangedNotSwitchFullscreen) {
+        //设备旋转，不影响全半屏状态
+    }else {
+        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+        if ([self fullscreenMustBeLandscape]) {
+            [self playInFullscreen:(interfaceOrientation != UIInterfaceOrientationPortrait)];
+        }
+        
+        [self updatePlayerConstraints];
     }
-
-    [self updatePlayerConstraints];
 }
 
 #pragma mark - Override Related Private Method
 
 - (void)playInFullscreen:(BOOL)full {
     self.fullscreen = full;
-
-    if (self.fullscreen == NO) {// 非全屏时一定是竖屏状态
-        [PLVVodUtils changeDeviceOrientation:UIInterfaceOrientationPortrait];
-    } else if ([self fullscreenMustBeLandscape]) {// 必须旋转屏幕才能实现全屏
-        UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-        if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
-            [PLVVodUtils changeDeviceOrientation:UIInterfaceOrientationLandscapeLeft];
-        } else {
-            [PLVVodUtils changeDeviceOrientation:UIInterfaceOrientationLandscapeRight];
+    
+    if (self.deviceOrientationChangedNotSwitchFullscreen) {
+        // 点击全半屏切换，不旋转屏幕方向
+    }else {
+        if (self.fullscreen == NO) {// 非全屏时一定是竖屏状态
+            [PLVVodUtils changeDeviceOrientation:UIInterfaceOrientationPortrait];
+        } else if ([self fullscreenMustBeLandscape]) {// 必须旋转屏幕才能实现全屏
+            UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
+            if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
+                [PLVVodUtils changeDeviceOrientation:UIInterfaceOrientationLandscapeLeft];
+            } else {
+                [PLVVodUtils changeDeviceOrientation:UIInterfaceOrientationLandscapeRight];
+            }
         }
     }
-
+    
     if (self.didFullScreenSwitch) {
         self.didFullScreenSwitch(self.fullscreen);
     }
@@ -1300,17 +1491,36 @@ static NSString * const PLVVodMaxPositionKey = @"net.polyv.sdk.vod.maxPosition";
     if (self.placeholderView == nil) {
         return;
     }
-
+    
+    if (self.deviceOrientationChangedNotSwitchFullscreen) {
+        if (self.fullscreen) {
+            [self.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
+                make.edges.plv_equalTo(self.rootViewController.view);
+            }];
+        }else {
+            [self.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
+                make.edges.plv_equalTo(self.placeholderView);
+            }];
+        }
+        
+    }else {
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
+        if (isPortrait && !self.fullscreen) {
+            [self.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
+                make.edges.plv_equalTo(self.placeholderView);
+            }];
+        } else {
+            [self.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
+                make.edges.plv_equalTo(self.rootViewController.view);
+            }];
+        }
+    }
+    
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
-    if (isPortrait && !self.fullscreen) {
-        [self.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
-            make.edges.plv_equalTo(self.placeholderView);
-        }];
-    } else {
-        [self.view plv_remakeConstraints:^(PLVMASConstraintMaker *make) {
-            make.edges.plv_equalTo(self.rootViewController.view);
-        }];
+    if (isPortrait && self.knowledgeListViewController.showing) {
+        [self.knowledgeListViewController hideKnowledgeListView];
     }
 }
 

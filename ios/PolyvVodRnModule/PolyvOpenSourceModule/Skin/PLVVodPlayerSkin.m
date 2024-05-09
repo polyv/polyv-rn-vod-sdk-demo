@@ -16,6 +16,7 @@
 #import "PLVVodDanmuSendView.h"
 #import "PLVVodDanmu+PLVVod.h"
 #import "PLVVodDefinitionPanelView.h"
+#import "PLVVodVideoToolBoxPanelView.h"
 #import "PLVVodPlaybackRatePanelView.h"
 #import "PLVVodLockScreenView.h"
 #import "PLVVodCoverView.h"
@@ -37,6 +38,9 @@
 
 /// 清晰度选择面板
 @property (strong, nonatomic) IBOutlet PLVVodDefinitionPanelView *definitionPanelView;
+
+/// 软硬解选择面板
+@property (strong, nonatomic) IBOutlet PLVVodVideoToolBoxPanelView *videoToolBoxPanelView;
 
 /// 速率选择面板
 @property (strong, nonatomic) IBOutlet PLVVodPlaybackRatePanelView *playbackRatePanelView;
@@ -87,6 +91,9 @@
 /// 手势快进提示视图
 @property (nonatomic, strong) PLVVodFastForwardView *fastForwardView;
 
+/// 切换清晰度的提示视图
+@property (nonatomic, strong) PLVVodDefinitionTipsView *definitionTipsView;
+
 @end
 
 @implementation PLVVodPlayerSkin
@@ -113,8 +120,8 @@
 		self.playbackSlider = playbackControl.playbackSlider;
 		self.fullShrinkscreenButton = playbackControl.switchScreenButton;
 	}
-
-  [self.playPauseButton setEnlargeEdgeWithTop:15 right:15 bottom:15 left:15];
+    
+    [self.playPauseButton setEnlargeEdgeWithTop:15 right:15 bottom:15 left:15];
 }
 
 - (void)setTopView:(UIView *)topView {
@@ -142,10 +149,31 @@
         // 根据 video 的 hasPPT 属性和 player.enablePPT 确定是否要显示【关闭副屏】【显示课件目录】按钮
         [weakSelf enablePPTMode:delegatePlayer.video.hasPPT && delegatePlayer.enablePPT];
 	});
-
+    
     _delegatePlayer.didFullScreenSwitch = ^(BOOL fullScreen) {
-        weakSelf.shrinkscreenView.switchScreenButton.selected = fullScreen;
-        [weakSelf updateUIForOrientation];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.shrinkscreenView.switchScreenButton.selected = fullScreen;
+            [weakSelf updateUIForOrientation];
+        });
+    };
+    
+    // 切换清晰度成功回调
+    _delegatePlayer.switchQualitySuccessHandler = ^(PLVVodQuality quality) {
+        if (self->_delegatePlayer.fullscreen) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.definitionTipsView showSwitchSuccess:quality];
+            });
+        }
+    };
+    
+    //差网络回调
+    _delegatePlayer.poorNetWorkHandler = ^{
+        if (self->_delegatePlayer.quality > PLVVodQualityStandard &&
+            self->_delegatePlayer.fullscreen) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.definitionTipsView showSwitchQuality:self->_delegatePlayer.quality - 1];
+            });
+        }
     };
 }
 
@@ -160,14 +188,22 @@
 		} else {
 			definitionButton.selected = YES;
 			definitionButton.enabled = YES;
+            
+            if (self.delegatePlayer.video.keepSource){
+                definitionButton.enabled = NO;
+            }
 		}
-
+        
         UIButton *shrinkDefiBtn = self.shrinkscreenView.definitionButton;
         if (localPlayback) {
             [shrinkDefiBtn setTitle:@"本地" forState:UIControlStateNormal];
             shrinkDefiBtn.enabled = NO;
         } else {
             shrinkDefiBtn.enabled = YES;
+            
+            if (self.delegatePlayer.video.keepSource){
+                shrinkDefiBtn.enabled = NO;
+            }
         }
 	});
 }
@@ -221,7 +257,7 @@
 	dispatch_async(dispatch_get_main_queue(), ^{
 		UIButton *definitionButton = self.fullscreenView.definitionButton;
 		[definitionButton setTitle:definition forState:UIControlStateNormal];
-
+        
         UIButton *shrinkDefinitionBtn = self.shrinkscreenView.definitionButton;
         if (shrinkDefinitionBtn){
             [shrinkDefinitionBtn setTitle:definition forState:UIControlStateNormal];
@@ -242,6 +278,29 @@
 - (void)setEnableQualityBtn:(BOOL)enable{
     [self.shrinkscreenView setEnableQualityBtn:enable];
     [self.fullscreenView setEnableQualityBtn:enable];
+}
+
+#pragma mark 软硬解
+
+- (void)setIsVideoToolBox:(BOOL)isVideoToolBox {
+    self.videoToolBoxPanelView.isVideoToolBox = isVideoToolBox;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *title = isVideoToolBox ? @"硬解" : @"软解";
+        UIButton *videoToolBoxButton = self.fullscreenView.videoToolBoxButton;
+        [videoToolBoxButton setTitle:title forState:UIControlStateNormal];
+    });
+}
+
+- (BOOL)isVideoToolBox {
+    return self.videoToolBoxPanelView.isVideoToolBox;
+}
+
+- (void)setVideoToolBoxDidChangeBlock:(void (^)(BOOL))videoToolBoxDidChangeBlock {
+    self.videoToolBoxPanelView.videoToolBoxDidChangeBlock = videoToolBoxDidChangeBlock;
+}
+
+- (void (^)(BOOL))videoToolBoxDidChangeBlock {
+    return self.videoToolBoxPanelView.videoToolBoxDidChangeBlock;
 }
 
 #pragma mark 拉伸方式
@@ -266,7 +325,7 @@
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[self.fullscreenView.playbackRateButton setTitle:title forState:UIControlStateNormal];
         [self.playbackRatePanelView setCurRate:playbackRate];
-
+        
         if (self.shrinkscreenView.playbackRateButton){
             [self.shrinkscreenView.playbackRateButton setTitle:title forState:UIControlStateNormal];
         }
@@ -303,18 +362,18 @@
     BOOL canSwithPlaybackMode = [video canSwithPlaybackMode];
     self.shrinkscreenView.playModeContainerView.hidden = !canSwithPlaybackMode;
     self.fullscreenView.playModeContainerView.hidden = !canSwithPlaybackMode;
-
+    
     [self.audioCoverPanelView setCoverUrl:video.snapshot];
     if ([self.audioCoverPanelView superview] == nil) {
         [self.view addSubview:self.audioCoverPanelView];
         [self constrainSubview:self.audioCoverPanelView toMatchWithSuperview:self.view];
         [self.view sendSubviewToBack:self.audioCoverPanelView];
     }
-
+    
     if (![video canSwithPlaybackMode]) {
         [self.audioCoverPanelView hiddenContainerView:YES];
     }
-
+    
     [self updatePlayModeContainView:video];
 }
 
@@ -325,7 +384,7 @@
         [self.fullscreenView switchToPlayMode:playbackMode];
         [self.audioCoverPanelView switchToPlayMode:playbackMode];
     }
-
+    
     // 根据 video 的 hasPPT 属性和 player.enablePPT 确定是否要显示【关闭副屏】【显示课件目录】按钮
     [self enablePPTMode:video.hasPPT && self.delegatePlayer.enablePPT];
 }
@@ -340,6 +399,19 @@
     // 是否要显示【悬浮窗播放】按钮
     [self.shrinkscreenView enableFloating:enable];
     [self.fullscreenView enableFloating:enable];
+}
+
+- (void)setEnableKnowledge:(BOOL)enableKnowledge {
+    _enableKnowledge = enableKnowledge;
+    [self.fullscreenView enableKnowledge:enableKnowledge];
+}
+
+- (void)setKnowledgeButtonTitle:(NSString *)knowledgeButtonTitle {
+    [self.fullscreenView.knowledgeButton setTitle:knowledgeButtonTitle forState:0];
+}
+
+- (NSString *)knowledgeButtonTitle {
+    return self.fullscreenView.knowledgeButton.titleLabel.text;
 }
 
 - (void)updateAudioCoverAnimation:(BOOL)isPlaying {
@@ -357,39 +429,37 @@
     if ([video isKindOfClass: [PLVVodLocalVideo class]]){
         // 是本地文件
         PLVVodDownloadInfo * info = [[PLVVodDownloadManager sharedManager]requestDownloadInfoWithVid:video.vid];
-
+        
         video.snapshot = info.snapshot;
-
+        
         PLVVodLocalVideo * localVideoModel = (PLVVodLocalVideo *)video;
         fileUrl = localVideoModel.path;
     }else{
         // 非本地文件
         if (video.keepSource == NO) {
             // 非源文件
-            fileUrl = video.hlsIndex;
+            fileUrl = video.isHls302 ? video.hlsIndex2 : video.hlsIndex;
         }else{
             // 源文件
             fileUrl = video.play_source_url;
         }
     }
-
+    
     // 判断链接是否存在
     if (fileUrl && [fileUrl isKindOfClass:[NSString class]] && fileUrl.length != 0) {
-    //todo-update 这里需要隐藏？
         // 判断是否为音频
         if ([fileUrl hasSuffix:@".mp3"]) {
             self.isVideoCover = NO;
         }else{
             self.isVideoCover = YES;
         }
-
+        
         self.coverView.hidden = NO;
-//        [self.coverView setCoverImageWithUrl:video.snapshot];
-//        [self.view addSubview:self.coverView];
-//        [self constrainSubview:self.coverView toMatchWithSuperview:self.view];
-//        [self.view sendSubviewToBack:self.coverView];
+        [self.coverView setCoverImageWithUrl:video.snapshot];
+        [self.view addSubview:self.coverView];
+        [self constrainSubview:self.coverView toMatchWithSuperview:self.view];
+        [self.view sendSubviewToBack:self.coverView];
     }
-    //todo-end
 }
 
 - (void)removeCoverView{
@@ -431,7 +501,7 @@
     if (isShowing) {
         [self hideOrShowPlaybackControl];
     }
-
+    
     return self.playErrorTipsView;
 }
 
@@ -461,7 +531,7 @@
         [self constrainSubview:_playErrorTipsView toMatchWithSuperview:self.view];
         [self.view bringSubviewToFront:_playErrorTipsView];
     }
-
+    
     return _playErrorTipsView;
 }
 
@@ -475,6 +545,24 @@
     return _fastForwardView;
 }
 
+-(PLVVodDefinitionTipsView *)definitionTipsView {
+    if (!_definitionTipsView) {
+        _definitionTipsView = [[PLVVodDefinitionTipsView alloc] init];
+        __weak typeof(self) weakSelf = self;
+        [_definitionTipsView setClickSwitchQualityBlock:^(PLVVodQuality quality) {
+            weakSelf.quality = quality;
+            if (weakSelf.definitionPanelView.qualityDidChangeBlock) {
+                weakSelf.definitionPanelView.qualityDidChangeBlock(quality);
+            }
+        }];
+        [self.view addSubview:_definitionTipsView];
+        [self constrainSubview:_definitionTipsView toMatchWithSuperview:self.view];
+        [self.view bringSubviewToFront:_definitionTipsView];
+    }
+    return _definitionTipsView;
+}
+
+
 #pragma mark - view controller
 
 - (void)dealloc {
@@ -485,41 +573,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(interfaceOrientationDidChange:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
-
+    
 	[self setupUI];
 }
 
 - (void)setupUI {
 	[self updateUIForOrientation];
-
+	
 	self.topView = self.mainControl;
 	[self.controlContainerView addSubview:self.mainControl];
 	self.priorConstraints = [self constrainSubview:self.mainControl toMatchWithSuperview:self.controlContainerView];
-
+	
 	[self.view addSubview:self.gestureIndicatorView];
 	[self constrainSubview:self.gestureIndicatorView toMatchWithSuperview:self.view];
 	self.gestureIndicatorView.alpha = 0;
-
+	
 	// 配置控件细节
 	self.subtitleLabel.text = @"";
     self.subtitleTopLabel.text = @"";
 	UIImage *playbackThumb = [UIImage imageNamed:@"plv_vod_btn_slider_player"];
 	[self.fullscreenView.playbackSlider setThumbImage:playbackThumb forState:UIControlStateNormal];
 	[self.shrinkscreenView.playbackSlider setThumbImage:playbackThumb forState:UIControlStateNormal];
-
+	
 	UIImage *settingThumb = [UIImage imageNamed:@"plv_vod_btn_slider_settings"];
 	[self.settingsPanelView.volumeSlider setThumbImage:settingThumb forState:UIControlStateNormal];
 	[self.settingsPanelView.brightnessSlider setThumbImage:settingThumb forState:UIControlStateNormal];
-
+	
 	__weak typeof(self) weakSelf = self;
 	self.definitionPanelView.qualityButtonDidClick = ^(UIButton *sender) {
 		[weakSelf backMainControl:sender];
 	};
+    self.videoToolBoxPanelView.videoToolBoxButtonDidClick = ^(UIButton * _Nonnull sender) {
+        [weakSelf backMainControl:sender];
+    };
 	self.playbackRatePanelView.playbackRateButtonDidClick = ^(UIButton *sender) {
 		[weakSelf backMainControl:sender];
 	};
@@ -531,32 +622,32 @@
             weakSelf.routeLineDidChangeBlock(routeIndex);
         }
     };
-
+    
 	// 链接属性
 	self.brightnessSlider = self.settingsPanelView.brightnessSlider;
 	self.volumeSlider = self.settingsPanelView.volumeSlider;
-
+    
     // 在线视频网络加载速度
     self.loadSpeed.hidden = YES;
-
+    
     // 视频打点信息，点击播放回调，UI层触发
     self.fullscreenView.plvVideoTipsSelectedBlock = ^(NSUInteger selIndex) {
         if (weakSelf.plvVideoTipsPlayerBlock){
             weakSelf.plvVideoTipsPlayerBlock(selIndex);
         }
     };
-
+	
 	// 自动隐藏控件
     [self fadeoutPlaybackControl];
-
+    
     // 皮肤控件覆盖层，现实弹幕
     self.skinMaskView = [[UIView alloc] init];
     self.skinMaskView.backgroundColor = [UIColor clearColor];
-
+    
     [self.view addSubview:self.skinMaskView];
     [self constrainSubview:self.skinMaskView toMatchWithSuperview:self.view];
     [self.view sendSubviewToBack:self.skinMaskView];
-
+    
     [self enableFloating:self.enableFloating];
 }
 
@@ -568,12 +659,7 @@
 }
 
 - (void)updateUIForOrientation {
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (!UIInterfaceOrientationIsPortrait(orientation)) {
-        self.mainControl = self.fullscreenView;
-        self.shouldHideStatusBar = YES;
-        self.shouldHideNavigationBar = YES;
-    } else {
+    if (self.deviceOrientationChangedNotSwitchFullscreen) {
         if (self.delegatePlayer.fullscreen) {
             self.mainControl = self.fullscreenView;
             self.shouldHideStatusBar = YES;
@@ -583,8 +669,25 @@
             self.shouldHideStatusBar = NO;
             self.shouldHideNavigationBar = NO;
         }
+    }else {
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        if (!UIInterfaceOrientationIsPortrait(orientation)) {
+            self.mainControl = self.fullscreenView;
+            self.shouldHideStatusBar = YES;
+            self.shouldHideNavigationBar = YES;
+        } else {
+            if (self.delegatePlayer.fullscreen) {
+                self.mainControl = self.fullscreenView;
+                self.shouldHideStatusBar = YES;
+                self.shouldHideNavigationBar = YES;
+            } else {
+                self.mainControl = self.shrinkscreenView;
+                self.shouldHideStatusBar = NO;
+                self.shouldHideNavigationBar = NO;
+            }
+        }
     }
-
+    
     self.statusBarStyle = self.delegatePlayer.fullscreen ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
 }
 
@@ -603,7 +706,7 @@
         [self.delegatePlayer playInFullscreen:NO];
         return;
     }
-
+    
     [self.delegatePlayer playInFullscreen:!self.delegatePlayer.fullscreen];
 }
 
@@ -617,6 +720,10 @@
 // 清晰度设置
 - (IBAction)definitionAction:(UIButton *)sender {
 	[self transitToView:self.definitionPanelView];
+}
+
+- (IBAction)videotoolboxAction:(UIButton *)sender {
+    [self transitToView:self.videoToolBoxPanelView];
 }
 
 // 播放速率设置
@@ -638,6 +745,7 @@
 - (IBAction)settingAction:(UIButton *)sender {
 	[self transitToView:self.settingsPanelView];
     [self.settingsPanelView switchToPlayMode:self.delegatePlayer.playbackMode];
+    self.settingsPanelView.volumeSlider.value = self.delegatePlayer.playbackVolume;
 }
 
 // 截图按钮
@@ -646,21 +754,21 @@
     if (self.pptVideoDelegate && [self.pptVideoDelegate respondsToSelector:@selector(tapSnapshotButton:)]) {
         snapshot = [self.pptVideoDelegate tapSnapshotButton:self];
     }
-
+    
     if (snapshot == nil) {
         snapshot = [self.delegatePlayer snapshot];
     }
-
+	
 	NSLog(@"snapshot: %@", snapshot);
 	// 请求图库权限
 	__weak typeof(self) weakSelf = self;
-
+    
     void (^authorizedHandler)(void) = ^() {
         dispatch_async(dispatch_get_main_queue(), ^{
             UIImageWriteToSavedPhotosAlbum(snapshot, weakSelf, @selector(image:didFinishSavingWithError:contextInfo:), nil);
         });
     };
-
+    
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     switch (status) {
         case PHAuthorizationStatusNotDetermined:{
@@ -713,7 +821,7 @@
 // 视频模式按钮
 - (IBAction)videoPlaybackModeAction:(id)sender {
     self.delegatePlayer.playbackMode = PLVVodPlaybackModeVideo;
-
+    self.delegatePlayer.allowShowToast = NO;
     // add by libl [更新线路面板] 2019-02-14 start
     [self setRouteLineCount:self.delegatePlayer.video.availableRouteLines.count];
     // add end
@@ -722,7 +830,7 @@
 // 音频模式按钮
 - (IBAction)audioPlaybackModeAction:(id)sender {
     self.delegatePlayer.playbackMode = PLVVodPlaybackModeAudio;
-
+    self.delegatePlayer.allowShowToast = NO;
     // add by libl [更新线路面板] 2019-02-14 start
     [self setRouteLineCount:self.delegatePlayer.video.availableAudioRouteLines.count];
     // add end
@@ -743,7 +851,7 @@
 }
 
 // 投屏按钮
-- (IBAction)castAction:(UIButton *)sender {
+- (IBAction)castAction:(UIButton *)sender {    
     sender.selected = !sender.selected;
     if (self.castButtonTouchHandler) self.castButtonTouchHandler(sender);
 }
@@ -762,10 +870,17 @@
 
 // 【悬浮窗播放】按钮点击事件
 - (IBAction)floatingButtonAction:(id)sender {
-
+    
     // 接着，执行对应的 block
     if (self.floatingButtonTouchHandler) {
         self.floatingButtonTouchHandler();
+    }
+}
+
+// 【知识点】按钮点击事件
+- (IBAction)knowledgeButtonAction:(id)sender {
+    if (self.knowledgeButtonTouchHandler) {
+        self.knowledgeButtonTouchHandler();
     }
 }
 
@@ -796,7 +911,7 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	if (self.topView != self.mainControl) return;
 	[self backMainControl:nil];
-
+	
 	BOOL isShowing = self.controlContainerView.alpha > 0.0;
 	[UIView animateWithDuration:PLVVodAnimationDuration animations:^{
 		self.controlContainerView.alpha = isShowing ? 0 : 1;
@@ -822,7 +937,7 @@
 - (NSArray *)constrainSubview:(UIView *)subview toMatchWithSuperview:(UIView *)superview {
 	subview.translatesAutoresizingMaskIntoConstraints = NO;
 	NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(subview);
-
+	
 	NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subview]|"
                                                                    options:0
                                                                    metrics:nil
@@ -832,7 +947,7 @@
                                                                                                      metrics:nil
                                                                                                        views:viewsDictionary]];
 	[superview addConstraints:constraints];
-
+	
 	return constraints;
 }
 

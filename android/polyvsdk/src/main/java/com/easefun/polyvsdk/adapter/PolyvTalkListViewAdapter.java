@@ -103,7 +103,7 @@ public class PolyvTalkListViewAdapter extends BaseAdapter {
                 }
             });
         } else {
-            viewHolder.sublv_talk.setVisibility(View.INVISIBLE);
+            viewHolder.sublv_talk.setVisibility(View.GONE);
         }
         SpannableStringBuilder span = lists.get(pPosition).content_display;
         span.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.center_bottom_text_color_blue)), 0, polyvQuestion.nickname.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

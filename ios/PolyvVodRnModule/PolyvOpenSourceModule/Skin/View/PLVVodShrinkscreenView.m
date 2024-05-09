@@ -6,11 +6,8 @@
 //  Copyright © 2017年 POLYV. All rights reserved.
 //
 
-// 各个机型最小逻辑分辨率宽度
-#define PLV_Min_ScreenWidth 320
-#define PLV_Max_ScreenWidth 414
-
 #import "PLVVodShrinkscreenView.h"
+#import "PolyvVodSDKDemoUtils.h"
 
 @interface PLVVodShrinkscreenView ()
 

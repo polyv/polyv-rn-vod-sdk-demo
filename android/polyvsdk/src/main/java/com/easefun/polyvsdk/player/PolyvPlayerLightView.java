@@ -37,12 +37,12 @@ public class PolyvPlayerLightView extends FrameLayout {
 
     public void hide() {
         if (rl_center_light != null)
-            rl_center_light.setVisibility(View.INVISIBLE);
+            rl_center_light.setVisibility(View.GONE);
     }
 
     public void setViewLightValue(int brightness, boolean end) {
         if (end)
-            rl_center_light.setVisibility(View.INVISIBLE);
+            rl_center_light.setVisibility(View.GONE);
         else
             rl_center_light.setVisibility(View.VISIBLE);
         tv_light.setText(brightness + "%");

@@ -7,6 +7,7 @@
 //
 
 #import "PLVVodFullscreenView.h"
+#import "PolyvVodSDKDemoUtils.h"
 #import "PLVVodPlayTipsView.h"
 
 #import <PLVMasonry/PLVMasonry.h>
@@ -19,6 +20,7 @@
 @interface PLVVodFullscreenView ()
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *statusBarHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lockButtonLeading;
 
 @property (weak, nonatomic) IBOutlet UIImageView *videoModeSelectedImageView;
 @property (weak, nonatomic) IBOutlet UILabel *videoModeLabel;
@@ -39,12 +41,12 @@
 - (void)awakeFromNib {
 	[super awakeFromNib];
     
-  //关闭弹幕开关
-  self.danmuButton.hidden = YES;
-  
 	if ([UIDevice currentDevice].systemVersion.integerValue < 11) {
 		self.statusBarHeight.constant = 12;
 	}
+    if (PLV_iPhoneXSeries) {
+        self.lockButtonLeading.constant = PLV_Landscape_Left_And_Right_Safe_Side_Margin;
+    }
 }
 
 #pragma mark -- getter
@@ -98,6 +100,11 @@
 
 - (void)enableFloating:(BOOL)enable {
     self.floatingButton.hidden = !enable;
+}
+
+// 是否支持知识点功能，不调用时默认不支持
+- (void)enableKnowledge:(BOOL)enable {
+    self.knowledgeButton.hidden = !enable;
 }
 
 - (void)addPlayTipsWithVideo:(PLVVodVideo *)video{

@@ -1,0 +1,108 @@
+//
+// Created by sanhuazhang on 2019/05/02
+//
+
+/*
+ * Tencent is pleased to support the open source community by making
+ * WCDB available.
+ *
+ * Copyright (C) 2017 THL A29 Limited, a Tencent company.
+ * All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ *       https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#pragma once
+
+#include "Macro.h"
+
+namespace WCDB {
+
+class WCDB_API UnsafeStringView;
+class WCDB_API StringView;
+
+namespace Syntax {
+
+enum class WCDB_API ColumnType : signed char {
+    Null = 0,
+    Integer,
+    Float,
+    Text,
+    BLOB,
+};
+
+bool isIntegerColumnType(const UnsafeStringView& type);
+
+enum class WCDB_API CompoundOperator : signed char {
+    Union = 1,
+    UnionAll,
+    Intersect,
+    Except,
+};
+
+enum class WCDB_API Conflict : signed char {
+    Rollback = 1,
+    Abort,
+    Fail,
+    Ignore,
+    Replace,
+};
+
+enum class WCDB_API JoinOperator : signed char {
+    With = 1,
+    Join,
+    LeftOuterJoin,
+    LeftJoin,
+    InnerJoin,
+    CrossJoin,
+    NaturalJoin,
+    NaturalLeftOuterJoin,
+    NaturalLeftJoin,
+    NaturalInnerJoin,
+    NaturalCrossJoin,
+};
+
+enum class WCDB_API Order : signed char {
+    ASC = 0,
+    DESC,
+};
+
+enum class WCDB_API LimitParameterType : signed char {
+    NotSet = 0,
+    Offset,
+    End,
+};
+
+enum class WCDB_API ConflictAction : signed char {
+    Replace = 1,
+    Rollback,
+    Abort,
+    Fail,
+    Ignore,
+};
+
+enum class WCDB_API MatchType : signed char {
+    Simple = 1,
+    Full,
+    Partial,
+};
+
+WCDBLiteralStringDefine(masterTable, "sqlite_master");
+WCDBLiteralStringDefine(sequenceTable, "sqlite_sequence");
+WCDBLiteralStringDefine(mainSchema, "main");
+WCDBLiteralStringDefine(tempSchema, "temp");
+WCDBLiteralStringDefine(builtinTablePrefix, "sqlite_");
+
+} // namespace Syntax
+
+} // namespace WCDB

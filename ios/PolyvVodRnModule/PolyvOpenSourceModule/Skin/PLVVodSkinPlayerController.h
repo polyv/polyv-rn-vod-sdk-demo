@@ -8,6 +8,9 @@
 
 #import <PLVVodSDK/PLVVodPlayerViewController.h>
 #import "PolyvVodPlayerWrapperView.h"
+#import "PLVKnowledgeListViewController.h"
+#import "PLVKnowledgeModel.h"
+#import "PLVMarqueeView.h"
 
 extern NSString *PLVVodPlaybackRecoveryNotification;
 extern NSString *PLVVodADAndTeasersPlayFinishNotification;
@@ -23,6 +26,14 @@ extern NSString *PLVVodADAndTeasersPlayFinishNotification;
 
 // 问答控制器
 @property (nonatomic, strong, readonly) PLVVodExamViewController *examViewController;
+
+/// 知识清单控制器
+@property (nonatomic, strong, readonly) PLVKnowledgeListViewController *knowledgeListViewController;
+
+/// 知识清单model, 设置此mode即为开启知识清单功能，请在调用方法 ‘-addPlayerOnPlaceholderView:rootViewController:’ 之后设置
+@property (nonatomic, strong) PLVKnowledgeModel *knowledgeModel;
+/// 跑马灯2.0 View
+@property (nonatomic, strong) PLVMarqueeView *marqueeView;
 
 // 是否屏蔽长按倍速快进手势，默认为 NO
 @property (nonatomic, assign) BOOL disableLongPressGesture;
@@ -44,6 +55,10 @@ extern NSString *PLVVodADAndTeasersPlayFinishNotification;
 @property (nonatomic, assign) NSTimeInterval maxPosition;
 
 @property (nonatomic, strong) PolyvVodPlayerWrapperView *wrapperView;
+
+/// 设备旋转的时候是否不影响全/半屏状态，默认NO，若需打开，请在调用方法 ‘-addPlayerOnPlaceholderView:rootViewController:’ 之前设置
+@property (nonatomic, assign) BOOL deviceOrientationChangedNotSwitchFullscreen;
+
 
 - (void)playInFullscreen:(BOOL)full;
 

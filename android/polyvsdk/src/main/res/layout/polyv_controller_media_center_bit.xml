@@ -21,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:translationY="120dp" >
 
         <TextView
             android:id="@+id/tv_sc"

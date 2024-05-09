@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +19,6 @@ import com.easefun.polyvsdk.video.PolyvVideoView;
 
 import java.util.Locale;
 
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-
 public class PolyvLoadingLayout extends FrameLayout {
     private ProgressBar loadingProgress;
     private TextView loadingSpeed;
@@ -32,14 +30,10 @@ public class PolyvLoadingLayout extends FrameLayout {
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 if (videoView != null && !videoView.isLocalPlay()) {
-                    IjkMediaPlayer mp = videoView.getIjkMediaPlayer();
-                    if (mp != null) {
-                        long tcpSpeed = mp.getTcpSpeed();
-                        loadingSpeed.setVisibility(View.VISIBLE);
-                        loadingSpeed.setText(formatedSpeed(tcpSpeed, 1000));
+                    loadingSpeed.setVisibility(View.VISIBLE);
+                    loadingSpeed.setText(formatedSpeed(videoView.getTcpSpeed(), 1000));
 
-                        handler.sendEmptyMessageDelayed(1, 500);
-                    }
+                    handler.sendEmptyMessageDelayed(1, 500);
                 }
             }
         }
@@ -110,7 +104,7 @@ public class PolyvLoadingLayout extends FrameLayout {
         if (visibility == View.VISIBLE) {
             handler.sendEmptyMessage(1);
         } else {
-            loadingSpeed.setVisibility(View.INVISIBLE);
+            loadingSpeed.setVisibility(View.GONE);
         }
     }
 

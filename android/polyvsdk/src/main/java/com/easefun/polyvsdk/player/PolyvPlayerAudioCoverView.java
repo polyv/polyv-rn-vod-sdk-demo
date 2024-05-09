@@ -5,8 +5,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +60,7 @@ public class PolyvPlayerAudioCoverView extends FrameLayout {
         fl_cover = (FrameLayout) findViewById(R.id.fl_cover);
         if (!isShowFilm) {
             iv_audio_cover_m.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            fl_cover.setVisibility(View.INVISIBLE);
+            fl_cover.setVisibility(View.GONE);
         } else {
             iv_audio_cover_m.setAlpha(0.4f);
         }
@@ -107,9 +107,9 @@ public class PolyvPlayerAudioCoverView extends FrameLayout {
     public void hide() {
         if (animator != null)
             animator.cancel();
-        fl_cover.setVisibility(View.INVISIBLE);
-        iv_audio_cover.setVisibility(View.INVISIBLE);
-        iv_audio_cover_m.setVisibility(View.INVISIBLE);
+        fl_cover.setVisibility(View.GONE);
+        iv_audio_cover.setVisibility(View.GONE);
+        iv_audio_cover_m.setVisibility(View.GONE);
     }
 
     public void fitLocationChange(boolean isInMainScreen) {

@@ -14,6 +14,7 @@
 #import "PLVVodFastForwardView.h"
 #import "PLVVodSkinPlayerController.h"
 #import "PolyvVodPlayerWrapperView.h"
+#import "PLVVodDefinitionTipsView.h"
 
 @class PLVVodAudioCoverPanelView;
 @class PLVVodCoverView;
@@ -56,6 +57,9 @@
 /// 是否播放本地视频
 @property (nonatomic, assign) BOOL localPlayback;
 
+/// 设备旋转的时候不影响全/半屏状态 (设备旋转是否与全/半屏状态无关)，默认NO
+@property (nonatomic, assign) BOOL deviceOrientationChangedNotSwitchFullscreen;
+
 #pragma mark 控件
 
 /// 播放/暂停按钮
@@ -94,6 +98,15 @@
 /// "悬浮窗"按钮点击事件
 @property (nonatomic, strong) void (^floatingButtonTouchHandler)(void);
 
+/// 是否开启知识点功能，默认为 NO
+@property (nonatomic, assign) BOOL enableKnowledge;
+
+/// 知识点按钮的title
+@property (nonatomic, copy) NSString *knowledgeButtonTitle;
+
+/// "知识点"按钮点击事件
+@property (nonatomic, strong) void (^knowledgeButtonTouchHandler)(void);
+
 #pragma mark - 额外
 
 /// 字幕标签
@@ -125,6 +138,9 @@
 /// 手势快进提示视图
 @property (nonatomic, strong, readonly) PLVVodFastForwardView *fastForwardView;
 
+/// 切换清晰度的提示视图
+@property (nonatomic, strong, readonly) PLVVodDefinitionTipsView *definitionTipsView;
+
 /// 是否是锁屏状态
 @property (nonatomic, assign, readonly) BOOL isLockScreen;
 
@@ -133,6 +149,9 @@
 @property (nonatomic, copy) void (^enableDanmuChangeHandler)(PLVVodPlayerSkin *skin, BOOL enableDanmu);
 
 @property (nonatomic, strong) PolyvVodPlayerWrapperView *wrapperView;
+// 皮肤上是否显示硬解
+@property (nonatomic, assign) BOOL isVideoToolBox;
+@property (nonatomic, copy) void (^videoToolBoxDidChangeBlock)(BOOL isVideoToolBox);
 
 /// 视频打点，点击播放回调
 @property (nonatomic, copy) void(^plvVideoTipsPlayerBlock)(NSUInteger playIndex);

@@ -6,13 +6,12 @@ import {
   FlatList,
   DeviceEventEmitter,
   Alert,
-  TouchableHighlight
+  TouchableHighlight,
 } from "react-native";
 import {
-  Footer,
-  FooterTab,
+  HStack,
   Button,
-  Text,
+  Text
 } from "native-base";
 import PropTypes from "prop-types";
 import { PolyvVideoDownloadItem } from "./PolyvVideoDownloadItem";
@@ -40,7 +39,7 @@ export class PolyvVideoDownloadList extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.registerReceiver();
   }
 
@@ -274,22 +273,16 @@ export class PolyvVideoDownloadList extends Component {
 
   createFooterView() {
     return this.props.isDownloadedPage ? null : (
-      <Footer>
-        <FooterTab>
-          <Button onPress={this._startOrPauseDownloadAll.bind(this)}>
-            <Text style={styles.footerTxt}>
-              {this.state.allTaskDownloadPause ? "下载全部" : "暂停全部"}
-            </Text>
-          </Button>
-          <Button
-            onPress={() => {
-              this._clearAll();
-            }}
-          >
-            <Text style={styles.footerTxt}>全部清空</Text>
-          </Button>
-        </FooterTab>
-      </Footer>
+      <HStack space={2} alignItems="center" style={styles.footer}>
+        <Button onPress={this._startOrPauseDownloadAll.bind(this)}>
+          <Text style={styles.footerTxt}>
+            {this.state.allTaskDownloadPause ? "下载全部" : "暂停全部"}
+          </Text>
+        </Button>
+        <Button onPress={() => { this._clearAll(); }}>
+          <Text style={styles.footerTxt}>全部清空</Text>
+        </Button>
+      </HStack>
     );
   }
 

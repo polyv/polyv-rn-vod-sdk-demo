@@ -1,7 +1,7 @@
 package com.easefun.polyvsdk.player;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,11 +96,18 @@ public class PolyvPlayerPlayErrorView extends LinearLayout {
         //播放异常才能切换线路
         if (playErrorReason == PolyvPlayErrorReason.VIDEO_ERROR) {
             //判断是否有线路可以切换
-            videoErrorRoute.setVisibility(videoView.getRouteCount() > 1 ? View.VISIBLE : View.INVISIBLE);
+            videoErrorRoute.setVisibility(videoView.getRouteCount() > 1 ? View.VISIBLE : View.GONE);
         } else {
-            videoErrorRoute.setVisibility(View.INVISIBLE);
+            videoErrorRoute.setVisibility(View.GONE);
         }
+        videoErrorRetry.setVisibility(VISIBLE);
+        setVisibility(View.VISIBLE);
+    }
 
+    public void show(String tips, String code, @NonNull PolyvVideoView videoView){
+        videoErrorContent.setText(tips);
+        videoErrorRetry.setVisibility(GONE);
+        videoErrorRoute.setVisibility(View.GONE);
         setVisibility(View.VISIBLE);
     }
 
@@ -108,7 +115,7 @@ public class PolyvPlayerPlayErrorView extends LinearLayout {
      * 隐藏界面
      */
     public void hide() {
-        setVisibility(View.INVISIBLE);
+        setVisibility(View.GONE);
     }
 // </editor-fold>
 

@@ -9,7 +9,6 @@
 #import "PolyvVodPlayerWrapperView.h"
 #import <PLVVodSDK/PLVVodSDK.h>
 #import "PLVVodSkinPlayerController.h"
-#import "PLVMarquee.h"
 
 @interface PolyvVodPlayerWrapperView ()
 
@@ -85,17 +84,20 @@
         font = @(20);
       }
       
-      PLVMarquee *marquee = [[PLVMarquee alloc] init];
-      marquee.type = PLVMarqueeTypeRoll;
-      marquee.displayDuration = displayDuration;
-      marquee.maxRollInterval = maxRollInterval;
-      marquee.content = content;
-      marquee.color = [self colorWithHexStringRGB:colorStr];
-      marquee.alpha = [alpha floatValue];
-      marquee.font = [UIFont systemFontOfSize:[font floatValue]];
-      self.player.marquee = marquee;
+      PLVMarqueeModel *marqueeModel = [[PLVMarqueeModel alloc]init];
+      marqueeModel.style = PLVMarqueeModelStyleRoll;
+      marqueeModel.speed = displayDuration;
+      marqueeModel.interval = maxRollInterval;
+      marqueeModel.content = content;
+      marqueeModel.fontColor = colorStr;
+      marqueeModel.alpha = [alpha floatValue];
+      marqueeModel.fontSize = [font integerValue];
+      self.player.marqueeView.hidden = NO;
+      [self.player.marqueeView setPLVMarqueeModel:marqueeModel];
+      [self.player.marqueeView start];
     } else {
-      self.player.marquee = nil;
+      self.player.marqueeView.hidden = YES;
+      [self.player.marqueeView stop];
     }
   }
 }

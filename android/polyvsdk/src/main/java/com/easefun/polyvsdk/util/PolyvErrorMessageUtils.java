@@ -1,6 +1,6 @@
 package com.easefun.polyvsdk.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.easefun.polyvsdk.PolyvDownloader;
 import com.easefun.polyvsdk.PolyvDownloaderErrorReason;
@@ -229,7 +229,7 @@ public class PolyvErrorMessageUtils {
             case PolyvPlayErrorReason.TIMEOUT_FLOW:
                 return "账号过期，请向管理员反馈";
 
-            case PolyvPlayErrorReason.LOCAL_VIEWO_ERROR:
+            case PolyvPlayErrorReason.LOCAL_VIDEO_ERROR:
                 return "本地视频文件损坏，请重新下载";
 
             case PolyvPlayErrorReason.START_ERROR:
@@ -348,7 +348,10 @@ public class PolyvErrorMessageUtils {
 
             case PolyvPlayErrorReason.QUESTION_SERVER_ERROR:
                 return "视频加载失败，请联系管理员";
-
+            case PolyvPlayErrorReason.HLS_PRIVATE_VERSION_ERROR:
+                return "播放器不支持播放该视频，请升级播放器版本";
+            case PolyvPlayErrorReason.HLS_KEY_VERSION_ERROR:
+                return "请升级播放器版本";
             default:
                 return "当前视频无法播放，请向管理员反馈";
         }

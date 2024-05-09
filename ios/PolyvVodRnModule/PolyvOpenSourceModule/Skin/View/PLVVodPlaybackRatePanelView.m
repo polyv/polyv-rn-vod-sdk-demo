@@ -5,11 +5,9 @@
 //  Created by Bq Lin on 2017/12/26.
 //  Copyright © 2017年 POLYV. All rights reserved.
 //
-// 各个机型最小逻辑分辨率宽度
-#define PLV_Min_ScreenWidth 320
-#define PLV_Max_ScreenWidth 414
 
 #import "PLVVodPlaybackRatePanelView.h"
+#import "PolyvVodSDKDemoUtils.h"
 #import "UIColor+PLVVod.h"
 
 @interface PLVVodPlaybackRatePanelView ()

@@ -249,24 +249,24 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 		questionLayout.removeAllViews();
 
 		for (RadioButton answerRadioBtn : answerRadioList) {
-			answerRadioBtn.setVisibility(View.INVISIBLE);
+			answerRadioBtn.setVisibility(View.GONE);
 			answerRadioBtn.setChecked(false);
 		}
 
 		for (CheckBox answerCheckBox : answerCheckList) {
-			answerCheckBox.setVisibility(View.INVISIBLE);
+			answerCheckBox.setVisibility(View.GONE);
 			answerCheckBox.setChecked(false);
 		}
 
 		for (LinearLayout answerRadioLayout : answerRadioLayoutList) {
-			answerRadioLayout.setVisibility(View.INVISIBLE);
+			answerRadioLayout.setVisibility(View.GONE);
 			for (int i = 1, length = answerRadioLayout.getChildCount() ; i < length ; i++) {
 				answerRadioLayout.removeViewAt(1);
 			}
 		}
 
 		for (LinearLayout answerCheckLayout : answerCheckLayoutList) {
-			answerCheckLayout.setVisibility(View.INVISIBLE);
+			answerCheckLayout.setVisibility(View.GONE);
 			for (int i = 1, length = answerCheckLayout.getChildCount() ; i < length ; i++) {
 				answerCheckLayout.removeViewAt(1);
 			}
@@ -286,7 +286,7 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 				case URL:
 					imageView = new ImageView(context);
 					PolyvImageLoader.getInstance().loadImageOrigin(context, qaFormatVO.getStr(),
-							imageView, R.drawable.polyv_avatar_def);
+							imageView, R.drawable.polyv_loading);
 					questionLayout.addView(imageView);
 					break;
 			}
@@ -305,9 +305,9 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 		this.rightAnswerNum = rightAnswerNum;
 		if (rightAnswerNum > 1) {
 			choicesCheckLayout.setVisibility(View.VISIBLE);
-			choicesRadioLayout.setVisibility(View.INVISIBLE);
+			choicesRadioLayout.setVisibility(View.GONE);
 		} else {
-			choicesCheckLayout.setVisibility(View.INVISIBLE);
+			choicesCheckLayout.setVisibility(View.GONE);
 			choicesRadioLayout.setVisibility(View.VISIBLE);
 		}
 
@@ -340,7 +340,7 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 					case URL:
 						imageView = new ImageView(context);
 						PolyvImageLoader.getInstance().loadImageOrigin(context, qaFormatVO.getStr(),
-								imageView, R.drawable.polyv_avatar_def);
+								imageView, R.drawable.polyv_loading);
 						answerLayout.addView(imageView);
 						break;
 				}
@@ -356,7 +356,7 @@ public class PolyvPlayerQuestionView extends RelativeLayout implements OnChecked
 	 * 隐藏
 	 */
 	public void hide() {
-		setVisibility(View.INVISIBLE);
+		setVisibility(View.GONE);
 	}
 	
 	/**

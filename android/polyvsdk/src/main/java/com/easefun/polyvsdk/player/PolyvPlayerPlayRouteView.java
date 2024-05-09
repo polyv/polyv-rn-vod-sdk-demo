@@ -1,7 +1,7 @@
 package com.easefun.polyvsdk.player;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,9 +95,9 @@ public class PolyvPlayerPlayRouteView extends RelativeLayout implements View.OnC
 
     private void initSelectedRouteView(@NonNull PolyvVideoView videoView) {
         int routeCount = videoView.getRouteCount();
-        tvRoute1.setVisibility(routeCount >= 1 ? View.VISIBLE : View.INVISIBLE);
-        tvRoute2.setVisibility(routeCount >= 2 ? View.VISIBLE : View.INVISIBLE);
-        tvRoute3.setVisibility(routeCount >= 3 ? View.VISIBLE : View.INVISIBLE);
+        tvRoute1.setVisibility(routeCount >= 1 ? View.VISIBLE : View.GONE);
+        tvRoute2.setVisibility(routeCount >= 2 ? View.VISIBLE : View.GONE);
+        tvRoute3.setVisibility(routeCount >= 3 ? View.VISIBLE : View.GONE);
 
         tvRoute1.setSelected(false);
         tvRoute2.setSelected(false);
@@ -117,7 +117,7 @@ public class PolyvPlayerPlayRouteView extends RelativeLayout implements View.OnC
      * 隐藏界面
      */
     public void hide() {
-        setVisibility(View.INVISIBLE);
+        setVisibility(View.GONE);
     }
 // </editor-fold>
 

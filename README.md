@@ -6,7 +6,7 @@ PolyvRNVodDemo 支持 Android + iOS， 是专为 ReactNative 技术开发者定�
 
 ### 1.1 支持设备
 
-Android 4.1.0 (API 16) 以上 或 iOS 9.0 以上
+Android 4.1.0 (API 16) 以上 或 iOS 11.0 以上
 
 ### 1.2 接入条件
 
@@ -19,8 +19,8 @@ Android 4.1.0 (API 16) 以上 或 iOS 9.0 以上
 
 RN 版本是基于原生 demo + sdk 开发的，iOS 与 android 对应版本，及 SDK 版本更新日志链接如下：
 
-- iOS SDK 对应版本为 v2.13.1，[版本更新日志](https://github.com/polyv/polyv-ios-vod-sdk/releases)
-- android SDK 对应版本为 v2.13.1，[版本更新日志](https://github.com/easefun/polyv-android-sdk-2.0-demo/releases)
+- iOS SDK 对应版本为 v2.21.1，[版本更新日志](https://github.com/polyv/polyv-ios-vod-sdk/releases)
+- Android SDK 对应版本为 v2.21.2，[版本更新日志](https://github.com/easefun/polyv-android-sdk-2.0-demo/releases)
 
 ## 2. 快速开始
 
@@ -99,28 +99,37 @@ npm install
 2. 在 package.json 文件中配置依赖。
 
 ```json
-"dependencies": {
-    "react": "16.6.3",
-	  "react-native": "^0.58.6",
-	
-	//polyv/demo里需要的依赖（如不需要可删除）
+  "dependencies": {
+    "@react-navigation/material-top-tabs": "^6.6.13",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/stack": "^6.3.29",
     "axios": "^0.18.0",
-    "bower": "^1.8.8",
-    "jest-haste-map": "^24.5.0",
-    "loadash": "^1.0.0",
-    "native-base": "^2.12.1",
-    "react-art": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "react-native-gesture-handler": "^1.1.0",
-    "react-native-web": "^0.10.1",
-    "react-navigation": "^3.3.2"
+    "native-base": "^3.4.12",
+    "react": "18.2.0",
+    "react-native": "0.71.8",
+    "react-native-gesture-handler": "^2.16.0",
+    "react-native-pager-view": "^6.3.0",
+    "react-native-safe-area-context": "^4.9.0",
+    "react-native-screens": "^3.30.1",
+    "react-native-svg": "^14.1.0",
+    "react-native-tab-view": "^3.5.2"
   },
   "devDependencies": {
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "24.3.1",
-    "jest": "24.3.1",
-    "metro-react-native-babel-preset": "0.53.0",
-    "react-test-renderer": "16.6.3"
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@react-native-community/eslint-config": "^3.2.0",
+    "@tsconfig/react-native": "^2.0.2",
+    "@types/jest": "^29.2.1",
+    "@types/react": "^18.0.24",
+    "@types/react-test-renderer": "^18.0.0",
+    "babel-jest": "^29.2.1",
+    "eslint": "^8.19.0",
+    "jest": "^29.2.1",
+    "metro-react-native-babel-preset": "0.73.9",
+    "prettier": "^2.4.1",
+    "react-test-renderer": "18.2.0",
+    "typescript": "4.8.4"
   },
 ```
 
@@ -131,7 +140,7 @@ npm install
 
 0.4.0起建议使用初始化方法`setToken`，该方法是一个异步有返回结果的函数。推荐使用 https 接口，从服务端获取加密串，APP 本地解密（开发者设计自己的加解密方式）得到 `useId`、`readtoken`、`writetoken`、`secretkey` ，再使用该方法配置用户信息。
 
-低于0.4.0的可以继续使用`init`方法初始化，他也是异步有返回结果的函数。
+低于0.4.0的可以使用`init`方法初始化，他也是异步有返回结果的函数。
 
 ```javascript
  /*
@@ -431,36 +440,23 @@ iOS 端工程的原生插件代码全部包含在  ios/PolyvVodRnModule文件夹
 
    2）如果目标项目原来有Podfile 文件，只需要把 Polyv vod rn sdk 所需要的配置拷贝到  ios/Podfile文件 中；
 
-   3）如果存在 RNGestureHandler 的配置行，需要删除或者注释掉；
-
-   4）在命令行环境进入ios 目录，执行 pod install 命令；
+   3）在命令行环境进入ios 目录，添加点播SDK，执行 pod install 命令；
 
    ```java
-   project 'PolyvVodRnDemo.xcodeproj'
-   
-   platform :ios, '8.0'
-   inhibit_all_warnings!
-   
-   target 'PolyvVodRnDemo' do
-     
-     # Polyv vod rn sdk 
+     # Polyv vod rn sdk
      pod 'XRCarouselView', '~> 2.6.1'
      pod 'YYWebImage', '~> 1.0.5'
      pod 'FDStackView', '~> 1.0.1'
      pod 'PLVMasonry', '~> 1.1.2'
-     pod 'PolyvVodSDK', '2.13.1'
-     pod 'LBLelinkKit', '~> 30226'
+   
+     # Polyv vod rn sdk 2.13.1
+   #  pod 'PolyvVodSDK', '2.13.1'
+   
+     # Polyv vod rn sdk 2.21.1
+     pod 'PLVAliHttpDNS', '~> 1.10.0'
+     pod 'SSZipArchive', '~> 2.1.5'
+     pod 'PolyvVodSDK', '2.21.1', :subspecs => ['Core','Player']
+   
      pod 'PLVVodDanmu', '~> 0.0.1'
      pod 'PLVSubtitle', '~> 0.1.0'
-   
-     # 执行 npm install命令之后，有可能会自动生成下面这一行配置。需要把这一行配置删掉或者注释掉；
-     # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler' 
-   
-   end
    ```
-
-4. 集成react-native-gesture-handler插件（如果RN端没有集成react-native-gesture-handler，可跳过本步骤）
-
-   1）把Demo项目的 ios/PolyvVodRnDemo/react-native-gesture-handler文件夹 拷贝到 目标项目的 ios 目录下；
-
-   2）在XCode中，把上述文件夹增加（Add Files）到项目中；

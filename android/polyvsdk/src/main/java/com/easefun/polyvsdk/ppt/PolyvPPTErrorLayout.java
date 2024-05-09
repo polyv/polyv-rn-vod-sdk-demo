@@ -3,8 +3,8 @@ package com.easefun.polyvsdk.ppt;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +51,7 @@ public class PolyvPPTErrorLayout extends FrameLayout {
             @Override
             public void onClick(View v) {
                 if (isLandLayout()) {
-                    setVisibility(View.INVISIBLE);
+                    setVisibility(View.GONE);
                 }
                 if (currentVideoView == null) {
                     Toast.makeText(getContext(), "videoView is empty, don't regain ppt.", Toast.LENGTH_SHORT).show();
@@ -95,7 +95,7 @@ public class PolyvPPTErrorLayout extends FrameLayout {
             @Override
             public void onClick(View v) {
                 if (isLandLayout()) {
-                    setVisibility(View.INVISIBLE);
+                    setVisibility(View.GONE);
                 }
             }
         });
@@ -118,7 +118,7 @@ public class PolyvPPTErrorLayout extends FrameLayout {
     public void acceptPPTCallback(PolyvVideoView videoView, String vid, boolean hasPPT, PolyvPptInfo pptvo) {
         if (PolyvScreenUtils.isLandscape(getContext()) && isLandLayout()) {
             if (hasPPT) {
-                setVisibility(pptvo == null ? View.VISIBLE : View.INVISIBLE);
+                setVisibility(pptvo == null ? View.VISIBLE : View.GONE);
             }
         }
         this.currentVideoView = videoView;
@@ -134,7 +134,7 @@ public class PolyvPPTErrorLayout extends FrameLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT && isLandLayout()) {
-            setVisibility(View.INVISIBLE);
+            setVisibility(View.GONE);
         }
     }
 }

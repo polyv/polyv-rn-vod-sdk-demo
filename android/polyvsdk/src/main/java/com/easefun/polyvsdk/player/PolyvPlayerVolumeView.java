@@ -37,12 +37,12 @@ public class PolyvPlayerVolumeView extends FrameLayout {
 
     public void hide() {
         if (rl_center_volume != null)
-            rl_center_volume.setVisibility(View.INVISIBLE);
+            rl_center_volume.setVisibility(View.GONE);
     }
 
     public void setViewVolumeValue(int volume, boolean end) {
         if (end)
-            rl_center_volume.setVisibility(View.INVISIBLE);
+            rl_center_volume.setVisibility(View.GONE);
         else
             rl_center_volume.setVisibility(View.VISIBLE);
         tv_volume.setText(volume + "%");

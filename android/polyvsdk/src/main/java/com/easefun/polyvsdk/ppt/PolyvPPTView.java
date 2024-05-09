@@ -102,7 +102,7 @@ public class PolyvPPTView extends FrameLayout {
             loadView.setmCurrent(loadPPTProgress);
         }
         if (textView != null) {
-            textView.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.GONE);
         }
     }
 
@@ -110,13 +110,13 @@ public class PolyvPPTView extends FrameLayout {
         handler.removeMessages(1);
         if (currentVid != null && !currentVid.equals(vid) || (hasPPT && pptvo == null)) {
             imageView.setImageDrawable(null);
-            loadView.setVisibility(View.INVISIBLE);
+            loadView.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
         }
         currentVid = vid;
         if (videoView != null && hasPPT && pptvo != null) {
-            textView.setVisibility(View.INVISIBLE);
-            loadView.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.GONE);
+            loadView.setVisibility(View.GONE);
             currentVideoView = videoView;
             currentPPTVO = pptvo;
 

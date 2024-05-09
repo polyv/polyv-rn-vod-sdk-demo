@@ -3,10 +3,10 @@ package com.easefun.polyvsdk.ppt;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,8 +52,8 @@ public class PolyvPPTDirLayout extends FrameLayout {
 
     private void initView() {
         if (isLandLayout()) {
-            findViewById(R.id.title).setVisibility(View.INVISIBLE);
-            findViewById(R.id.line).setVisibility(View.INVISIBLE);
+            findViewById(R.id.title).setVisibility(View.GONE);
+            findViewById(R.id.line).setVisibility(View.GONE);
             FrameLayout frameLayout = new FrameLayout(getContext());
             frameLayout.setBackgroundColor(Color.BLACK);
             frameLayout.setAlpha(0.7f);
@@ -75,12 +75,16 @@ public class PolyvPPTDirLayout extends FrameLayout {
                     int seekPosition = Math.min(currentVideoView.getDuration(), Math.max(0, pptPageInfo.getSec()) * 1000);
                     int dragSeekStrategy = PolyvSPUtils.getInstance(getContext(), "dragSeekStrategy").getInt("dragSeekStrategy");
                     boolean canDragSeek;
-                    if (dragSeekStrategy == PolyvPlayerMediaController.DRAG_SEEK_BAN) {
-                        canDragSeek = false;
-                    } else if (dragSeekStrategy == PolyvPlayerMediaController.DRAG_SEEK_PLAYED) {
-                        canDragSeek = seekPosition <= PolyvSPUtils.getInstance(getContext(), "videoProgress").getInt(currentVideoView.getCurrentVid());
+                    if (currentVideoView != null && currentVideoView.getMediaController() != null) {
+                        canDragSeek = currentVideoView.getMediaController().canDragSeek(seekPosition);
                     } else {
-                        canDragSeek = true;
+                        if (dragSeekStrategy == PolyvPlayerMediaController.DRAG_SEEK_BAN) {
+                            canDragSeek = false;
+                        } else if (dragSeekStrategy == PolyvPlayerMediaController.DRAG_SEEK_PLAYED) {
+                            canDragSeek = seekPosition <= PolyvSPUtils.getInstance(getContext(), "videoProgress").getInt(currentVideoView.getCurrentVid());
+                        } else {
+                            canDragSeek = true;
+                        }
                     }
                     if (canDragSeek) {
                         currentVideoView.seekTo(seekPosition);
@@ -88,7 +92,7 @@ public class PolyvPPTDirLayout extends FrameLayout {
                             currentVideoView.start();
                         }
                         if (isLandLayout()) {
-                            setVisibility(View.INVISIBLE);
+                            setVisibility(View.GONE);
                         }
                     }
                 }
@@ -129,19 +133,19 @@ public class PolyvPPTDirLayout extends FrameLayout {
                 pptIsError = true;
                 if (!isLandLayout()) {
                     pptErrorLayout.setVisibility(View.VISIBLE);
-                    pptDirList.setVisibility(View.INVISIBLE);
+                    pptDirList.setVisibility(View.GONE);
                 }
                 pptDirListAdapter.clear();
                 pptDirListAdapter.notifyDataSetChanged();
             } else {
                 pptIsError = false;
-                pptErrorLayout.setVisibility(View.INVISIBLE);
+                pptErrorLayout.setVisibility(View.GONE);
                 pptDirList.setVisibility(View.VISIBLE);
                 pptDirListAdapter.set(pptvo.getPages());
                 pptDirListAdapter.notifyDataSetChanged();
             }
         } else {
-            setVisibility(View.INVISIBLE);
+            setVisibility(View.GONE);
             pptDirListAdapter.clear();
             pptDirListAdapter.notifyDataSetChanged();
         }
@@ -156,7 +160,7 @@ public class PolyvPPTDirLayout extends FrameLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT && isLandLayout()) {
-            setVisibility(View.INVISIBLE);
+            setVisibility(View.GONE);
         }
     }
 }

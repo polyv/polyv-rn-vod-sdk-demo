@@ -1,12 +1,12 @@
 package com.easefun.polyvsdk.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.format.Formatter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -226,8 +226,8 @@ public class PolyvDownloadListViewAdapter extends BaseSwipeAdapter {
         if (progress == 100) {
             viewHolder.iv_start.setImageResource(R.drawable.polyv_btn_play);
             viewHolder.tv_status.setText(DOWNLOADED);
-            viewHolder.pb_progress.setVisibility(View.INVISIBLE);
-            viewHolder.tv_speed.setVisibility(View.INVISIBLE);
+            viewHolder.pb_progress.setVisibility(View.GONE);
+            viewHolder.tv_speed.setVisibility(View.GONE);
         } else if (downloader.isDownloading()) {
             viewHolder.iv_start.setImageResource(R.drawable.polyv_btn_dlpause);
             viewHolder.tv_status.setText(DOWNLOADING);
@@ -295,11 +295,8 @@ public class PolyvDownloadListViewAdapter extends BaseSwipeAdapter {
             return lv_download != null && viewHolder.get() != null && lv_download.getChildAt(position - lv_download.getFirstVisiblePosition()) != null;
         }
 
-        private void removeToDownloadedQueue(int position) {
-            if(position >= lists.size()){
-                return;
-            }
-            PolyvDownloadInfo downloadInfo = lists.remove(position);
+        private void removeToDownloadedQueue() {
+            lists.remove(downloadInfo);
             ((BaseSwipeAdapter) wr_lv_download.get().getAdapter()).notifyDataSetChanged();
             if (downloadSuccessListener != null) {
                 downloadSuccessListener.onDownloadSuccess(downloadInfo);
@@ -330,11 +327,11 @@ public class PolyvDownloadListViewAdapter extends BaseSwipeAdapter {
                 viewHolder.get().tv_status.setText(DOWNLOADED);
                 viewHolder.get().tv_status.setSelected(false);
                 viewHolder.get().iv_start.setImageResource(R.drawable.polyv_btn_play);
-                viewHolder.get().pb_progress.setVisibility(View.INVISIBLE);
-                viewHolder.get().tv_speed.setVisibility(View.INVISIBLE);
+                viewHolder.get().pb_progress.setVisibility(View.GONE);
+                viewHolder.get().tv_speed.setVisibility(View.GONE);
 
 //                Toast.makeText(appContext, "第" + (position + 1) + "个任务下载成功", Toast.LENGTH_SHORT).show();
-                removeToDownloadedQueue(position);
+                removeToDownloadedQueue();
             }
         }
 
@@ -349,7 +346,10 @@ public class PolyvDownloadListViewAdapter extends BaseSwipeAdapter {
                 message += PolyvErrorMessageUtils.getDownloaderErrorMessage(errorReason.getType(), downloadInfo.getFileType());
                 message += "(error code " + errorReason.getType().getCode() + ")";
 
-//                Toast.makeText(appContext, message, Toast.LENGTH_LONG).show();
+                Context context = contextWeakReference.get();
+                if (!(context instanceof Activity) || ((Activity) context).isFinishing()) {
+                    return;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(contextWeakReference.get());
                 builder.setTitle("错误");
                 builder.setMessage(message);
@@ -359,6 +359,9 @@ public class PolyvDownloadListViewAdapter extends BaseSwipeAdapter {
                     }
                 });
 
+                if (((Activity) context).isFinishing()) {
+                    return;
+                }
                 builder.show();
             }
         }

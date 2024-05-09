@@ -1,0 +1,1278 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E356F31AD99517003FC87E /* PolyvRNVodDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PolyvRNVodDemoTests.m */; };
+		0931AD18E38CC66B3971E2E8 /* libPods-PolyvRNVodDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD65E2508947CA6FC35C443 /* libPods-PolyvRNVodDemo.a */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		361B4C162BC7AFA0008A5C88 /* PLVVodDBManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C012BC7AFA0008A5C88 /* PLVVodDBManager.mm */; };
+		361B4C172BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C022BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.mm */; };
+		361B4C182BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C082BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.m */; };
+		361B4C192BC7AFA0008A5C88 /* plv_bg_voice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 361B4C0A2BC7AFA0008A5C88 /* plv_bg_voice.mp3 */; };
+		361B4C1A2BC7AFA0008A5C88 /* PLVVodDownloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C0C2BC7AFA0008A5C88 /* PLVVodDownloadHelper.m */; };
+		361B4C252BC7AFB3008A5C88 /* PolyvRNVodConfigModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C212BC7AFB3008A5C88 /* PolyvRNVodConfigModule.m */; };
+		361B4C262BC7AFB3008A5C88 /* PolyvRNVodEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C222BC7AFB3008A5C88 /* PolyvRNVodEmitter.m */; };
+		361B4C272BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 361B4C232BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.m */; };
+		366C44012BCD15D2008834CB /* sqlcipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 366C43FE2BCD15C9008834CB /* sqlcipher.framework */; };
+		366C44022BCD15D2008834CB /* sqlcipher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 366C43FE2BCD15C9008834CB /* sqlcipher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		366C44042BCD15D3008834CB /* WCDBObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 366C43FD2BCD15C9008834CB /* WCDBObjc.framework */; };
+		366C44052BCD15D3008834CB /* WCDBObjc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 366C43FD2BCD15C9008834CB /* WCDBObjc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		366C441D2BCD1DB1008834CB /* PLVMarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 366C44082BCD1DB1008834CB /* PLVMarqueeLabel.m */; };
+		36F0A57A2BC77FD7002062FB /* PolyvVodPlayerWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5792BC77FD7002062FB /* PolyvVodPlayerWrapperView.m */; };
+		36F0A5C52BC78030002062FB /* PLVVodPlayerSkin.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36F0A57F2BC7802F002062FB /* PLVVodPlayerSkin.xib */; };
+		36F0A5C62BC78030002062FB /* PLVVodDefinitionPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5812BC7802F002062FB /* PLVVodDefinitionPanelView.m */; };
+		36F0A5C72BC78030002062FB /* PLVVodPlayTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5842BC7802F002062FB /* PLVVodPlayTipsView.m */; };
+		36F0A5C82BC78030002062FB /* PLVVodRouteLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5892BC7802F002062FB /* PLVVodRouteLineView.m */; };
+		36F0A5C92BC78030002062FB /* PLVVodDanmuSendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A58A2BC7802F002062FB /* PLVVodDanmuSendView.m */; };
+		36F0A5CA2BC78030002062FB /* PLVVodCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A58B2BC7802F002062FB /* PLVVodCoverView.m */; };
+		36F0A5CB2BC78030002062FB /* PLVVodFullscreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A58F2BC7802F002062FB /* PLVVodFullscreenView.m */; };
+		36F0A5CC2BC78030002062FB /* PLVVodGestureIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5912BC7802F002062FB /* PLVVodGestureIndicatorView.m */; };
+		36F0A5CD2BC78030002062FB /* PLVVodPlaybackRatePanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5922BC7802F002062FB /* PLVVodPlaybackRatePanelView.m */; };
+		36F0A5CE2BC78030002062FB /* PLVVodNetworkTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5972BC7802F002062FB /* PLVVodNetworkTipsView.m */; };
+		36F0A5CF2BC78030002062FB /* PLVVodAudioCoverPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5982BC7802F002062FB /* PLVVodAudioCoverPanelView.m */; };
+		36F0A5D02BC78030002062FB /* PLVVodSettingPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5992BC7802F002062FB /* PLVVodSettingPanelView.m */; };
+		36F0A5D12BC78030002062FB /* PLVVodFastForwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A59A2BC7802F002062FB /* PLVVodFastForwardView.m */; };
+		36F0A5D22BC78030002062FB /* PLVVodShrinkscreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A59B2BC7802F002062FB /* PLVVodShrinkscreenView.m */; };
+		36F0A5D32BC78030002062FB /* PLVVodLockScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A59C2BC7802F002062FB /* PLVVodLockScreenView.m */; };
+		36F0A5D42BC78030002062FB /* PLVVodPlayerSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A59E2BC7802F002062FB /* PLVVodPlayerSkin.m */; };
+		36F0A5D52BC78030002062FB /* PLVVodSkinPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A59F2BC7802F002062FB /* PLVVodSkinPlayerController.m */; };
+		36F0A5D62BC78030002062FB /* NSString+PLVVod.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5A42BC7802F002062FB /* NSString+PLVVod.m */; };
+		36F0A5D72BC78030002062FB /* UIColor+PLVVod.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5A72BC7802F002062FB /* UIColor+PLVVod.m */; };
+		36F0A5D82BC78030002062FB /* UINavigationController+PLVVod.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5A82BC7802F002062FB /* UINavigationController+PLVVod.m */; };
+		36F0A5D92BC78030002062FB /* UIControl+PLVVod.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5A92BC7802F002062FB /* UIControl+PLVVod.m */; };
+		36F0A5DA2BC78030002062FB /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5AB2BC7802F002062FB /* UIButton+EnlargeTouchArea.m */; };
+		36F0A5DB2BC78030002062FB /* PLVVodDanmu+PLVVod.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5AC2BC7802F002062FB /* PLVVodDanmu+PLVVod.m */; };
+		36F0A5DC2BC78030002062FB /* PLVVodNetworkUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5AE2BC78030002062FB /* PLVVodNetworkUtil.m */; };
+		36F0A5DD2BC78030002062FB /* PLVVodUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5B02BC78030002062FB /* PLVVodUtils.m */; };
+		36F0A5DE2BC78030002062FB /* PLVVodErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5B12BC78030002062FB /* PLVVodErrorUtil.m */; };
+		36F0A5DF2BC78030002062FB /* PLVVodResources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36F0A5B42BC78030002062FB /* PLVVodResources.xcassets */; };
+		36F0A5E02BC78030002062FB /* PLVVodExamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5B62BC78030002062FB /* PLVVodExamViewController.m */; };
+		36F0A5E12BC78030002062FB /* PLVVodExamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36F0A5B72BC78030002062FB /* PLVVodExamViewController.xib */; };
+		36F0A5E22BC78030002062FB /* PLVVodExamTestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 36F0A5B92BC78030002062FB /* PLVVodExamTestData.json */; };
+		36F0A5E32BC78030002062FB /* PLVVodQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5BD2BC78030002062FB /* PLVVodQuestion.m */; };
+		36F0A5E42BC78030002062FB /* PLVVodQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5BE2BC78030002062FB /* PLVVodQuestionView.m */; };
+		36F0A5E52BC78030002062FB /* PLVVodOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5BF2BC78030002062FB /* PLVVodOptionCell.m */; };
+		36F0A5E62BC78030002062FB /* PLVVodOptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36F0A5C02BC78030002062FB /* PLVVodOptionCell.xib */; };
+		36F0A5E72BC78030002062FB /* PLVVodExplanationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5C32BC78030002062FB /* PLVVodExplanationView.m */; };
+		36F0A5EA2BC7809E002062FB /* PolyvVodPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F0A5E92BC7809E002062FB /* PolyvVodPlayerManager.m */; };
+		7082B3FC44BE429A99CB91C5 /* libPods-PolyvRNVodDemo-PolyvRNVodDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2742B3F925DA5E42DB414F /* libPods-PolyvRNVodDemo-PolyvRNVodDemoTests.a */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BF6E450E2BCA7F14003A87A9 /* PLVVodDefinitionTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E450C2BCA7F14003A87A9 /* PLVVodDefinitionTipsView.m */; };
+		BF6E450F2BCA7F14003A87A9 /* PLVVodVideoToolBoxPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E450D2BCA7F14003A87A9 /* PLVVodVideoToolBoxPanelView.m */; };
+		BF6E45162BCA7FC0003A87A9 /* PLVFillBlankQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45122BCA7FC0003A87A9 /* PLVFillBlankQuestionView.m */; };
+		BF6E45172BCA7FC0003A87A9 /* PLVOptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45132BCA7FC0003A87A9 /* PLVOptionView.m */; };
+		BF6E45182BCA7FC0003A87A9 /* PLVFillBlankView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45142BCA7FC0003A87A9 /* PLVFillBlankView.m */; };
+		BF6E452E2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E451B2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.m */; };
+		BF6E452F2BCA9CDD003A87A9 /* PLVKnowledgeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E451E2BCA9CDD003A87A9 /* PLVKnowledgeModel.m */; };
+		BF6E45302BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45212BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.m */; };
+		BF6E45312BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45222BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.m */; };
+		BF6E45322BCA9CDD003A87A9 /* PLVSlideTabbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45262BCA9CDD003A87A9 /* PLVSlideTabbarView.m */; };
+		BF6E45332BCA9CDD003A87A9 /* PLVMarqueeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45282BCA9CDD003A87A9 /* PLVMarqueeView.m */; };
+		BF6E45342BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E452A2BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.m */; };
+		BF6E45352BCA9CDD003A87A9 /* PLVMarqueeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E452D2BCA9CDD003A87A9 /* PLVMarqueeModel.m */; };
+		BF6E453A2BCAB1C0003A87A9 /* PLVToast.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E45382BCAB1C0003A87A9 /* PLVToast.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = PolyvRNVodDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		366C44032BCD15D2008834CB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				366C44052BCD15D3008834CB /* WCDBObjc.framework in Embed Frameworks */,
+				366C44022BCD15D2008834CB /* sqlcipher.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		00E356EE1AD99517003FC87E /* PolyvRNVodDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PolyvRNVodDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* PolyvRNVodDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PolyvRNVodDemoTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* PolyvRNVodDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PolyvRNVodDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = PolyvRNVodDemo/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = PolyvRNVodDemo/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PolyvRNVodDemo/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PolyvRNVodDemo/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = PolyvRNVodDemo/main.m; sourceTree = "<group>"; };
+		1C4F679E2A6F39CDDAC739B8 /* Pods-PolyvRNVodDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PolyvRNVodDemo.release.xcconfig"; path = "Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo.release.xcconfig"; sourceTree = "<group>"; };
+		2F2742B3F925DA5E42DB414F /* libPods-PolyvRNVodDemo-PolyvRNVodDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PolyvRNVodDemo-PolyvRNVodDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		361B4C012BC7AFA0008A5C88 /* PLVVodDBManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PLVVodDBManager.mm; sourceTree = "<group>"; };
+		361B4C022BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PLVVodExtendVideoInfo.mm; sourceTree = "<group>"; };
+		361B4C032BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodExtendVideoInfo.h; sourceTree = "<group>"; };
+		361B4C042BC7AFA0008A5C88 /* PLVVodDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodDBManager.h; sourceTree = "<group>"; };
+		361B4C052BC7AFA0008A5C88 /* PLVVodExtendVideoInfo+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PLVVodExtendVideoInfo+WCTTableCoding.h"; sourceTree = "<group>"; };
+		361B4C072BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVDownloadCompleteInfoModel.h; sourceTree = "<group>"; };
+		361B4C082BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVDownloadCompleteInfoModel.m; sourceTree = "<group>"; };
+		361B4C0A2BC7AFA0008A5C88 /* plv_bg_voice.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = plv_bg_voice.mp3; sourceTree = "<group>"; };
+		361B4C0B2BC7AFA0008A5C88 /* PLVVodDownloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodDownloadHelper.h; sourceTree = "<group>"; };
+		361B4C0C2BC7AFA0008A5C88 /* PLVVodDownloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodDownloadHelper.m; sourceTree = "<group>"; };
+		361B4C1F2BC7AFB3008A5C88 /* PolyvRNVodConfigModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyvRNVodConfigModule.h; sourceTree = "<group>"; };
+		361B4C202BC7AFB3008A5C88 /* PolyvRNVodEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyvRNVodEmitter.h; sourceTree = "<group>"; };
+		361B4C212BC7AFB3008A5C88 /* PolyvRNVodConfigModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolyvRNVodConfigModule.m; sourceTree = "<group>"; };
+		361B4C222BC7AFB3008A5C88 /* PolyvRNVodEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolyvRNVodEmitter.m; sourceTree = "<group>"; };
+		361B4C232BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolyvRNVodDownloadModule.m; sourceTree = "<group>"; };
+		361B4C242BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyvRNVodDownloadModule.h; sourceTree = "<group>"; };
+		366C43FD2BCD15C9008834CB /* WCDBObjc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WCDBObjc.framework; sourceTree = "<group>"; };
+		366C43FE2BCD15C9008834CB /* sqlcipher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = sqlcipher.framework; sourceTree = "<group>"; };
+		366C44082BCD1DB1008834CB /* PLVMarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVMarqueeLabel.m; sourceTree = "<group>"; };
+		366C44092BCD1DB1008834CB /* PLVMarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVMarqueeLabel.h; sourceTree = "<group>"; };
+		36F0A5782BC77FD7002062FB /* PolyvVodPlayerWrapperView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyvVodPlayerWrapperView.h; sourceTree = "<group>"; };
+		36F0A5792BC77FD7002062FB /* PolyvVodPlayerWrapperView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolyvVodPlayerWrapperView.m; sourceTree = "<group>"; };
+		36F0A57D2BC7802F002062FB /* PLVVodSkinPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodSkinPlayerController.h; sourceTree = "<group>"; };
+		36F0A57E2BC7802F002062FB /* PLVVodPlayerSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodPlayerSkin.h; sourceTree = "<group>"; };
+		36F0A57F2BC7802F002062FB /* PLVVodPlayerSkin.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PLVVodPlayerSkin.xib; sourceTree = "<group>"; };
+		36F0A5812BC7802F002062FB /* PLVVodDefinitionPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodDefinitionPanelView.m; sourceTree = "<group>"; };
+		36F0A5832BC7802F002062FB /* PLVVodPlayTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodPlayTipsView.h; sourceTree = "<group>"; };
+		36F0A5842BC7802F002062FB /* PLVVodPlayTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodPlayTipsView.m; sourceTree = "<group>"; };
+		36F0A5852BC7802F002062FB /* PLVVodPlaybackRatePanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodPlaybackRatePanelView.h; sourceTree = "<group>"; };
+		36F0A5862BC7802F002062FB /* PLVVodGestureIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodGestureIndicatorView.h; sourceTree = "<group>"; };
+		36F0A5872BC7802F002062FB /* PLVVodAudioCoverPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodAudioCoverPanelView.h; sourceTree = "<group>"; };
+		36F0A5882BC7802F002062FB /* PLVVodNetworkTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodNetworkTipsView.h; sourceTree = "<group>"; };
+		36F0A5892BC7802F002062FB /* PLVVodRouteLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodRouteLineView.m; sourceTree = "<group>"; };
+		36F0A58A2BC7802F002062FB /* PLVVodDanmuSendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodDanmuSendView.m; sourceTree = "<group>"; };
+		36F0A58B2BC7802F002062FB /* PLVVodCoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodCoverView.m; sourceTree = "<group>"; };
+		36F0A58C2BC7802F002062FB /* PLVVodShrinkscreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodShrinkscreenView.h; sourceTree = "<group>"; };
+		36F0A58D2BC7802F002062FB /* PLVVodFastForwardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodFastForwardView.h; sourceTree = "<group>"; };
+		36F0A58E2BC7802F002062FB /* PLVVodSettingPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodSettingPanelView.h; sourceTree = "<group>"; };
+		36F0A58F2BC7802F002062FB /* PLVVodFullscreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodFullscreenView.m; sourceTree = "<group>"; };
+		36F0A5902BC7802F002062FB /* PLVVodLockScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodLockScreenView.h; sourceTree = "<group>"; };
+		36F0A5912BC7802F002062FB /* PLVVodGestureIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodGestureIndicatorView.m; sourceTree = "<group>"; };
+		36F0A5922BC7802F002062FB /* PLVVodPlaybackRatePanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodPlaybackRatePanelView.m; sourceTree = "<group>"; };
+		36F0A5932BC7802F002062FB /* PLVVodDefinitionPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodDefinitionPanelView.h; sourceTree = "<group>"; };
+		36F0A5942BC7802F002062FB /* PLVVodCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodCoverView.h; sourceTree = "<group>"; };
+		36F0A5952BC7802F002062FB /* PLVVodDanmuSendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodDanmuSendView.h; sourceTree = "<group>"; };
+		36F0A5962BC7802F002062FB /* PLVVodRouteLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodRouteLineView.h; sourceTree = "<group>"; };
+		36F0A5972BC7802F002062FB /* PLVVodNetworkTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodNetworkTipsView.m; sourceTree = "<group>"; };
+		36F0A5982BC7802F002062FB /* PLVVodAudioCoverPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodAudioCoverPanelView.m; sourceTree = "<group>"; };
+		36F0A5992BC7802F002062FB /* PLVVodSettingPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodSettingPanelView.m; sourceTree = "<group>"; };
+		36F0A59A2BC7802F002062FB /* PLVVodFastForwardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodFastForwardView.m; sourceTree = "<group>"; };
+		36F0A59B2BC7802F002062FB /* PLVVodShrinkscreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodShrinkscreenView.m; sourceTree = "<group>"; };
+		36F0A59C2BC7802F002062FB /* PLVVodLockScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodLockScreenView.m; sourceTree = "<group>"; };
+		36F0A59D2BC7802F002062FB /* PLVVodFullscreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodFullscreenView.h; sourceTree = "<group>"; };
+		36F0A59E2BC7802F002062FB /* PLVVodPlayerSkin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodPlayerSkin.m; sourceTree = "<group>"; };
+		36F0A59F2BC7802F002062FB /* PLVVodSkinPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodSkinPlayerController.m; sourceTree = "<group>"; };
+		36F0A5A12BC7802F002062FB /* UIControl+PLVVod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+PLVVod.h"; sourceTree = "<group>"; };
+		36F0A5A22BC7802F002062FB /* UIColor+PLVVod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+PLVVod.h"; sourceTree = "<group>"; };
+		36F0A5A32BC7802F002062FB /* UINavigationController+PLVVod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+PLVVod.h"; sourceTree = "<group>"; };
+		36F0A5A42BC7802F002062FB /* NSString+PLVVod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PLVVod.m"; sourceTree = "<group>"; };
+		36F0A5A52BC7802F002062FB /* PLVVodDanmu+PLVVod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PLVVodDanmu+PLVVod.h"; sourceTree = "<group>"; };
+		36F0A5A62BC7802F002062FB /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
+		36F0A5A72BC7802F002062FB /* UIColor+PLVVod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PLVVod.m"; sourceTree = "<group>"; };
+		36F0A5A82BC7802F002062FB /* UINavigationController+PLVVod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+PLVVod.m"; sourceTree = "<group>"; };
+		36F0A5A92BC7802F002062FB /* UIControl+PLVVod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+PLVVod.m"; sourceTree = "<group>"; };
+		36F0A5AA2BC7802F002062FB /* NSString+PLVVod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PLVVod.h"; sourceTree = "<group>"; };
+		36F0A5AB2BC7802F002062FB /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
+		36F0A5AC2BC7802F002062FB /* PLVVodDanmu+PLVVod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PLVVodDanmu+PLVVod.m"; sourceTree = "<group>"; };
+		36F0A5AE2BC78030002062FB /* PLVVodNetworkUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodNetworkUtil.m; sourceTree = "<group>"; };
+		36F0A5AF2BC78030002062FB /* PLVVodErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodErrorUtil.h; sourceTree = "<group>"; };
+		36F0A5B02BC78030002062FB /* PLVVodUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodUtils.m; sourceTree = "<group>"; };
+		36F0A5B12BC78030002062FB /* PLVVodErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodErrorUtil.m; sourceTree = "<group>"; };
+		36F0A5B22BC78030002062FB /* PLVVodNetworkUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodNetworkUtil.h; sourceTree = "<group>"; };
+		36F0A5B32BC78030002062FB /* PLVVodUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodUtils.h; sourceTree = "<group>"; };
+		36F0A5B42BC78030002062FB /* PLVVodResources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PLVVodResources.xcassets; sourceTree = "<group>"; };
+		36F0A5B62BC78030002062FB /* PLVVodExamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodExamViewController.m; sourceTree = "<group>"; };
+		36F0A5B72BC78030002062FB /* PLVVodExamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PLVVodExamViewController.xib; sourceTree = "<group>"; };
+		36F0A5B82BC78030002062FB /* PLVVodExamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodExamViewController.h; sourceTree = "<group>"; };
+		36F0A5B92BC78030002062FB /* PLVVodExamTestData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PLVVodExamTestData.json; sourceTree = "<group>"; };
+		36F0A5BB2BC78030002062FB /* PLVVodQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodQuestionView.h; sourceTree = "<group>"; };
+		36F0A5BC2BC78030002062FB /* PLVVodOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodOptionCell.h; sourceTree = "<group>"; };
+		36F0A5BD2BC78030002062FB /* PLVVodQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodQuestion.m; sourceTree = "<group>"; };
+		36F0A5BE2BC78030002062FB /* PLVVodQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodQuestionView.m; sourceTree = "<group>"; };
+		36F0A5BF2BC78030002062FB /* PLVVodOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodOptionCell.m; sourceTree = "<group>"; };
+		36F0A5C02BC78030002062FB /* PLVVodOptionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PLVVodOptionCell.xib; sourceTree = "<group>"; };
+		36F0A5C12BC78030002062FB /* PLVVodQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodQuestion.h; sourceTree = "<group>"; };
+		36F0A5C32BC78030002062FB /* PLVVodExplanationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodExplanationView.m; sourceTree = "<group>"; };
+		36F0A5C42BC78030002062FB /* PLVVodExplanationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodExplanationView.h; sourceTree = "<group>"; };
+		36F0A5E82BC7809E002062FB /* PolyvVodPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyvVodPlayerManager.h; sourceTree = "<group>"; };
+		36F0A5E92BC7809E002062FB /* PolyvVodPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolyvVodPlayerManager.m; sourceTree = "<group>"; };
+		530012DE629656403A1EA1C4 /* Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.release.xcconfig"; path = "Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		75BFAC96A4C972E5D16DE41E /* Pods-PolyvRNVodDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PolyvRNVodDemo.debug.xcconfig"; path = "Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PolyvRNVodDemo/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BDD65E2508947CA6FC35C443 /* libPods-PolyvRNVodDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PolyvRNVodDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF6E450A2BCA7F13003A87A9 /* PLVVodVideoToolBoxPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodVideoToolBoxPanelView.h; sourceTree = "<group>"; };
+		BF6E450B2BCA7F13003A87A9 /* PLVVodDefinitionTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVVodDefinitionTipsView.h; sourceTree = "<group>"; };
+		BF6E450C2BCA7F14003A87A9 /* PLVVodDefinitionTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodDefinitionTipsView.m; sourceTree = "<group>"; };
+		BF6E450D2BCA7F14003A87A9 /* PLVVodVideoToolBoxPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVVodVideoToolBoxPanelView.m; sourceTree = "<group>"; };
+		BF6E45102BCA7FC0003A87A9 /* PLVFillBlankView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVFillBlankView.h; sourceTree = "<group>"; };
+		BF6E45112BCA7FC0003A87A9 /* PLVOptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVOptionView.h; sourceTree = "<group>"; };
+		BF6E45122BCA7FC0003A87A9 /* PLVFillBlankQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVFillBlankQuestionView.m; sourceTree = "<group>"; };
+		BF6E45132BCA7FC0003A87A9 /* PLVOptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVOptionView.m; sourceTree = "<group>"; };
+		BF6E45142BCA7FC0003A87A9 /* PLVFillBlankView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVFillBlankView.m; sourceTree = "<group>"; };
+		BF6E45152BCA7FC0003A87A9 /* PLVFillBlankQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVFillBlankQuestionView.h; sourceTree = "<group>"; };
+		BF6E451A2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVKnowledgeListViewController.h; sourceTree = "<group>"; };
+		BF6E451B2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVKnowledgeListViewController.m; sourceTree = "<group>"; };
+		BF6E451D2BCA9CDD003A87A9 /* PLVKnowledgeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVKnowledgeModel.h; sourceTree = "<group>"; };
+		BF6E451E2BCA9CDD003A87A9 /* PLVKnowledgeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVKnowledgeModel.m; sourceTree = "<group>"; };
+		BF6E45202BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVKnowledgeCategoryTableViewCell.h; sourceTree = "<group>"; };
+		BF6E45212BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVKnowledgePointTableViewCell.m; sourceTree = "<group>"; };
+		BF6E45222BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVKnowledgeCategoryTableViewCell.m; sourceTree = "<group>"; };
+		BF6E45232BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVKnowledgePointTableViewCell.h; sourceTree = "<group>"; };
+		BF6E45252BCA9CDD003A87A9 /* PLVSlideTabbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVSlideTabbarView.h; sourceTree = "<group>"; };
+		BF6E45262BCA9CDD003A87A9 /* PLVSlideTabbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVSlideTabbarView.m; sourceTree = "<group>"; };
+		BF6E45282BCA9CDD003A87A9 /* PLVMarqueeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVMarqueeView.m; sourceTree = "<group>"; };
+		BF6E45292BCA9CDD003A87A9 /* PLVMarqueeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVMarqueeModel.h; sourceTree = "<group>"; };
+		BF6E452A2BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVMarqueeAnimationManager.m; sourceTree = "<group>"; };
+		BF6E452B2BCA9CDD003A87A9 /* PLVMarqueeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVMarqueeView.h; sourceTree = "<group>"; };
+		BF6E452C2BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVMarqueeAnimationManager.h; sourceTree = "<group>"; };
+		BF6E452D2BCA9CDD003A87A9 /* PLVMarqueeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVMarqueeModel.m; sourceTree = "<group>"; };
+		BF6E45362BCAB13C003A87A9 /* PolyvVodSDKDemoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyvVodSDKDemoUtils.h; sourceTree = "<group>"; };
+		BF6E45382BCAB1C0003A87A9 /* PLVToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLVToast.m; sourceTree = "<group>"; };
+		BF6E45392BCAB1C0003A87A9 /* PLVToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLVToast.h; sourceTree = "<group>"; };
+		E1491557A21BF90350A42ECE /* Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00E356EB1AD99517003FC87E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7082B3FC44BE429A99CB91C5 /* libPods-PolyvRNVodDemo-PolyvRNVodDemoTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				366C44042BCD15D3008834CB /* WCDBObjc.framework in Frameworks */,
+				0931AD18E38CC66B3971E2E8 /* libPods-PolyvRNVodDemo.a in Frameworks */,
+				366C44012BCD15D2008834CB /* sqlcipher.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00E356EF1AD99517003FC87E /* PolyvRNVodDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F21AD99517003FC87E /* PolyvRNVodDemoTests.m */,
+				00E356F01AD99517003FC87E /* Supporting Files */,
+			);
+			path = PolyvRNVodDemoTests;
+			sourceTree = "<group>";
+		};
+		00E356F01AD99517003FC87E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F11AD99517003FC87E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		13B07FAE1A68108700A75B9A /* PolyvRNVodDemo */ = {
+			isa = PBXGroup;
+			children = (
+				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				13B07FB61A68108700A75B9A /* Info.plist */,
+				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				13B07FB71A68108700A75B9A /* main.m */,
+			);
+			name = PolyvRNVodDemo;
+			sourceTree = "<group>";
+		};
+		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				BDD65E2508947CA6FC35C443 /* libPods-PolyvRNVodDemo.a */,
+				2F2742B3F925DA5E42DB414F /* libPods-PolyvRNVodDemo-PolyvRNVodDemoTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		361B4BFF2BC7AFA0008A5C88 /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				361B4C002BC7AFA0008A5C88 /* PolyvOpenDatabase */,
+				361B4C062BC7AFA0008A5C88 /* Model */,
+				361B4C092BC7AFA0008A5C88 /* Helper */,
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
+		361B4C002BC7AFA0008A5C88 /* PolyvOpenDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				361B4C012BC7AFA0008A5C88 /* PLVVodDBManager.mm */,
+				361B4C022BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.mm */,
+				361B4C032BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.h */,
+				361B4C042BC7AFA0008A5C88 /* PLVVodDBManager.h */,
+				361B4C052BC7AFA0008A5C88 /* PLVVodExtendVideoInfo+WCTTableCoding.h */,
+			);
+			path = PolyvOpenDatabase;
+			sourceTree = "<group>";
+		};
+		361B4C062BC7AFA0008A5C88 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				361B4C072BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.h */,
+				361B4C082BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		361B4C092BC7AFA0008A5C88 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				361B4C0A2BC7AFA0008A5C88 /* plv_bg_voice.mp3 */,
+				361B4C0B2BC7AFA0008A5C88 /* PLVVodDownloadHelper.h */,
+				361B4C0C2BC7AFA0008A5C88 /* PLVVodDownloadHelper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		366C43FC2BCD15C9008834CB /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				366C43FD2BCD15C9008834CB /* WCDBObjc.framework */,
+				366C43FE2BCD15C9008834CB /* sqlcipher.framework */,
+			);
+			path = Libs;
+			sourceTree = "<group>";
+		};
+		366C44062BCD1DB1008834CB /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				366C44072BCD1DB1008834CB /* PLVMarqueeLabel */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		366C44072BCD1DB1008834CB /* PLVMarqueeLabel */ = {
+			isa = PBXGroup;
+			children = (
+				366C44082BCD1DB1008834CB /* PLVMarqueeLabel.m */,
+				366C44092BCD1DB1008834CB /* PLVMarqueeLabel.h */,
+			);
+			path = PLVMarqueeLabel;
+			sourceTree = "<group>";
+		};
+		36F0A5772BC77FD7002062FB /* PolyvVodRnModule */ = {
+			isa = PBXGroup;
+			children = (
+				366C44062BCD1DB1008834CB /* Vendor */,
+				366C43FC2BCD15C9008834CB /* Libs */,
+				BF6E45362BCAB13C003A87A9 /* PolyvVodSDKDemoUtils.h */,
+				BF6E45372BCAB1C0003A87A9 /* Toast */,
+				361B4BFF2BC7AFA0008A5C88 /* Download */,
+				36F0A57B2BC7802F002062FB /* PolyvOpenSourceModule */,
+				36F0A5782BC77FD7002062FB /* PolyvVodPlayerWrapperView.h */,
+				36F0A5792BC77FD7002062FB /* PolyvVodPlayerWrapperView.m */,
+				36F0A5E82BC7809E002062FB /* PolyvVodPlayerManager.h */,
+				36F0A5E92BC7809E002062FB /* PolyvVodPlayerManager.m */,
+				361B4C1F2BC7AFB3008A5C88 /* PolyvRNVodConfigModule.h */,
+				361B4C212BC7AFB3008A5C88 /* PolyvRNVodConfigModule.m */,
+				361B4C242BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.h */,
+				361B4C232BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.m */,
+				361B4C202BC7AFB3008A5C88 /* PolyvRNVodEmitter.h */,
+				361B4C222BC7AFB3008A5C88 /* PolyvRNVodEmitter.m */,
+			);
+			path = PolyvVodRnModule;
+			sourceTree = "<group>";
+		};
+		36F0A57B2BC7802F002062FB /* PolyvOpenSourceModule */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E45192BCA9CDD003A87A9 /* KnowledgeList */,
+				BF6E45272BCA9CDD003A87A9 /* PLVMarquee */,
+				36F0A57C2BC7802F002062FB /* Skin */,
+				36F0A5A02BC7802F002062FB /* Category */,
+				36F0A5AD2BC78030002062FB /* Util */,
+				36F0A5B42BC78030002062FB /* PLVVodResources.xcassets */,
+				36F0A5B52BC78030002062FB /* Exam */,
+			);
+			path = PolyvOpenSourceModule;
+			sourceTree = "<group>";
+		};
+		36F0A57C2BC7802F002062FB /* Skin */ = {
+			isa = PBXGroup;
+			children = (
+				36F0A57D2BC7802F002062FB /* PLVVodSkinPlayerController.h */,
+				36F0A57E2BC7802F002062FB /* PLVVodPlayerSkin.h */,
+				36F0A57F2BC7802F002062FB /* PLVVodPlayerSkin.xib */,
+				36F0A5802BC7802F002062FB /* View */,
+				36F0A59E2BC7802F002062FB /* PLVVodPlayerSkin.m */,
+				36F0A59F2BC7802F002062FB /* PLVVodSkinPlayerController.m */,
+			);
+			path = Skin;
+			sourceTree = "<group>";
+		};
+		36F0A5802BC7802F002062FB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E450B2BCA7F13003A87A9 /* PLVVodDefinitionTipsView.h */,
+				BF6E450C2BCA7F14003A87A9 /* PLVVodDefinitionTipsView.m */,
+				BF6E450A2BCA7F13003A87A9 /* PLVVodVideoToolBoxPanelView.h */,
+				BF6E450D2BCA7F14003A87A9 /* PLVVodVideoToolBoxPanelView.m */,
+				36F0A5812BC7802F002062FB /* PLVVodDefinitionPanelView.m */,
+				36F0A5822BC7802F002062FB /* PlayTips */,
+				36F0A5852BC7802F002062FB /* PLVVodPlaybackRatePanelView.h */,
+				36F0A5862BC7802F002062FB /* PLVVodGestureIndicatorView.h */,
+				36F0A5872BC7802F002062FB /* PLVVodAudioCoverPanelView.h */,
+				36F0A5882BC7802F002062FB /* PLVVodNetworkTipsView.h */,
+				36F0A5892BC7802F002062FB /* PLVVodRouteLineView.m */,
+				36F0A58A2BC7802F002062FB /* PLVVodDanmuSendView.m */,
+				36F0A58B2BC7802F002062FB /* PLVVodCoverView.m */,
+				36F0A58C2BC7802F002062FB /* PLVVodShrinkscreenView.h */,
+				36F0A58D2BC7802F002062FB /* PLVVodFastForwardView.h */,
+				36F0A58E2BC7802F002062FB /* PLVVodSettingPanelView.h */,
+				36F0A58F2BC7802F002062FB /* PLVVodFullscreenView.m */,
+				36F0A5902BC7802F002062FB /* PLVVodLockScreenView.h */,
+				36F0A5912BC7802F002062FB /* PLVVodGestureIndicatorView.m */,
+				36F0A5922BC7802F002062FB /* PLVVodPlaybackRatePanelView.m */,
+				36F0A5932BC7802F002062FB /* PLVVodDefinitionPanelView.h */,
+				36F0A5942BC7802F002062FB /* PLVVodCoverView.h */,
+				36F0A5952BC7802F002062FB /* PLVVodDanmuSendView.h */,
+				36F0A5962BC7802F002062FB /* PLVVodRouteLineView.h */,
+				36F0A5972BC7802F002062FB /* PLVVodNetworkTipsView.m */,
+				36F0A5982BC7802F002062FB /* PLVVodAudioCoverPanelView.m */,
+				36F0A5992BC7802F002062FB /* PLVVodSettingPanelView.m */,
+				36F0A59A2BC7802F002062FB /* PLVVodFastForwardView.m */,
+				36F0A59B2BC7802F002062FB /* PLVVodShrinkscreenView.m */,
+				36F0A59C2BC7802F002062FB /* PLVVodLockScreenView.m */,
+				36F0A59D2BC7802F002062FB /* PLVVodFullscreenView.h */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		36F0A5822BC7802F002062FB /* PlayTips */ = {
+			isa = PBXGroup;
+			children = (
+				36F0A5832BC7802F002062FB /* PLVVodPlayTipsView.h */,
+				36F0A5842BC7802F002062FB /* PLVVodPlayTipsView.m */,
+			);
+			path = PlayTips;
+			sourceTree = "<group>";
+		};
+		36F0A5A02BC7802F002062FB /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				36F0A5A12BC7802F002062FB /* UIControl+PLVVod.h */,
+				36F0A5A22BC7802F002062FB /* UIColor+PLVVod.h */,
+				36F0A5A32BC7802F002062FB /* UINavigationController+PLVVod.h */,
+				36F0A5A42BC7802F002062FB /* NSString+PLVVod.m */,
+				36F0A5A52BC7802F002062FB /* PLVVodDanmu+PLVVod.h */,
+				36F0A5A62BC7802F002062FB /* UIButton+EnlargeTouchArea.h */,
+				36F0A5A72BC7802F002062FB /* UIColor+PLVVod.m */,
+				36F0A5A82BC7802F002062FB /* UINavigationController+PLVVod.m */,
+				36F0A5A92BC7802F002062FB /* UIControl+PLVVod.m */,
+				36F0A5AA2BC7802F002062FB /* NSString+PLVVod.h */,
+				36F0A5AB2BC7802F002062FB /* UIButton+EnlargeTouchArea.m */,
+				36F0A5AC2BC7802F002062FB /* PLVVodDanmu+PLVVod.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		36F0A5AD2BC78030002062FB /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				36F0A5AE2BC78030002062FB /* PLVVodNetworkUtil.m */,
+				36F0A5AF2BC78030002062FB /* PLVVodErrorUtil.h */,
+				36F0A5B02BC78030002062FB /* PLVVodUtils.m */,
+				36F0A5B12BC78030002062FB /* PLVVodErrorUtil.m */,
+				36F0A5B22BC78030002062FB /* PLVVodNetworkUtil.h */,
+				36F0A5B32BC78030002062FB /* PLVVodUtils.h */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		36F0A5B52BC78030002062FB /* Exam */ = {
+			isa = PBXGroup;
+			children = (
+				36F0A5B62BC78030002062FB /* PLVVodExamViewController.m */,
+				36F0A5B72BC78030002062FB /* PLVVodExamViewController.xib */,
+				36F0A5B82BC78030002062FB /* PLVVodExamViewController.h */,
+				36F0A5B92BC78030002062FB /* PLVVodExamTestData.json */,
+				36F0A5BA2BC78030002062FB /* QuestionView */,
+				36F0A5C22BC78030002062FB /* ExplanationView */,
+			);
+			path = Exam;
+			sourceTree = "<group>";
+		};
+		36F0A5BA2BC78030002062FB /* QuestionView */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E45152BCA7FC0003A87A9 /* PLVFillBlankQuestionView.h */,
+				BF6E45122BCA7FC0003A87A9 /* PLVFillBlankQuestionView.m */,
+				BF6E45102BCA7FC0003A87A9 /* PLVFillBlankView.h */,
+				BF6E45142BCA7FC0003A87A9 /* PLVFillBlankView.m */,
+				BF6E45112BCA7FC0003A87A9 /* PLVOptionView.h */,
+				BF6E45132BCA7FC0003A87A9 /* PLVOptionView.m */,
+				36F0A5BB2BC78030002062FB /* PLVVodQuestionView.h */,
+				36F0A5BC2BC78030002062FB /* PLVVodOptionCell.h */,
+				36F0A5BD2BC78030002062FB /* PLVVodQuestion.m */,
+				36F0A5BE2BC78030002062FB /* PLVVodQuestionView.m */,
+				36F0A5BF2BC78030002062FB /* PLVVodOptionCell.m */,
+				36F0A5C02BC78030002062FB /* PLVVodOptionCell.xib */,
+				36F0A5C12BC78030002062FB /* PLVVodQuestion.h */,
+			);
+			path = QuestionView;
+			sourceTree = "<group>";
+		};
+		36F0A5C22BC78030002062FB /* ExplanationView */ = {
+			isa = PBXGroup;
+			children = (
+				36F0A5C32BC78030002062FB /* PLVVodExplanationView.m */,
+				36F0A5C42BC78030002062FB /* PLVVodExplanationView.h */,
+			);
+			path = ExplanationView;
+			sourceTree = "<group>";
+		};
+		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		83CBB9F61A601CBA00E9B192 = {
+			isa = PBXGroup;
+			children = (
+				36F0A5772BC77FD7002062FB /* PolyvVodRnModule */,
+				13B07FAE1A68108700A75B9A /* PolyvRNVodDemo */,
+				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				00E356EF1AD99517003FC87E /* PolyvRNVodDemoTests */,
+				83CBBA001A601CBA00E9B192 /* Products */,
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+			);
+			indentWidth = 2;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		83CBBA001A601CBA00E9B192 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				13B07F961A680F5B00A75B9A /* PolyvRNVodDemo.app */,
+				00E356EE1AD99517003FC87E /* PolyvRNVodDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				75BFAC96A4C972E5D16DE41E /* Pods-PolyvRNVodDemo.debug.xcconfig */,
+				1C4F679E2A6F39CDDAC739B8 /* Pods-PolyvRNVodDemo.release.xcconfig */,
+				E1491557A21BF90350A42ECE /* Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.debug.xcconfig */,
+				530012DE629656403A1EA1C4 /* Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		BF6E45192BCA9CDD003A87A9 /* KnowledgeList */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E451A2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.h */,
+				BF6E451B2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.m */,
+				BF6E451C2BCA9CDD003A87A9 /* Model */,
+				BF6E451F2BCA9CDD003A87A9 /* View */,
+				BF6E45242BCA9CDD003A87A9 /* PLVSlideTabbarView */,
+			);
+			path = KnowledgeList;
+			sourceTree = "<group>";
+		};
+		BF6E451C2BCA9CDD003A87A9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E451D2BCA9CDD003A87A9 /* PLVKnowledgeModel.h */,
+				BF6E451E2BCA9CDD003A87A9 /* PLVKnowledgeModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BF6E451F2BCA9CDD003A87A9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E45202BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.h */,
+				BF6E45212BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.m */,
+				BF6E45222BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.m */,
+				BF6E45232BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.h */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BF6E45242BCA9CDD003A87A9 /* PLVSlideTabbarView */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E45252BCA9CDD003A87A9 /* PLVSlideTabbarView.h */,
+				BF6E45262BCA9CDD003A87A9 /* PLVSlideTabbarView.m */,
+			);
+			path = PLVSlideTabbarView;
+			sourceTree = "<group>";
+		};
+		BF6E45272BCA9CDD003A87A9 /* PLVMarquee */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E45282BCA9CDD003A87A9 /* PLVMarqueeView.m */,
+				BF6E45292BCA9CDD003A87A9 /* PLVMarqueeModel.h */,
+				BF6E452A2BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.m */,
+				BF6E452B2BCA9CDD003A87A9 /* PLVMarqueeView.h */,
+				BF6E452C2BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.h */,
+				BF6E452D2BCA9CDD003A87A9 /* PLVMarqueeModel.m */,
+			);
+			path = PLVMarquee;
+			sourceTree = "<group>";
+		};
+		BF6E45372BCAB1C0003A87A9 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				BF6E45382BCAB1C0003A87A9 /* PLVToast.m */,
+				BF6E45392BCAB1C0003A87A9 /* PLVToast.h */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00E356ED1AD99517003FC87E /* PolyvRNVodDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "PolyvRNVodDemoTests" */;
+			buildPhases = (
+				EFA4FF8129D3700E23C955AB /* [CP] Check Pods Manifest.lock */,
+				00E356EA1AD99517003FC87E /* Sources */,
+				00E356EB1AD99517003FC87E /* Frameworks */,
+				00E356EC1AD99517003FC87E /* Resources */,
+				910D673D0C5EB4725B3DFF00 /* [CP] Embed Pods Frameworks */,
+				A15CD5C4358A43C7D727B4E8 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00E356F51AD99517003FC87E /* PBXTargetDependency */,
+			);
+			name = PolyvRNVodDemoTests;
+			productName = PolyvRNVodDemoTests;
+			productReference = 00E356EE1AD99517003FC87E /* PolyvRNVodDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		13B07F861A680F5B00A75B9A /* PolyvRNVodDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PolyvRNVodDemo" */;
+			buildPhases = (
+				94E20040DC7786974599AE63 /* [CP] Check Pods Manifest.lock */,
+				FD10A7F022414F080027D42C /* Start Packager */,
+				13B07F871A680F5B00A75B9A /* Sources */,
+				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+				13B07F8E1A680F5B00A75B9A /* Resources */,
+				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				0921122C39E710F28915139F /* [CP] Embed Pods Frameworks */,
+				A075AD592AB8AE200A5FA453 /* [CP] Copy Pods Resources */,
+				366C44032BCD15D2008834CB /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PolyvRNVodDemo;
+			productName = PolyvRNVodDemo;
+			productReference = 13B07F961A680F5B00A75B9A /* PolyvRNVodDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83CBB9F71A601CBA00E9B192 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1210;
+				TargetAttributes = {
+					00E356ED1AD99517003FC87E = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1120;
+					};
+				};
+			};
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "PolyvRNVodDemo" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83CBB9F61A601CBA00E9B192;
+			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13B07F861A680F5B00A75B9A /* PolyvRNVodDemo */,
+				00E356ED1AD99517003FC87E /* PolyvRNVodDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00E356EC1AD99517003FC87E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8E1A680F5B00A75B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36F0A5E12BC78030002062FB /* PLVVodExamViewController.xib in Resources */,
+				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				36F0A5C52BC78030002062FB /* PLVVodPlayerSkin.xib in Resources */,
+				36F0A5E22BC78030002062FB /* PLVVodExamTestData.json in Resources */,
+				36F0A5DF2BC78030002062FB /* PLVVodResources.xcassets in Resources */,
+				361B4C192BC7AFA0008A5C88 /* plv_bg_voice.mp3 in Resources */,
+				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				36F0A5E62BC78030002062FB /* PLVVodOptionCell.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		0921122C39E710F28915139F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		910D673D0C5EB4725B3DFF00 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94E20040DC7786974599AE63 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PolyvRNVodDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A075AD592AB8AE200A5FA453 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo/Pods-PolyvRNVodDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A15CD5C4358A43C7D727B4E8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EFA4FF8129D3700E23C955AB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PolyvRNVodDemo-PolyvRNVodDemoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD10A7F022414F080027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00E356EA1AD99517003FC87E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00E356F31AD99517003FC87E /* PolyvRNVodDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F871A680F5B00A75B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				361B4C182BC7AFA0008A5C88 /* PLVDownloadCompleteInfoModel.m in Sources */,
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				36F0A5E52BC78030002062FB /* PLVVodOptionCell.m in Sources */,
+				BF6E45172BCA7FC0003A87A9 /* PLVOptionView.m in Sources */,
+				BF6E45302BCA9CDD003A87A9 /* PLVKnowledgePointTableViewCell.m in Sources */,
+				36F0A5D12BC78030002062FB /* PLVVodFastForwardView.m in Sources */,
+				361B4C252BC7AFB3008A5C88 /* PolyvRNVodConfigModule.m in Sources */,
+				36F0A5E32BC78030002062FB /* PLVVodQuestion.m in Sources */,
+				BF6E450F2BCA7F14003A87A9 /* PLVVodVideoToolBoxPanelView.m in Sources */,
+				36F0A5CC2BC78030002062FB /* PLVVodGestureIndicatorView.m in Sources */,
+				BF6E45162BCA7FC0003A87A9 /* PLVFillBlankQuestionView.m in Sources */,
+				BF6E450E2BCA7F14003A87A9 /* PLVVodDefinitionTipsView.m in Sources */,
+				36F0A5CA2BC78030002062FB /* PLVVodCoverView.m in Sources */,
+				36F0A5D92BC78030002062FB /* UIControl+PLVVod.m in Sources */,
+				36F0A5DA2BC78030002062FB /* UIButton+EnlargeTouchArea.m in Sources */,
+				36F0A5DD2BC78030002062FB /* PLVVodUtils.m in Sources */,
+				36F0A5D02BC78030002062FB /* PLVVodSettingPanelView.m in Sources */,
+				BF6E452F2BCA9CDD003A87A9 /* PLVKnowledgeModel.m in Sources */,
+				361B4C172BC7AFA0008A5C88 /* PLVVodExtendVideoInfo.mm in Sources */,
+				36F0A5C82BC78030002062FB /* PLVVodRouteLineView.m in Sources */,
+				BF6E45322BCA9CDD003A87A9 /* PLVSlideTabbarView.m in Sources */,
+				36F0A5E72BC78030002062FB /* PLVVodExplanationView.m in Sources */,
+				36F0A5D52BC78030002062FB /* PLVVodSkinPlayerController.m in Sources */,
+				36F0A5CD2BC78030002062FB /* PLVVodPlaybackRatePanelView.m in Sources */,
+				366C441D2BCD1DB1008834CB /* PLVMarqueeLabel.m in Sources */,
+				36F0A5DE2BC78030002062FB /* PLVVodErrorUtil.m in Sources */,
+				BF6E45352BCA9CDD003A87A9 /* PLVMarqueeModel.m in Sources */,
+				36F0A5C62BC78030002062FB /* PLVVodDefinitionPanelView.m in Sources */,
+				BF6E45182BCA7FC0003A87A9 /* PLVFillBlankView.m in Sources */,
+				36F0A5D32BC78030002062FB /* PLVVodLockScreenView.m in Sources */,
+				BF6E45342BCA9CDD003A87A9 /* PLVMarqueeAnimationManager.m in Sources */,
+				36F0A5D62BC78030002062FB /* NSString+PLVVod.m in Sources */,
+				36F0A5DC2BC78030002062FB /* PLVVodNetworkUtil.m in Sources */,
+				361B4C272BC7AFB3008A5C88 /* PolyvRNVodDownloadModule.m in Sources */,
+				36F0A5EA2BC7809E002062FB /* PolyvVodPlayerManager.m in Sources */,
+				361B4C1A2BC7AFA0008A5C88 /* PLVVodDownloadHelper.m in Sources */,
+				36F0A5D22BC78030002062FB /* PLVVodShrinkscreenView.m in Sources */,
+				36F0A5D82BC78030002062FB /* UINavigationController+PLVVod.m in Sources */,
+				BF6E453A2BCAB1C0003A87A9 /* PLVToast.m in Sources */,
+				36F0A5CF2BC78030002062FB /* PLVVodAudioCoverPanelView.m in Sources */,
+				36F0A5DB2BC78030002062FB /* PLVVodDanmu+PLVVod.m in Sources */,
+				36F0A5CE2BC78030002062FB /* PLVVodNetworkTipsView.m in Sources */,
+				36F0A5D72BC78030002062FB /* UIColor+PLVVod.m in Sources */,
+				36F0A5CB2BC78030002062FB /* PLVVodFullscreenView.m in Sources */,
+				36F0A5E42BC78030002062FB /* PLVVodQuestionView.m in Sources */,
+				36F0A5C92BC78030002062FB /* PLVVodDanmuSendView.m in Sources */,
+				361B4C162BC7AFA0008A5C88 /* PLVVodDBManager.mm in Sources */,
+				36F0A57A2BC77FD7002062FB /* PolyvVodPlayerWrapperView.m in Sources */,
+				BF6E45332BCA9CDD003A87A9 /* PLVMarqueeView.m in Sources */,
+				36F0A5C72BC78030002062FB /* PLVVodPlayTipsView.m in Sources */,
+				36F0A5D42BC78030002062FB /* PLVVodPlayerSkin.m in Sources */,
+				BF6E452E2BCA9CDD003A87A9 /* PLVKnowledgeListViewController.m in Sources */,
+				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				36F0A5E02BC78030002062FB /* PLVVodExamViewController.m in Sources */,
+				361B4C262BC7AFB3008A5C88 /* PolyvRNVodEmitter.m in Sources */,
+				BF6E45312BCA9CDD003A87A9 /* PLVKnowledgeCategoryTableViewCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* PolyvRNVodDemo */;
+			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00E356F61AD99517003FC87E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1491557A21BF90350A42ECE /* Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PolyvRNVodDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PolyvRNVodDemo.app/PolyvRNVodDemo";
+			};
+			name = Debug;
+		};
+		00E356F71AD99517003FC87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 530012DE629656403A1EA1C4 /* Pods-PolyvRNVodDemo-PolyvRNVodDemoTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = PolyvRNVodDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PolyvRNVodDemo.app/PolyvRNVodDemo";
+			};
+			name = Release;
+		};
+		13B07F941A680F5B00A75B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75BFAC96A4C972E5D16DE41E /* Pods-PolyvRNVodDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ETRBR9HA5V;
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PolyvVodRnModule/Libs",
+				);
+				INFOPLIST_FILE = PolyvRNVodDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = PolyvRNVodDemo;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		13B07F951A680F5B00A75B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1C4F679E2A6F39CDDAC739B8 /* Pods-PolyvRNVodDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ETRBR9HA5V;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PolyvVodRnModule/Libs",
+				);
+				INFOPLIST_FILE = PolyvRNVodDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = PolyvRNVodDemo;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		83CBBA201A601CBA00E9B192 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		83CBBA211A601CBA00E9B192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "PolyvRNVodDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00E356F61AD99517003FC87E /* Debug */,
+				00E356F71AD99517003FC87E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PolyvRNVodDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13B07F941A680F5B00A75B9A /* Debug */,
+				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "PolyvRNVodDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83CBBA201A601CBA00E9B192 /* Debug */,
+				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
+}

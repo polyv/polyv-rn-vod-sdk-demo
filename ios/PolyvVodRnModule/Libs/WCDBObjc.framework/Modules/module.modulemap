@@ -1,0 +1,6 @@
+framework module WCDBObjc {
+  umbrella header "WCDB.objc-umbrella.h"
+
+  export *
+  module * { export * }
+}

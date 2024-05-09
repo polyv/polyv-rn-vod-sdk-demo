@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *snapshotButton;
 @property (weak, nonatomic) IBOutlet UIButton *danmuSendButton;
 @property (weak, nonatomic) IBOutlet UIButton *definitionButton;
+@property (weak, nonatomic) IBOutlet UIButton *videoToolBoxButton;
 @property (weak, nonatomic) IBOutlet UIButton *playbackRateButton;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *subScreenButton; // 关闭三分屏按钮
 @property (weak, nonatomic) IBOutlet UIButton *pptCatalogButton; // 显示课件目录按钮
 @property (weak, nonatomic) IBOutlet UIButton *floatingButton; // 悬浮窗播放按钮
+@property (weak, nonatomic) IBOutlet UIButton *knowledgeButton; // 知识点按钮
 
 //音视频切换
 @property (weak, nonatomic) IBOutlet UIView *playModeContainerView;
@@ -61,5 +63,8 @@
 
 // 是否支持悬浮窗播放，不调用时默认不支持
 - (void)enableFloating:(BOOL)enable;
+
+// 是否支持知识点功能，不调用时默认不支持
+- (void)enableKnowledge:(BOOL)enable;
 
 @end

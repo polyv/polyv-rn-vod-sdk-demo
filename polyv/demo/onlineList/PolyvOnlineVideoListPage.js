@@ -1,39 +1,31 @@
-import React, { Component } from "react";
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ * @lint-ignore-every XPLATJSCOPYRIGHT1
+ */
 
+import React, { Component } from "react";
 import {
+  Text,
   View,
+  TextInput,
   Dimensions,
-  Button,
   StyleSheet,
 } from "react-native";
 import { setAxios } from "../common/PolyvNet";
 
-import PolyvVodConfig from "../../sdk/PolyvVodConfigModule";
 import PolyvVideoListView from "./view/PolyvVideoOnlineList";
+import PolyvVodConfig from "../../sdk/PolyvVodConfigModule";
 import PolyvUserConfig from '../PolyvUserConfig'
 
-
 const { width, height } = Dimensions.get("window");
+
 type Props = {};
+export default class PolyvOnlineVideoListPage extends Component<Props> {
 
-export default class PolyvOnlineVideoListPage extends Component {
-  static navigationOptions = (
-    { navigation }) => {
-      return {
-        headerTitle: '在线视频',
-      headerRight: (
-        <Button
-        onPress={() =>  {
-          console.log('nav btn is ')
-          navigation.navigate('downloadList')
-        }}
-          title="下载列表>"
-          color="red"
-        />
-      ),
-    }
-
-  };
   constructor(props) {
     super(props);
     this.state = {
@@ -54,8 +46,8 @@ export default class PolyvOnlineVideoListPage extends Component {
     };
   }
 
-  componentWillMount() {
-    console.log("componentWillMount");
+  componentDidMount() {
+    console.log("componentDidMount");
     /**
      * <Polyv Live init/>
      */
@@ -90,13 +82,6 @@ export default class PolyvOnlineVideoListPage extends Component {
   startOrPause() {
     console.log("startOrPause");
     this.refs["playerA"].startOrPause();
-  }
-
-
-  componentDidMount(){
-    // setTimeout(() => {
-    //   this.getOnlineList()
-    // }, 50);
   }
 
   render() {

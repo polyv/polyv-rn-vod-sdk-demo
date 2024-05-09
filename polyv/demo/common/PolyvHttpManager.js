@@ -14,7 +14,7 @@ const HttpManager ={
             //如果需要  计算sha值
         }
 
-        Axios.get('http://v.polyv.net/uc/services/rest?method=getNewList',{
+        Axios.get('https://v.polyv.net/uc/services/rest?method=getNewList',{
             params:{
                 readtoken:token(),
                 pageNum:num,

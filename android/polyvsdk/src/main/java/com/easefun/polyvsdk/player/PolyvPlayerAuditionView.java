@@ -179,6 +179,6 @@ public class PolyvPlayerAuditionView extends RelativeLayout {
 			handler.removeMessages(UPDATE_PROGRESS);
 		}
 
-		setVisibility(View.INVISIBLE);
+		setVisibility(View.GONE);
 	}
 }

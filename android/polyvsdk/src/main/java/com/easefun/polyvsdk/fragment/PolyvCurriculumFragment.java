@@ -3,7 +3,7 @@ package com.easefun.polyvsdk.fragment;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +25,11 @@ import com.easefun.polyvsdk.R;
 import com.easefun.polyvsdk.activity.PolyvDownloadActivity;
 import com.easefun.polyvsdk.activity.PolyvPlayerActivity;
 import com.easefun.polyvsdk.adapter.PolyvCurriculumListViewAdapter;
-import com.easefun.polyvsdk.sub.vlms.entity.PolyvCoursesInfo;
-import com.easefun.polyvsdk.util.PolyvVlmsHelper;
+import com.easefun.polyvsdk.sub.vlms.entity.PolyvVlmsCoursesInfo;
+import com.easefun.polyvsdk.sub.vlms.entity.PolyvVlmsCurriculumInfo;
+import com.easefun.polyvsdk.sub.vlms.listener.PolyvVlmsApiListener2;
+import com.easefun.polyvsdk.sub.vlms.main.PolyvVlmsManager2;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +43,13 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
     // 课程目录的listView
     private ListView lv_cur;
     private PolyvCurriculumListViewAdapter adapter;
-    private List<PolyvVlmsHelper.CurriculumsDetail> lists;
+    private List<PolyvVlmsCurriculumInfo> lists;
     // fragmentView
     private View view;
     // 取消按钮，下载全部按钮
     private TextView tv_cancle, tv_all;
     // 传过来课程对象
-    private PolyvCoursesInfo.Course course;
+    private PolyvVlmsCoursesInfo course;
     // 加载中控件
     private ProgressBar pb_loading;
     // 空数据控件,重新加载控件，选择清晰度控件
@@ -59,7 +62,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
     private TextView tv_hd, tv_sd, tv_flu;
     // 当前选择的下载码率
     private int currentSelcetBitrate = 3;
-    private PolyvVlmsHelper vlmsHelper;
+    private PolyvVlmsManager2 vlmsManager2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,26 +86,27 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
         ll_selbit = (LinearLayout) view.findViewById(R.id.ll_selbit);
         ll_top = (LinearLayout) view.findViewById(R.id.ll_top);
         lists = new ArrayList<>();
-        vlmsHelper = new PolyvVlmsHelper();
+        vlmsManager2 = new PolyvVlmsManager2(getContext());
     }
 
     private void getCurriculumDetail() {
-        vlmsHelper.getCurriculumDetail(course.course_id, new PolyvVlmsHelper.MyCurriculumDetailListener() {
+
+        vlmsManager2.getCourseVideoByCourseId(course.getCourseId() + "", new PolyvVlmsApiListener2<List<PolyvVlmsCurriculumInfo>>() {
             @Override
-            public void fail(Throwable t) {
-                pb_loading.setVisibility(View.INVISIBLE);
+            public void onFailed(Throwable throwable) {
+                pb_loading.setVisibility(View.GONE);
                 tv_reload.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void success(final List<PolyvVlmsHelper.CurriculumsDetail> curriculumsDetails) {
-                // 注：这里是从子线程回调过来的
+            public void onSuccess(final List<PolyvVlmsCurriculumInfo> data) {
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        pb_loading.setVisibility(View.INVISIBLE);
+                        pb_loading.setVisibility(View.GONE);
                         PolyvCurriculumFragment.this.lists.clear();
-                        PolyvCurriculumFragment.this.lists.addAll(curriculumsDetails);
+                        PolyvCurriculumFragment.this.lists.addAll(data);
                         if (PolyvCurriculumFragment.this.lists.size() == 0)
                             tv_empty.setVisibility(View.VISIBLE);
                         adapter.initSelect(currentSelcetBitrate);
@@ -114,7 +118,8 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
 
     private void initView() {
         // fragment在onCreate之后才可以获取
-        course = getArguments().getParcelable("course");
+        String courseString = getArguments().getString("course");
+        course = new Gson().fromJson(courseString, PolyvVlmsCoursesInfo.class);
         if (course == null)
             return;
         getCurriculumDetail();
@@ -126,7 +131,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!adapter.getSideIconVisible()) {
-                    String videoId = lists.get(position).lecture.vid;
+                    String videoId = lists.get(position).getVideoId();
                     ((PolyvPlayerActivity) getActivity()).play(videoId, PolyvBitRate.ziDong.getNum(), true, false);
                 } else {
                     adapter.putSideIconStatus(currentSelcetBitrate, position, !adapter.getSideIconStatus(currentSelcetBitrate, position, true));
@@ -140,7 +145,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!adapter.getSideIconVisible()) {
                     ll_top.setVisibility(View.VISIBLE);
-                    ll_center.setVisibility(View.INVISIBLE);
+                    ll_center.setVisibility(View.GONE);
                     ll_download.setVisibility(View.VISIBLE);
                     adapter.setSideIconVisible(true);
                 }
@@ -187,7 +192,6 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        vlmsHelper.destroy();
     }
 
     private void resetTv_allText() {
@@ -235,7 +239,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
             return;
         ll_top.setVisibility(View.VISIBLE);
         ll_download.setVisibility(View.VISIBLE);
-        ll_center.setVisibility(View.INVISIBLE);
+        ll_center.setVisibility(View.GONE);
         adapter.setSideIconVisible(true);
         adapter.cancelSideIconSelected();
         adapter.initSelect(currentSelcetBitrate);
@@ -244,8 +248,8 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
 
     private void sideIconGone() {
         adapter.setSideIconVisible(false);
-        ll_top.setVisibility(View.INVISIBLE);
-        ll_download.setVisibility(View.INVISIBLE);
+        ll_top.setVisibility(View.GONE);
+        ll_download.setVisibility(View.GONE);
         ll_center.setVisibility(View.VISIBLE);
     }
 
@@ -275,7 +279,7 @@ public class PolyvCurriculumFragment extends Fragment implements OnClickListener
             }
         } else if (id == R.id.tv_reload) {
             pb_loading.setVisibility(View.VISIBLE);
-            tv_reload.setVisibility(View.INVISIBLE);
+            tv_reload.setVisibility(View.GONE);
             getCurriculumDetail();
         } else if (id == R.id.ll_selbit) {
             int[] location = new int[2];

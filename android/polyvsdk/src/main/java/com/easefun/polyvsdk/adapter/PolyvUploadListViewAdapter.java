@@ -79,8 +79,8 @@ public class PolyvUploadListViewAdapter extends BaseAdapter {
                         tv_status.setSelected(false);
                         iv_start.setImageResource(R.drawable.polyv_btn_play);
                         fl_start.setEnabled(false);
-                        pb_progress.setVisibility(View.INVISIBLE);
-                        tv_speed.setVisibility(View.INVISIBLE);
+                        pb_progress.setVisibility(View.GONE);
+                        tv_speed.setVisibility(View.GONE);
                         Toast.makeText(context, "第" + (position + 1) + "个任务上传成功", Toast.LENGTH_SHORT).show();
                         break;
                     case FAILURE:
@@ -262,8 +262,8 @@ public class PolyvUploadListViewAdapter extends BaseAdapter {
             viewHolder.iv_start.setImageResource(R.drawable.polyv_btn_play);
             viewHolder.fl_start.setEnabled(false);
             viewHolder.tv_status.setText(UPLOADED);
-            viewHolder.pb_progress.setVisibility(View.INVISIBLE);
-            viewHolder.tv_speed.setVisibility(View.INVISIBLE);
+            viewHolder.pb_progress.setVisibility(View.GONE);
+            viewHolder.tv_speed.setVisibility(View.GONE);
         } else if (uploader.isUploading()) {
             viewHolder.iv_start.setImageResource(R.drawable.polyv_btn_dlpause);
             viewHolder.tv_status.setText(UPLOADING);

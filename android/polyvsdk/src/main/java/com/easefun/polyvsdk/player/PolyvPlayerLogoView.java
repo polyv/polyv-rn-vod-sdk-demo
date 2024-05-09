@@ -3,8 +3,8 @@ package com.easefun.polyvsdk.player;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -97,7 +97,7 @@ public class PolyvPlayerLogoView extends FrameLayout {
 
                 //设置可见度
                 if (logoParam.pos == 0) {
-                    imageView.setVisibility(View.INVISIBLE);
+                    imageView.setVisibility(View.GONE);
                 }
                 imageView.setAlpha(logoParam.alpha / 100f);
 

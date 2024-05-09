@@ -2,7 +2,7 @@ package com.easefun.polyvsdk.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.text.Html;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -72,7 +72,7 @@ public class PolyvSummaryFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                if (tv_expand.getVisibility() == View.INVISIBLE)
+                if (tv_expand.getVisibility() == View.GONE)
                     return;
                 expandOrCollapse();
             }

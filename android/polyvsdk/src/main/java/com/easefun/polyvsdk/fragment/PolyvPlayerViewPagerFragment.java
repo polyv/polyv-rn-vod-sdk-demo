@@ -1,9 +1,9 @@
 package com.easefun.polyvsdk.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +47,7 @@ public class PolyvPlayerViewPagerFragment extends Fragment {
         talkFragment = new PolyvTalkFragment();
         lists.add(curFragment);
         lists.add(sumFragment);
-        lists.add(talkFragment);
+//        lists.add(talkFragment);
         for (int i = 0; i < lists.size(); i++)
             lists.get(i).setArguments(getActivity().getIntent().getExtras());
         adapter = new PolyvPlayerFragmentAdapter(getActivity().getSupportFragmentManager(), lists);

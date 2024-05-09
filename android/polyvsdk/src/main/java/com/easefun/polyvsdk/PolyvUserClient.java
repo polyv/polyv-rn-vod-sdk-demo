@@ -1,7 +1,7 @@
 package com.easefun.polyvsdk;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -9,6 +9,7 @@ import com.chinanetcenter.wcs.android.utils.FileUtil;
 import com.easefun.polyvsdk.bean.PolyvDownloadInfo;
 import com.easefun.polyvsdk.database.PolyvDownloadSQLiteHelper;
 import com.easefun.polyvsdk.log.PolyvCommonLog;
+import com.easefun.polyvsdk.util.PLVFileUtils;
 import com.easefun.polyvsdk.util.PolyvStorageUtils;
 import com.easefun.polyvsdk.util.PolyvTaskExecutorUtils;
 
@@ -203,7 +204,7 @@ public class PolyvUserClient {
                         PolyvCommonLog.d(TAG,"moveDownloadToNewPath:"+newDir);
                         if (downloadDir.exists() && downloadDir.isDirectory()) {
                             copyFile(downloadDir, newDir);
-                            com.hpplay.common.utils.FileUtil.deleteFile(downloadDir);
+                            PLVFileUtils.deleteDir(downloadDir);
                         }
                     }catch (Exception e){
                         PolyvCommonLog.exception(e);

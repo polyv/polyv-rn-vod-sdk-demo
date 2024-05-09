@@ -118,7 +118,7 @@ public class PolyvPlayerPreviewView extends RelativeLayout {
 			if (file != null) {
 				mPreviewImage.setImageURI(Uri.parse(file.getAbsolutePath()));
 			} else {
-				PolyvImageLoader.getInstance().loadImageOrigin(getContext(), v.getFirstImage(), mPreviewImage, R.drawable.polyv_avatar_def);
+				PolyvImageLoader.getInstance().loadImageOrigin(getContext(), v.getFirstImage(), mPreviewImage, R.drawable.polyv_loading);
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class PolyvPlayerPreviewView extends RelativeLayout {
      * 隐藏
      */
     public void hide() {
-        setVisibility(View.INVISIBLE);
+        setVisibility(View.GONE);
     }
 
 	private boolean isDestroy(Activity activity){

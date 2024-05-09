@@ -228,7 +228,7 @@ public class LinearListView extends IcsLinearLayout {
 		if (empty) {
 			if (mEmptyView != null) {
 				mEmptyView.setVisibility(View.VISIBLE);
-				setVisibility(View.INVISIBLE);
+				setVisibility(View.GONE);
 			} else {
 				// If the caller just removed our empty view, make sure the list
 				// view is visible
@@ -236,7 +236,7 @@ public class LinearListView extends IcsLinearLayout {
 			}
 		} else {
 			if (mEmptyView != null)
-				mEmptyView.setVisibility(View.INVISIBLE);
+				mEmptyView.setVisibility(View.GONE);
 			setVisibility(View.VISIBLE);
 		}
 	}

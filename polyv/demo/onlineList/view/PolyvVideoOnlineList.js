@@ -36,7 +36,7 @@ export default class PolyvVideoOnlineList extends Component {
   componentDidMount(){
     setTimeout(() => {
       this.getOnlineList()
-    }, 50);
+    }, 500);
   }
 
   update(datas) {
