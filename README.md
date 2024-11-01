@@ -37,6 +37,7 @@ npm install
 
 点播的插件和 demo 使用到的插件的目录结构如下所示：
 
+```
 ├── polyv
 │   ├── demo
 │   │   ├── PolyvNavigation.js
@@ -51,6 +52,7 @@ npm install
 │       ├── PolyvVodDownloadModule.js
 │       ├── PolyvVodDownloadResultCode.js
 │       └── PolyvVodPlayerModule.js
+```
 
 在目录 sdk 下我们的 RN 点播 SDK 提供了一下三大功能模块：
 
